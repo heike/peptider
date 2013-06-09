@@ -1,0 +1,22 @@
+\docType{data}
+\name{nnk_scheme}
+\alias{nnk_scheme}
+\title{Nucleotide library scheme NNK}
+\format{'data.frame':	4 obs. of  5 variables:
+ $ class: Factor w/ 4 levels "A","B","C","Z": 1 2 3 4
+ $ aacid: Factor w/ 4 levels "AGPTV","C*","DEFHIKMNQWY",..: 4 1 3 2
+ $ s    : num  3 5 11 2
+ $ c    : num  3 2 1 1
+ $ stops: num  2 2 2 2}
+\description{
+  This data set contains descriptions of amino acid classes
+  under the NNB library scheme.
+}
+\details{
+  Nucleotide library scheme NNK
+
+  The last DNA nucleus in the sequence is restricted to be
+  one of C, G, or T.
+}
+\keyword{datasets}
+
