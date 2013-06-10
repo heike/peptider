@@ -28,10 +28,9 @@ NNN <- function(k) {
 
 #' Nucleotide library  scheme NNN
 #'
-#' 
-#' @name trimer_scheme
+#' @name nnn_scheme
 #' @title Nucleotide library scheme NNN
-#' @description This data set contains descriptions of amino acid classes under the NNB library scheme.
+#' @description This data set contains descriptions of amino acid classes under the NNN library scheme.
 #' @docType data
 #' @usage libBuild(1, libscheme="nnn_scheme")
 
@@ -72,7 +71,7 @@ Trimer <- function(k) {
 #' Only valid peptide sequences are created. Each sequence appears with the same probability.
 #' @name trimer_scheme
 #' @title Nucleotide library scheme Trimer
-#' @description This data set contains descriptions of amino acid classes under the NNB library scheme.
+#' @description This data set contains descriptions of amino acid classes under the Trimer library scheme.
 #' @docType data
 #' @usage libBuild(1, libscheme="trimer_scheme")
 
@@ -184,7 +183,7 @@ NNK <- function(k) {
 #' The last DNA nucleus in the sequence is restricted to be one of C, G, or T.
 #' @name nnk_scheme
 #' @title Nucleotide library scheme NNK
-#' @description This data set contains descriptions of amino acid classes under the NNB library scheme.
+#' @description This data set contains descriptions of amino acid classes under the NNK library scheme.
 #' @docType data
 #' @usage libBuild(1, libscheme="nnk_scheme")
 
