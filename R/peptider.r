@@ -376,14 +376,6 @@ getNofNeighbors <- function(x, blosum = 1, method="peptide", libscheme=NULL) {
 }
 
 
-#' BLOSUM80 matrix
-#' 
-#' where does this matrix come from and what does it describe?
-#' @name BLOSUM80
-#' @title BLOSUM80 matrix
-#' @description where does this matrix come from and what does it describe?
-#' @docType data
-#' @usage data(BLOSUM80)
 
 
 #' Compute the number of codons for a vector of peptide sequences
@@ -428,3 +420,12 @@ ppeptide <- function(x, libscheme, N) {
 }
 
 
+#' BLOSUM80 matrix
+#' 
+#' where does this matrix come from and what does it describe?
+#' @name BLOSUM80
+#' @title BLOSUM80 matrix
+#' @description where does this matrix come from and what does it describe?
+#' @docType data
+#' @usage data(BLOSUM80)
+data(BLOSUM80)
