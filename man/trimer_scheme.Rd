@@ -1,23 +1,18 @@
 \docType{data}
 \name{trimer_scheme}
 \alias{trimer_scheme}
-\title{Nucleotide library scheme NNN}
-\format{'data.frame':	6 obs. of  5 variables:
- $ class : Factor w/ 6 levels "A","B","C","D",..: 1 2 3 4 5 6
- $ aacids: Factor w/ 6 levels "AGPTV","C*","DEFHKNQY",..: 6 1 4 3 5 2
- $ s     : num  3 5 1 8 2 2
- $ c     : num  6 4 3 2 1 2.5
- $ stops : num  3 3 3 3 3 3}
+\title{Nucleotide library scheme Trimer}
+\format{'data.frame':	2 obs. of  5 variables:
+ $ class : Factor w/ 2 levels "A","Z": 1 2
+ $ aacids: Factor w/ 2 levels "*","SLRAGPTVIDEFHKNQYMW": 2 1
+ $ s     : num  19 0
+ $ c     : num  1 0
+ $ stops : num  0 0}
 \description{
   This data set contains descriptions of amino acid classes
-  under the NNB library scheme.
-
-  This data set contains descriptions of amino acid classes
-  under the NNB library scheme.
+  under the Trimer library scheme.
 }
 \details{
-  Nucleotide library scheme NNN
-
   Nucleotide library scheme Trimer
 
   Only valid peptide sequences are created. Each sequence

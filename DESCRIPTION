@@ -8,7 +8,8 @@ Maintainer: Heike Hofmann <hofmann@iastate.edu>
 Description: Couple of functions for evaluating diversity in peptide libraries
     (NNN, NNK/S, NNB, and Trimer).
 License: MIT
-Imports:
-    discreteRV
+Depends:
+    discreteRV,
+    plyr
 Collate:
     'peptider.r'

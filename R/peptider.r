@@ -63,7 +63,7 @@ Trimer <- function(k) {
 #                   scheme = data.frame(class=c("A"), 
 #                                   aacids=c("SLRAGPTVIDEFHKNQYMW"), 
 #                                   s=c(19), c=c(1))))
-  libBuild(k, libscheme=nnn_trimer)
+  libBuild(k, libscheme=trimer_scheme)
 }
 
 #' Nucleotide library  scheme Trimer
@@ -185,7 +185,7 @@ NNK <- function(k) {
 #' @title Nucleotide library scheme NNK
 #' @description This data set contains descriptions of amino acid classes under the NNK library scheme.
 #' @docType data
-#' @usage libBuild(1, libscheme="nnk_scheme")
+#' @usage libBuild(1, libscheme=nnk_scheme)
 
 nnk_scheme <- data.frame(class=c("A", "B", "C", "Z"),
                          aacid=c("SLR", "AGPTV", "DEFHIKMNQWY", "C*"),
@@ -293,3 +293,94 @@ detect <- function(lib = NNK(7), size = 10^8) {
   with(lib$data, 1 - exp(-size*probs/di))
 }
 
+
+getNeighborOne <- function(x, blosum=1) {
+  data(BLOSUM80)
+  replacements <- llply(strsplit(x,""), function(y) {
+    llply(y, function(z) {
+      as.character(subset(BLOSUM80, (AA1 == z) & (Blosum >= blosum)& (AA2 != z))$AA2 )
+    })
+  })[[1]]
+  neighbors <- NULL
+    for (i in 1:nchar(x)) {
+      neighbors <- c(neighbors, paste(substr(x, 1,i-1), replacements[[i]], substr(x, i+1, nchar(x)), sep=""))
+    }
+  # check that all neighbors have the correct length
+  idx <- which(nchar(neighbors) != nchar(x))
+  if (length(idx)>0) neighbors <- neighbors[-idx]
+  neighbors <- unique(c(x, neighbors))
+  
+  return(neighbors)
+}
+
+#' Find all neighbors of degree one for a set of peptide sequences
+#' 
+#' first degree neighbors - a neighbor of a peptide is defined as a peptide sequence that differs in at most one amino acid from a given sequence. 
+#' Additionally, we can restrict neighbors to regard only those sequences that have a certain minimal BLOSUM loading. 
+#' @param x (vector) of character strings of  peptide sequences.
+#' @param blosum minimal BLOSUM loading, defaults to 1 for positive loadings only
+#' @return list of neighbor sequences
+#' @export
+#' @examples
+#' getNeighbors("APE")
+#' getNeighbors(c("HI", "APE"))
+#' getNeighbors(c("HI", "EARNEST", "APE"), blosum=3)
+#' ## degree 2 neighbors:
+#' unique(unlist(getNeighbors(getNeighbors("APE"))))
+getNeighbors <- function(x, blosum=1) {
+  if (length(x) == 1) return(getNeighborOne(x, blosum))
+  llply(x, getNeighborOne)
+}
+
+getNofNeighborsOne <- function(x, blosum = 1, method="peptide", libscheme=NULL) {
+  data(BLOSUM80)
+  replacements <- llply(strsplit(x,""), function(y) {
+    llply(y, function(z) {
+      as.character(subset(BLOSUM80, (AA1 == z) & (Blosum >= blosum) & (AA2 != z))$AA2)
+    })
+  })[[1]]
+  if (method == "peptide") return(length(unlist(replacements))+1)
+  
+  stopifnot(!is.null(libscheme))
+  lib <- libscheme(1)$info$scheme
+   
+  dnas <- sum(unlist(llply(unlist(replacements), function(w) { 
+    lib[grep(w, lib$aacid),"c"]
+  })))
+  dnas <- dnas + sum(unlist(llply(unlist(strsplit(x, split="")), function(w) { 
+    lib[grep(w, lib$aacid),"c"]
+  })))
+  return(dnas)
+}
+
+#' Compute the number of neighbor of degree one for a set of peptide sequences
+#' 
+#' first degree neighbors - a neighbor of a peptide is defined as a peptide sequence that differs in at most one amino acid from a given sequence. 
+#' Additionally, we can restrict neighbors to regard only those sequences that have a certain minimal BLOSUM loading. 
+#' @param x (vector) of character strings of  peptide sequences.
+#' @param blosum minimal BLOSUM loading, defaults to 1 for positive loadings only
+#' @param method character string, one of "peptide" or "dna". This specifies the level at which the neighbors are calculated.
+#' @param libscheme library scheme under which neighbors are being calculated. this is only of importance, if method="dna"
+#' @return vector of numbers of neighbors 
+#' @export
+#' @examples
+#' getNofNeighbors("APE")
+#' getNofNeighbors(c("NEAREST", "EARNEST"))
+#' getNofNeighbors("N")
+#' getNofNeighbors("N", method="dna", libscheme=NNK)
+getNofNeighbors <- function(x, blosum = 1, method="peptide", libscheme=NULL) {
+  data(BLOSUM80)
+  if (length(x) == 1) return(getNofNeighborsOne(x, blosum, method, libscheme))
+
+  return(llply(x, getNofNeighborsOne, blosum, method, libscheme))
+}
+
+
+#' BLOSUM80 matrix
+#' 
+#' where does this matrix come from and what does it describe?
+#' @name BLOSUM80
+#' @title BLOSUM80 matrix
+#' @description where does this matrix come from and what does it describe?
+#' @docType data
+#' @usage data(BLOSUM80)

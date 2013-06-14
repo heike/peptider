@@ -10,7 +10,7 @@
  $ stops: num  2 2 2 2}
 \description{
   This data set contains descriptions of amino acid classes
-  under the NNB library scheme.
+  under the NNK library scheme.
 }
 \details{
   Nucleotide library scheme NNK
