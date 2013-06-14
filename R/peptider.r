@@ -384,3 +384,47 @@ getNofNeighbors <- function(x, blosum = 1, method="peptide", libscheme=NULL) {
 #' @description where does this matrix come from and what does it describe?
 #' @docType data
 #' @usage data(BLOSUM80)
+
+
+#' Compute the number of codons for a vector of peptide sequences
+#' 
+#' @param x (vector) of character strings of  peptide sequences.
+#' @param libscheme library scheme under which neighbors are being calculated. this is only of importance, if method="dna"
+#' @return vector of numbers of codons 
+#' @export
+#' @examples
+#' codons("APE", libscheme=NNK)
+#' codons("HENNING", libscheme=NNK)
+codons <- function(x, libscheme=NULL) {
+  if (length(x) == 1) return(codonsOne(x, libscheme))
+
+  unlist(llply(x, codonsOne, libscheme=libscheme))
+}
+
+codonsOne <- function(x, libscheme) {
+  stopifnot(!is.null(libscheme))
+  lib <- libscheme(1)$info$scheme
+
+  sum(unlist(llply(strsplit(x, split="")[[1]], function(w) { 
+    lib[grep(w, lib$aacid),"c"]
+  })))
+}
+
+#' Probability of detection of a peptide sequence 
+#' 
+#' @param x (vector) of character strings of  peptide sequences.
+#' @param libscheme library scheme under which neighbors are being calculated. 
+#' @param N number of DNA clones investigated
+#' @return probability of detection
+#' @export
+#' @examples
+#' ppeptide("APE", libscheme=NNK, N=10^8)
+#' ppeptide("HENNING", libscheme=NNK, N=10^8)
+
+ppeptide <- function(x, libscheme, N) {
+  n <- codons(x, libscheme=libscheme)
+  Max <- libscheme(1)$info$valid^nchar(as.character(x))
+  1 - exp(-N*n/Max)
+}
+
+

@@ -1,0 +1,31 @@
+\name{getNeighbors}
+\alias{getNeighbors}
+\title{Find all neighbors of degree one for a set of peptide sequences}
+\usage{
+  getNeighbors(x, blosum = 1)
+}
+\arguments{
+  \item{x}{(vector) of character strings of peptide
+  sequences.}
+
+  \item{blosum}{minimal BLOSUM loading, defaults to 1 for
+  positive loadings only}
+}
+\value{
+  list of neighbor sequences
+}
+\description{
+  first degree neighbors - a neighbor of a peptide is
+  defined as a peptide sequence that differs in at most one
+  amino acid from a given sequence. Additionally, we can
+  restrict neighbors to regard only those sequences that
+  have a certain minimal BLOSUM loading.
+}
+\examples{
+getNeighbors("APE")
+getNeighbors(c("HI", "APE"))
+getNeighbors(c("HI", "EARNEST", "APE"), blosum=3)
+## degree 2 neighbors:
+unique(unlist(getNeighbors(getNeighbors("APE"))))
+}
+
