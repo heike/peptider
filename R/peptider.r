@@ -32,11 +32,11 @@ NNN <- function(k) {
 #' @title Nucleotide library scheme NNN
 #' @description This data set contains descriptions of amino acid classes under the NNN library scheme.
 #' @docType data
-#' @usage libBuild(1, libscheme="nnn_scheme")
+#' @usage libBuild(1, libscheme=nnn_scheme)
 
 nnn_scheme <- data.frame(class=c("A", "B", "C", "D", "E", "Z"), 
                             aacids=c("SLR", "AGPTV", "I", "DEFHKNQY", "MW", "C*"), 
-                            s=c(3,5,1,8,2,2), c=c(6,4,3,2,1,2.5), stops=3)
+                            c=c(6,4,3,2,1,2.5))
 
 
 #' Nucleotide library of scheme Trimer
@@ -77,7 +77,7 @@ Trimer <- function(k) {
 
 trimer_scheme <- data.frame(class=c("A", "Z"), 
                             aacids=c("SLRAGPTVIDEFHKNQYMW", "*"), 
-                            s=c(19, 0), c=c(1, 0), stops=0)
+                            c=c(1, 0))
 
 
 
@@ -189,8 +189,7 @@ NNK <- function(k) {
 
 nnk_scheme <- data.frame(class=c("A", "B", "C", "Z"),
                          aacid=c("SLR", "AGPTV", "DEFHIKMNQWY", "C*"),
-                         s=c(3,5,11,2),
-                         c=c(3,2,1,1), stops=2)
+                         c=c(3,2,1,1))
 
 
 #' Nucleotide library of scheme NNS
@@ -245,8 +244,7 @@ NNB <- function(k) {
 
 nnb_scheme <- data.frame(class=c("A", "B", "C", "D", "E", "Z"),
               aacid=c("S", "LR", "AGPTV", "DFHINY", "EKMQW", "*C"),
-              s=c(1,2,5,6,5,2),
-              c=c(5,4,3,2,1, 1.5), stops=3)
+              c=c(5,4,3,2,1, 1.5))
 
 #' Build peptide library of k-length sequences according to specified scheme
 #' 
@@ -261,7 +259,9 @@ nnb_scheme <- data.frame(class=c("A", "B", "C", "D", "E", "Z"),
  
 libBuild <- function(k, libscheme) {
   libscheme$class <- as.character(libscheme$class)
-  seq <- with(libscheme[-nrow(libscheme),], make.RV(class, s*c))
+  libscheme$s <- nchar(as.character(libscheme$aacids))
+  mult <- with(libscheme, s*c)
+  seq <- with(libscheme[-nrow(libscheme),], make.RV(class, mult))
   d <- with(libscheme[-nrow(libscheme),], make.RV(class, s))
   
   d7 <- multN(d,k)
@@ -269,8 +269,8 @@ libBuild <- function(k, libscheme) {
   di <- with(libscheme, round(probs(d7)*sum(s[-length(unique(class))])^k,0))
   pi <- probs(seq7)
   list(data=data.frame(class = as.vector(d7), di = di, probs = pi),
-       info=list(nucleotides=sum(with(libscheme, s*c)), 
-                 valid=with(libscheme, sum(s*c)-stops[1]),
+       info=list(nucleotides=sum(with(libscheme, mult)), 
+                 valid=with(libscheme, sum(mult[-length(mult)])),
                  scheme=libscheme))
 }
 
