@@ -357,6 +357,7 @@ getNofNeighborsOne <- function(x, blosum = 1, method="peptide", libscheme=NULL) 
 #' 
 #' first degree neighbors - a neighbor of a peptide is defined as a peptide sequence that differs in at most one amino acid from a given sequence. 
 #' Additionally, we can restrict neighbors to regard only those sequences that have a certain minimal BLOSUM loading. 
+#' Use this function for only a few peptide sequences. Any larger number of peptide sequences will take too much main memory.
 #' @param x (vector) of character strings of  peptide sequences.
 #' @param blosum minimal BLOSUM loading, defaults to 1 for positive loadings only
 #' @param method character string, one of "peptide" or "dna". This specifies the level at which the neighbors are calculated.
@@ -380,6 +381,7 @@ getNofNeighbors <- function(x, blosum = 1, method="peptide", libscheme=NULL) {
 
 #' Compute the number of codons for a vector of peptide sequences
 #' 
+#' use this function for only a few peptide sequences. Any larger number of peptide sequences should be dealt with in the framework of the library scheme and the detect function.
 #' @param x (vector) of character strings of  peptide sequences.
 #' @param libscheme library scheme under which neighbors are being calculated. this is only of importance, if method="dna"
 #' @return vector of numbers of codons 
@@ -404,6 +406,7 @@ codonsOne <- function(x, libscheme) {
 
 #' Probability of detection of a peptide sequence 
 #' 
+#' use this function for only a few peptide sequences. Any larger number of peptide sequences should be dealt with in the framework of the library scheme and the detect function.
 #' @param x (vector) of character strings of  peptide sequences.
 #' @param libscheme library scheme under which neighbors are being calculated. 
 #' @param N number of valid DNA clones investigated
