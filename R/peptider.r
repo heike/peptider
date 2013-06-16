@@ -397,7 +397,7 @@ codonsOne <- function(x, libscheme) {
   stopifnot(!is.null(libscheme))
   lib <- libscheme(1)$info$scheme
 
-  sum(unlist(llply(strsplit(x, split="")[[1]], function(w) { 
+  prod(unlist(llply(strsplit(x, split="")[[1]], function(w) { 
     lib[grep(w, lib$aacid),"c"]
   })))
 }
@@ -406,7 +406,7 @@ codonsOne <- function(x, libscheme) {
 #' 
 #' @param x (vector) of character strings of  peptide sequences.
 #' @param libscheme library scheme under which neighbors are being calculated. 
-#' @param N number of DNA clones investigated
+#' @param N number of valid DNA clones investigated
 #' @return probability of detection
 #' @export
 #' @examples
