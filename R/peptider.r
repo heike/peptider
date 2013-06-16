@@ -414,8 +414,8 @@ codonsOne <- function(x, libscheme) {
 #' ppeptide("HENNING", libscheme=NNK, N=10^8)
 
 ppeptide <- function(x, libscheme, N) {
-  n <- codons(x, libscheme=libscheme)
-  Max <- libscheme(1)$info$valid^nchar(as.character(x))
+  n <- sum(codons(x, libscheme=libscheme))
+  Max <- libscheme(1)$info$valid^nchar(as.character(x[1]))
   1 - exp(-N*n/Max)
 }
 
