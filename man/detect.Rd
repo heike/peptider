@@ -23,6 +23,6 @@ summary(detect())
 
 require(ggplot2)
 lib = NNK(7)
-qplot(detect(lib), weight=di, geom="histogram")
+qplot(detect(lib, size=10^8), weight=di, geom="histogram", data=lib$data)
 }
 

@@ -11,5 +11,7 @@ License: MIT
 Depends:
     discreteRV,
     plyr
+Suggests:
+    ggplot2
 Collate:
     'peptider.r'

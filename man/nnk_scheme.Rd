@@ -14,7 +14,7 @@
   Nucleotide library scheme NNK
 
   The last DNA nucleus in the sequence is restricted to be
-  one of C, G, or T.
+  one of G, or T.
 }
 \keyword{datasets}
 

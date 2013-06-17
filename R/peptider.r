@@ -180,7 +180,7 @@ NNK <- function(k) {
 
 #' Nucleotide library  scheme NNK
 #'
-#' The last DNA nucleus in the sequence is restricted to be one of C, G, or T.
+#' The last DNA nucleus in the sequence is restricted to be one of G, or T.
 #' @name nnk_scheme
 #' @title Nucleotide library scheme NNK
 #' @description This data set contains descriptions of amino acid classes under the NNK library scheme.
@@ -191,6 +191,15 @@ nnk_scheme <- data.frame(class=c("A", "B", "C", "Z"),
                          aacid=c("SLR", "AGPTV", "DEFHIKMNQWY", "C*"),
                          c=c(3,2,1,1))
 
+#' Nucleotide library  scheme NNS
+#'
+#' The last DNA nucleus in the sequence is restricted to be one of C, or G.
+#' @name nns_scheme
+#' @title Nucleotide library scheme NNS
+#' @description This data set contains descriptions of amino acid classes under the NNS library scheme.
+#' @docType data
+#' @usage libBuild(1, libscheme=nns_scheme)
+nns_scheme <- nnk_scheme
 
 #' Nucleotide library of scheme NNS
 #'
@@ -254,20 +263,18 @@ nnb_scheme <- data.frame(class=c("A", "B", "C", "D", "E", "Z"),
 #' last class is reserved for stop tags and other amino acids we are not interested in. 
 #' @return library and library scheme used
 #' @export
-#' @examples
-#' lib <- libBuild(4, libscheme=nnb_scheme)
  
 libBuild <- function(k, libscheme) {
   libscheme$class <- as.character(libscheme$class)
-  libscheme$s <- nchar(as.character(libscheme$aacids))
-  mult <- with(libscheme, s*c)
-  seq <- with(libscheme[-nrow(libscheme),], make.RV(class, mult))
+  libscheme$s <- nchar(as.character(libscheme$aacid))
+  seq <- with(libscheme[-nrow(libscheme),], make.RV(class, s*c))
   d <- with(libscheme[-nrow(libscheme),], make.RV(class, s))
   
   d7 <- multN(d,k)
   seq7 <- multN(seq,k)
   di <- with(libscheme, round(probs(d7)*sum(s[-length(unique(class))])^k,0))
   pi <- probs(seq7)
+  mult <- with(libscheme, s*c)
   list(data=data.frame(class = as.vector(d7), di = di, probs = pi),
        info=list(nucleotides=sum(with(libscheme, mult)), 
                  valid=with(libscheme, sum(mult[-length(mult)])),
@@ -287,7 +294,7 @@ libBuild <- function(k, libscheme) {
 #'
 #' require(ggplot2)
 #' lib = NNK(7)
-#' qplot(detect(lib), weight=di, geom="histogram")
+#' qplot(detect(lib, size=10^8), weight=di, geom="histogram", data=lib$data)
 
 detect <- function(lib = NNK(7), size = 10^8) {
   with(lib$data, 1 - exp(-size*probs/di))
@@ -431,4 +438,4 @@ ppeptide <- function(x, libscheme, N) {
 #' @description where does this matrix come from and what does it describe?
 #' @docType data
 #' @usage data(BLOSUM80)
-data(BLOSUM80)
+NULL

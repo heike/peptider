@@ -18,7 +18,4 @@
 \description{
   some more explanation here
 }
-\examples{
-lib <- libBuild(4, libscheme=nnb_scheme)
-}
 
