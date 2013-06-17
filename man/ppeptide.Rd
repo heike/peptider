@@ -11,13 +11,16 @@
   \item{libscheme}{library scheme under which neighbors are
   being calculated.}
 
-  \item{N}{number of DNA clones investigated}
+  \item{N}{number of valid DNA clones investigated}
 }
 \value{
   probability of detection
 }
 \description{
-  Probability of detection of a peptide sequence
+  use this function for only a few peptide sequences. Any
+  larger number of peptide sequences should be dealt with
+  in the framework of the library scheme and the detect
+  function.
 }
 \examples{
 ppeptide("APE", libscheme=NNK, N=10^8)

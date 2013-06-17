@@ -28,7 +28,9 @@
   defined as a peptide sequence that differs in at most one
   amino acid from a given sequence. Additionally, we can
   restrict neighbors to regard only those sequences that
-  have a certain minimal BLOSUM loading.
+  have a certain minimal BLOSUM loading. Use this function
+  for only a few peptide sequences. Any larger number of
+  peptide sequences will take too much main memory.
 }
 \examples{
 getNofNeighbors("APE")

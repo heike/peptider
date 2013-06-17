@@ -16,8 +16,10 @@
   vector of numbers of codons
 }
 \description{
-  Compute the number of codons for a vector of peptide
-  sequences
+  use this function for only a few peptide sequences. Any
+  larger number of peptide sequences should be dealt with
+  in the framework of the library scheme and the detect
+  function.
 }
 \examples{
 codons("APE", libscheme=NNK)
