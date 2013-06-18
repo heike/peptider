@@ -9,20 +9,7 @@
 #' NNN(2)
 #' head(NNN(7))
 NNN <- function(k) {
-#   seq <- make.RV(c("A","B","C", "D", "E"), c(3*6, 5*4, 1*3, 8*2, 2*1))
-#   d <- make.RV(c("A","B","C", "D", "E"), c(3, 5, 1, 8, 2))
-#   
-#   d7 <- multN(d,k)
-#   seq7 <- multN(seq,k)
-#   
-#   di <- round(probs(d7)*19^k,0)
-#   pi <- probs(seq7)
-#   
-#   list(data = data.frame(class = as.vector(d7), di = di, probs = pi), 
-#        info =list(nucleotides = 64, valid = 59, 
-#                   scheme = data.frame(class=c("A", "B", "C", "D", "E", "Z"), 
-#                                   aacids=c("SLR", "AGPTV", "I", "DEFHKNQY", "MW", "C*"), 
-#                                   s=c(3,5,1,8,2,2), c=c(6,4,3,2,1,2.5))))
+
   libBuild(k, libscheme=nnn_scheme)
 }
 
@@ -49,20 +36,7 @@ nnn_scheme <- data.frame(class=c("A", "B", "C", "D", "E", "Z"),
 #' Trimer(2)
 #' head(Trimer(7))
 Trimer <- function(k) {
-#   seq <- make.RV(c("A"), c(19))
-#   d <- make.RV(c("A"), c(19))
-#   
-#   d7 <- multN(d,k)
-#   seq7 <- multN(seq,k)
-#   
-#   di <- round(probs(d7)*19^k,0)
-#   pi <- probs(seq7)
-#   
-#   list(data = data.frame(class = as.vector(d7), di = di, probs = pi), 
-#        info =list(nucleotides = 19, valid = 19, 
-#                   scheme = data.frame(class=c("A"), 
-#                                   aacids=c("SLRAGPTVIDEFHKNQYMW"), 
-#                                   s=c(19), c=c(1))))
+
   libBuild(k, libscheme=trimer_scheme)
 }
 
@@ -160,21 +134,7 @@ efficiency <- function(k, libscheme, N, lib=NULL) {
 #' NNK(2)
 #' head(NNK(7))
 NNK <- function(k) {
-#   seq <- make.RV(c("A","B","C"), c(3*3,5*2,11))
-#   d <- make.RV(c("A","B","C"), c(3,5,11))
-#   
-#   d7 <- multN(d,k)
-#   seq7 <- multN(seq,k)
-#   
-#   di <- round(probs(d7)*19^k,0)
-#   pi <- probs(seq7)
-#   
-#   list(data=data.frame(class = as.vector(d7), di = di, probs = pi),
-#        info=list(nucleotides=32, valid=30,
-#                  scheme=data.frame(class=c("A", "B", "C", "Z"),
-#                               aacid=c("SLR", "AGPTV", "DEFHIKMNQWY", "C*"),
-#                                s=c(3,5,11,2),
-#                                c=c(3,2,1,1))))
+
   libBuild(k, nnk_scheme)
 }
 
@@ -224,21 +184,7 @@ NNS <- function(k) {
 #' NNB(2)
 #' head(NNB(7))
 NNB <- function(k) {
-#   seq <- make.RV(c("A","B","C", "D", "E"), c(1*5, 2*4, 5*3, 6*2, 5*1))
-#   d <- make.RV(c("A","B","C", "D", "E"), c(1,2,5,6,5))
-#   
-#   d7 <- multN(d,k)
-#   seq7 <- multN(seq,k)
-#   
-#   di <- round(probs(d7)*19^k,0)
-#   pi <- probs(seq7)
-#   
-#   list(data=data.frame(class = as.vector(d7), di = di, probs = pi),
-#        info=list(nucleotides=48, valid=45,
-#                  scheme=data.frame(class=c("A", "B", "C", "D", "E", "Z"),
-#                                aacid=c("S", "LR", "AGPTV", "DFHINY", "EKMQW", "C*"),
-#                                s=c(1,2,5,6,5,2),
-#                                c=c(5,4,3,2,1, 1.5))))
+
   libBuild(k, libscheme=nnb_scheme)
 }
 
