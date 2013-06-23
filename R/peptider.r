@@ -1,5 +1,5 @@
 
-#' Nucleotide library of scheme NNN
+#' k-nucleotide library of scheme NNN
 #'
 #' @param k length of peptide sequences
 #' @return list consisting of a data frame of peptide classes, size of class, and its probabilities, 
@@ -26,7 +26,7 @@ nnn_scheme <- data.frame(class=c("A", "B", "C", "D", "E", "Z"),
                             c=c(6,4,3,2,1,2.5))
 
 
-#' Nucleotide library of scheme Trimer
+#' k-nucleotide library of scheme Trimer
 #'
 #' @param k length of peptide sequences
 #' @return list consisting of a data frame of peptide classes, size of class, and its probabilities, 
@@ -71,7 +71,9 @@ trimer_scheme <- data.frame(class=c("A", "Z"),
 #' makowski(3, Trimer)
 makowski <- function(k, libscheme) {
   dframe <- libscheme(k)$data
-  with(dframe, 1/(19^k*sum(probs^2/di)))
+  info <- libscheme(1)$info$scheme
+  numAA <- sum(info$c[-nrow(info)]) 
+  with(dframe, 1/(numAA^k*sum(probs^2/di)))
 }
 
 #' Coverage as expected number of peptides given all possible peptides
@@ -124,7 +126,7 @@ efficiency <- function(k, libscheme, N, lib=NULL) {
 }
 
 
-#' Nucleotide library of scheme NNK
+#' k-nucleotide library of scheme NNK
 #'
 #' @param k length of peptide sequences
 #' @return list consisting of a data frame of peptide classes, size of class, and its probabilities, 
@@ -161,7 +163,7 @@ nnk_scheme <- data.frame(class=c("A", "B", "C", "Z"),
 #' @usage libBuild(1, libscheme=nns_scheme)
 nns_scheme <- nnk_scheme
 
-#' Nucleotide library of scheme NNS
+#' k nucleotide library of scheme NNS
 #'
 #' @param k length of peptide sequences
 #' @return data frame of peptide classes, size of class, and its probability
@@ -174,7 +176,7 @@ NNS <- function(k) {
   NNK(k)
 }
 
-#' Nucleotide library of scheme NNB
+#' k nucleotide library of scheme NNB
 #'
 #' The last DNA nucleus in the sequence is restricted to be one of C, G, or T.
 #' @param k length of peptide sequences

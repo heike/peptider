@@ -1,6 +1,6 @@
 \name{NNS}
 \alias{NNS}
-\title{Nucleotide library of scheme NNS}
+\title{k nucleotide library of scheme NNS}
 \usage{
   NNS(k)
 }
@@ -12,7 +12,7 @@
   probability
 }
 \description{
-  Nucleotide library of scheme NNS
+  k nucleotide library of scheme NNS
 }
 \examples{
 NNS(2)

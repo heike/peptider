@@ -1,6 +1,6 @@
 \name{Trimer}
 \alias{Trimer}
-\title{Nucleotide library of scheme Trimer}
+\title{k-nucleotide library of scheme Trimer}
 \usage{
   Trimer(k)
 }
@@ -13,7 +13,7 @@
   information relating to the library scheme
 }
 \description{
-  Nucleotide library of scheme Trimer
+  k-nucleotide library of scheme Trimer
 }
 \examples{
 Trimer(2)

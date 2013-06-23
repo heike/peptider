@@ -1,6 +1,6 @@
 \name{NNN}
 \alias{NNN}
-\title{Nucleotide library of scheme NNN}
+\title{k-nucleotide library of scheme NNN}
 \usage{
   NNN(k)
 }
@@ -13,7 +13,7 @@
   information relating to the library scheme
 }
 \description{
-  Nucleotide library of scheme NNN
+  k-nucleotide library of scheme NNN
 }
 \examples{
 NNN(2)

@@ -1,6 +1,6 @@
 \name{NNK}
 \alias{NNK}
-\title{Nucleotide library of scheme NNK}
+\title{k-nucleotide library of scheme NNK}
 \usage{
   NNK(k)
 }
@@ -13,7 +13,7 @@
   information relating to the library scheme
 }
 \description{
-  Nucleotide library of scheme NNK
+  k-nucleotide library of scheme NNK
 }
 \examples{
 NNK(2)

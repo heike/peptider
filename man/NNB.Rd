@@ -1,6 +1,6 @@
 \name{NNB}
 \alias{NNB}
-\title{Nucleotide library of scheme NNB}
+\title{k nucleotide library of scheme NNB}
 \usage{
   NNB(k)
 }
