@@ -122,7 +122,7 @@ efficiency <- function(k, libscheme, N, lib=NULL) {
   libdata$expected <- libdata$probs*N*(1-initialloss)
   libdata$z <- with(libdata, di*(1-exp(-expected/di)))
   
-  with(libdata, sum(z)/min(19^k,N))
+  with(libdata, min(19^k,sum(z))/N)
 }
 
 
