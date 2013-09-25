@@ -210,6 +210,11 @@ nnb_scheme <- data.frame(class=c("A", "B", "C", "D", "E", "Z"),
 #' @param libscheme library scheme specifying classes of amino acids according to number of encodings
 #' last class is reserved for stop tags and other amino acids we are not interested in. 
 #' @return library and library scheme used
+#' @examples
+#' user_scheme <- data.frame(class=c("A", "B", "C", "Z"),
+#'                           aacid=c("SLR", "AGPTV", "CDEFHIKMNQWY", "*"),
+#'                           c=c(3,2,1,1))
+#' user_library <- libBuild(3, user_scheme)                        
 #' @export
  
 libBuild <- function(k, libscheme) {
