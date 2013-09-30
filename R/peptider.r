@@ -72,7 +72,7 @@ trimer_scheme <- data.frame(class=c("A", "Z"),
 makowski <- function(k, libscheme) {
   dframe <- libscheme(k)$data
   info <- libscheme(1)$info$scheme
-  numAA <- sum(info$c[-nrow(info)]) 
+  numAA <- sum(info$s[-nrow(info)]) 
   with(dframe, 1/(numAA^k*sum(probs^2/di)))
 }
 
