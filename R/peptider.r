@@ -13,6 +13,20 @@ NNN <- function(k) {
   libBuild(k, libscheme=nnn_scheme)
 }
 
+#' k-nucleotide library of scheme NNNC
+#'
+#' @param k length of peptide sequences
+#' @return list consisting of a data frame of peptide classes, size of class, and its probabilities, 
+#' and a list of additional information relating to the library scheme
+#' @export
+#' @examples
+#' NNNC(2)
+#' head(NNNC(7))
+NNNC <- function(k) {
+    
+    libBuild(k, libscheme=nnnc_scheme)
+}
+
 #' Nucleotide library  scheme NNN
 #'
 #' @name nnn_scheme
@@ -24,6 +38,18 @@ NNN <- function(k) {
 nnn_scheme <- data.frame(class=c("A", "B", "C", "D", "E", "Z"), 
                             aacids=c("SLR", "AGPTV", "I", "DEFHKNQY", "MW", "C*"), 
                             c=c(6,4,3,2,1,2.5))
+
+#' Nucleotide library scheme NNNC
+#'
+#' @name nnnc_scheme
+#' @title Nucleotide library scheme NNNC
+#' @description This data set contains descriptions of amino acid classes under the NNN library scheme with C.
+#' @docType data
+#' @usage libBuild(1, libscheme=nnnc_scheme)
+
+nnnc_scheme <- data.frame(class=c("A", "B", "C", "D", "E", "Z"), 
+                         aacids=c("SLR", "AGPTV", "I", "DEFHKNQYC", "MW", "*"), 
+                         c=c(6,4,3,2,1,3))
 
 
 #' k-nucleotide library of scheme Trimer
@@ -140,6 +166,20 @@ NNK <- function(k) {
   libBuild(k, nnk_scheme)
 }
 
+#' k-nucleotide library of scheme NNKC
+#'
+#' @param k length of peptide sequences
+#' @return list consisting of a data frame of peptide classes, size of class, and its probabilities, 
+#' and a list of additional information relating to the library scheme
+#' @export
+#' @examples
+#' NNKC(2)
+#' head(NNKC(7))
+NNKC <- function(k) {
+    
+    libBuild(k, nnkc_scheme)
+}
+
 #' Nucleotide library  scheme NNK
 #'
 #' The last DNA nucleus in the sequence is restricted to be one of G, or T.
@@ -153,6 +193,19 @@ nnk_scheme <- data.frame(class=c("A", "B", "C", "Z"),
                          aacid=c("SLR", "AGPTV", "DEFHIKMNQWY", "C*"),
                          c=c(3,2,1,1))
 
+#' Nucleotide library  scheme NNKC
+#'
+#' The last DNA nucleus in the sequence is restricted to be one of G, or T.
+#' @name nnkc_scheme
+#' @title Nucleotide library scheme NNKC
+#' @description This data set contains descriptions of amino acid classes under the NNKC library scheme.
+#' @docType data
+#' @usage libBuild(1, libscheme=nnkc_scheme)
+
+nnkc_scheme <- data.frame(class=c("A", "B", "C", "Z"),
+                         aacid=c("SLR", "AGPTV", "DEFHIKMNQWYC", "*"),
+                         c=c(3,2,1,1))
+
 #' Nucleotide library  scheme NNS
 #'
 #' The last DNA nucleus in the sequence is restricted to be one of C, or G.
@@ -162,6 +215,16 @@ nnk_scheme <- data.frame(class=c("A", "B", "C", "Z"),
 #' @docType data
 #' @usage libBuild(1, libscheme=nns_scheme)
 nns_scheme <- nnk_scheme
+
+#' Nucleotide library  scheme NNSC
+#'
+#' The last DNA nucleus in the sequence is restricted to be one of C, or G.
+#' @name nnsc_scheme
+#' @title Nucleotide library scheme NNSC
+#' @description This data set contains descriptions of amino acid classes under the NNSC library scheme.
+#' @docType data
+#' @usage libBuild(1, libscheme=nnsc_scheme)
+nnsc_scheme <- nnkc_scheme
 
 #' k nucleotide library of scheme NNS
 #'
@@ -174,6 +237,19 @@ nns_scheme <- nnk_scheme
 NNS <- function(k) {
   ## from a codon to amino acid encoding point of view NNK and NNS are identical.
   NNK(k)
+}
+
+#' k nucleotide library of scheme NNSC
+#'
+#' @param k length of peptide sequences
+#' @return data frame of peptide classes, size of class, and its probability
+#' @export
+#' @examples
+#' NNSC(2)
+#' head(NNSC(7))
+NNSC <- function(k) {
+    ## from a codon to amino acid encoding point of view NNKC and NNSC are identical.
+    NNKC(k)
 }
 
 #' k nucleotide library of scheme NNB
@@ -190,6 +266,20 @@ NNB <- function(k) {
   libBuild(k, libscheme=nnb_scheme)
 }
 
+#' k nucleotide library of scheme NNBC
+#'
+#' The last DNA nucleus in the sequence is restricted to be one of C, G, or T.
+#' @param k length of peptide sequences
+#' @return data frame of peptide classes, size of class, and its probability
+#' @export
+#' @examples
+#' NNBC(2)
+#' head(NNBC(7))
+NNBC <- function(k) {
+    
+    libBuild(k, libscheme=nnbc_scheme)
+}
+
 #' Nucleotide library  scheme NNB
 #'
 #' The last DNA nucleus in the sequence is restricted to be one of C, G, or T.
@@ -202,6 +292,19 @@ NNB <- function(k) {
 nnb_scheme <- data.frame(class=c("A", "B", "C", "D", "E", "Z"),
               aacid=c("S", "LR", "AGPTV", "DFHINY", "EKMQW", "*C"),
               c=c(5,4,3,2,1, 1.5))
+
+#' Nucleotide library  scheme NNBC
+#'
+#' The last DNA nucleus in the sequence is restricted to be one of C, G, or T.
+#' @name nnbc_scheme
+#' @title Nucleotide library scheme NNBC
+#' @description This data set contains descriptions of amino acid classes under the NNBC library scheme with C.
+#' @docType data
+#' @usage libBuild(1, libscheme="nnbc_scheme")
+
+nnbc_scheme <- data.frame(class=c("A", "B", "C", "D", "E", "Z"),
+                         aacid=c("S", "LR", "AGPTV", "DFHINYC", "EKMQW", "*"),
+                         c=c(5,4,3,2,1,1))
 
 #' Build peptide library of k-length sequences according to specified scheme
 #' 
