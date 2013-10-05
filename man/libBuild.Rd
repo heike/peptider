@@ -18,4 +18,10 @@
 \description{
   some more explanation here
 }
+\examples{
+user_scheme <- data.frame(class=c("A", "B", "C", "Z"),
+                          aacid=c("SLR", "AGPTV", "CDEFHIKMNQWY", "*"),
+                          c=c(3,2,1,1))
+user_library <- libBuild(3, user_scheme)
+}
 
