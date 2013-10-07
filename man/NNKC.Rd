@@ -17,6 +17,5 @@
 }
 \examples{
 NNKC(2)
-head(NNKC(7))
 }
 

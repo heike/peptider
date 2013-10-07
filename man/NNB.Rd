@@ -17,6 +17,5 @@
 }
 \examples{
 NNB(2)
-head(NNB(7))
 }
 

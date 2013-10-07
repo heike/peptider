@@ -16,6 +16,5 @@
 }
 \examples{
 NNS(2)
-head(NNS(7))
 }
 

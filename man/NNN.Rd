@@ -17,6 +17,5 @@
 }
 \examples{
 NNN(2)
-head(NNN(7))
 }
 

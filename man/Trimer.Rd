@@ -17,6 +17,5 @@
 }
 \examples{
 Trimer(2)
-head(Trimer(7))
 }
 

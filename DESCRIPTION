@@ -1,13 +1,13 @@
 Package: peptider
 Type: Package
 Title: Evaluation of diversity in nucleotide libraries
-Version: 0.0.1
-Date: 2012-12-20
-Author: Eric Hare, Heike Hofmann
-Maintainer: Heike Hofmann <hofmann@iastate.edu>
-Description: Couple of functions for evaluating diversity in peptide libraries
-    (NNN, NNK/S, NNB, and Trimer).
-License: MIT
+Version: 0.1
+Date: 2013-10-07
+Author: Heike Hofmann, Eric Hare
+Maintainer: Eric Hare <erichare@iastate.edu>
+Description: Functions for evaluating diversity in peptide libraries, including
+    NNN, NNB, NNK/S, and NNN schemes.
+License: GPL-3
 Depends:
     discreteRV,
     plyr
@@ -15,3 +15,4 @@ Suggests:
     ggplot2
 Collate:
     'peptider.r'
+    'tabulate.r'

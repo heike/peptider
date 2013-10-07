@@ -7,7 +7,6 @@
 #' @export
 #' @examples
 #' NNN(2)
-#' head(NNN(7))
 NNN <- function(k) {
 
   libBuild(k, libscheme=nnn_scheme)
@@ -21,7 +20,6 @@ NNN <- function(k) {
 #' @export
 #' @examples
 #' NNNC(2)
-#' head(NNNC(7))
 NNNC <- function(k) {
     
     libBuild(k, libscheme=nnnc_scheme)
@@ -60,7 +58,6 @@ nnnc_scheme <- data.frame(class=c("A", "B", "C", "D", "E", "Z"),
 #' @export
 #' @examples
 #' Trimer(2)
-#' head(Trimer(7))
 Trimer <- function(k) {
 
   libBuild(k, libscheme=trimer_scheme)
@@ -160,7 +157,6 @@ efficiency <- function(k, libscheme, N, lib=NULL) {
 #' @export
 #' @examples
 #' NNK(2)
-#' head(NNK(7))
 NNK <- function(k) {
 
   libBuild(k, nnk_scheme)
@@ -174,7 +170,6 @@ NNK <- function(k) {
 #' @export
 #' @examples
 #' NNKC(2)
-#' head(NNKC(7))
 NNKC <- function(k) {
     
     libBuild(k, nnkc_scheme)
@@ -233,7 +228,6 @@ nnsc_scheme <- nnkc_scheme
 #' @export
 #' @examples
 #' NNS(2)
-#' head(NNS(7))
 NNS <- function(k) {
   ## from a codon to amino acid encoding point of view NNK and NNS are identical.
   NNK(k)
@@ -246,7 +240,6 @@ NNS <- function(k) {
 #' @export
 #' @examples
 #' NNSC(2)
-#' head(NNSC(7))
 NNSC <- function(k) {
     ## from a codon to amino acid encoding point of view NNKC and NNSC are identical.
     NNKC(k)
@@ -260,7 +253,6 @@ NNSC <- function(k) {
 #' @export
 #' @examples
 #' NNB(2)
-#' head(NNB(7))
 NNB <- function(k) {
 
   libBuild(k, libscheme=nnb_scheme)
@@ -274,7 +266,6 @@ NNB <- function(k) {
 #' @export
 #' @examples
 #' NNBC(2)
-#' head(NNBC(7))
 NNBC <- function(k) {
     
     libBuild(k, libscheme=nnbc_scheme)
@@ -351,14 +342,17 @@ libBuild <- function(k, libscheme) {
 #' require(ggplot2)
 #' lib = NNK(7)
 #' qplot(detect(lib, size=10^8), weight=di, geom="histogram", data=lib$data)
-
 detect <- function(lib = NNK(7), size = 10^8) {
   with(lib$data, 1 - exp(-size*probs/di))
 }
 
 
 getNeighborOne <- function(x, blosum=1) {
-  data(BLOSUM80)
+  ## For CRAN check
+  BLOSUM80 <- AA1 <- Blosum <- AA2 <- NULL
+    
+  data(BLOSUM80, envir=environment())
+  
   replacements <- llply(strsplit(x,""), function(y) {
     llply(y, function(z) {
       as.character(subset(BLOSUM80, (AA1 == z) & (Blosum >= blosum)& (AA2 != z))$AA2 )
@@ -396,7 +390,10 @@ getNeighbors <- function(x, blosum=1) {
 }
 
 getNofNeighborsOne <- function(x, blosum = 1, method="peptide", libscheme=NULL) {
-  data(BLOSUM80)
+  ## For CRAN check
+  BLOSUM80 <- AA1 <- Blosum <- AA2 <- NULL
+    
+  data(BLOSUM80, envir=environment())
   replacements <- llply(strsplit(x,""), function(y) {
     llply(y, function(z) {
       as.character(subset(BLOSUM80, (AA1 == z) & (Blosum >= blosum) & (AA2 != z))$AA2)
@@ -433,7 +430,7 @@ getNofNeighborsOne <- function(x, blosum = 1, method="peptide", libscheme=NULL) 
 #' getNofNeighbors("N")
 #' getNofNeighbors("N", method="dna", libscheme=NNK)
 getNofNeighbors <- function(x, blosum = 1, method="peptide", libscheme=NULL) {
-  data(BLOSUM80)
+  data(BLOSUM80, envir=environment())
   if (length(x) == 1) return(getNofNeighborsOne(x, blosum, method, libscheme))
 
   return(llply(x, getNofNeighborsOne, blosum, method, libscheme))

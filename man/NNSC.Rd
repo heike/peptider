@@ -16,6 +16,5 @@
 }
 \examples{
 NNSC(2)
-head(NNSC(7))
 }
 
