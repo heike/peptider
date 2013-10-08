@@ -121,7 +121,9 @@ coverage <- function(k, libscheme, N, lib=NULL) {
   libdata$expected <- libdata$probs*N*(1-initialloss)
   libdata$z <- with(libdata, di*(1-exp(-expected/di)))
   
-  with(libdata, min(sum(z)/19^k,1))
+  s_count <- sum(subset(lib$info$scheme, class != "Z")$s)
+  
+  with(libdata, min(sum(z)/s_count^k,1))
 }
 
 #' Relative efficiency of a library
@@ -145,7 +147,9 @@ efficiency <- function(k, libscheme, N, lib=NULL) {
   libdata$expected <- libdata$probs*N*(1-initialloss)
   libdata$z <- with(libdata, di*(1-exp(-expected/di)))
   
-  with(libdata, min(19^k,sum(z))/N)
+  s_count <- sum(subset(lib$info$scheme, class != "Z")$s)
+  
+  with(libdata, min(s_count^k,sum(z))/N)
 }
 
 
