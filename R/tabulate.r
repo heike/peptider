@@ -53,15 +53,19 @@ generateCustomProbs <- function(Custom) {
     N <- c(10^6, 10^7, 10^8, 10^9, 10^10, 10^11, 10^12)
     n <- as.vector(sapply(10^seq(6, 12, by = 1), `*`, seq(1.0, 9.9, by = 0.1)))
     
+    cat("Getting possible peptide encodings...\n")
     lib.probs.tmp <- ldply(k, function(y) {
         df <- data.frame(Counts = getCounts(Custom, y))
         df$k <- y
         
         df
     })
+    
+    cat("Getting a sample peptide encoding...\n")
     lib.probs.tmp$samp.encoding <- apply(lib.probs.tmp, 1, function(z) { paste(rep(Custom(1)$info$scheme$class, as.numeric(c(strsplit(as.character(z), split = ",")[[1]], 0))), collapse = "") })
     
-    lib.probs <- ldply(k, function(y) {
+    cat("Processing probabilities...\n")
+    lib.probs <- ldply(k, .progress = "text", .fun = function(y) {
         lib.data <- get("Custom")(y)$data
         lib.data$class <- gsub("\\.", "", lib.data$class)
         lib.data.subset <- subset(lib.data, class %in% lib.probs.tmp$samp.encoding)
@@ -87,6 +91,7 @@ generateCustomLib <- function(Custom) {
     N <- c(10^6, 10^7, 10^8, 10^9, 10^10, 10^11, 10^12)
     n <- as.vector(sapply(10^seq(6, 12, by = 1), `*`, seq(1.0, 9.9, by = 0.1)))
     
+    cat("Generating library properties...\n")
     lib.stats <- ldply(k, function(k1) {
         cat("Processing for k =", k1, "\n")
         
@@ -101,6 +106,7 @@ generateCustomLib <- function(Custom) {
             c(k=k1, n=n1, cov=cov, eff=eff)
         })
         
+        cat("Generating library diversity...\n")
         lib.stats$div = makowski(k=k1, libscheme=Custom)
         
         lib.stats
