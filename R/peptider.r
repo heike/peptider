@@ -63,6 +63,19 @@ Trimer <- function(k) {
   libBuild(k, libscheme=trimer_scheme)
 }
 
+#' k-nucleotide library of scheme Trimer with Cysteine
+#'
+#' @param k length of peptide sequences
+#' @return list consisting of a data frame of peptide classes, size of class, and its probabilities, 
+#' and a list of additional information relating to the library scheme
+#' @export
+#' @examples
+#' TrimerC(2)
+TrimerC <- function(k) {
+    
+    libBuild(k, libscheme=trimerc_scheme)
+}
+
 #' Nucleotide library  scheme Trimer
 #'
 #' Only valid peptide sequences are created. Each sequence appears with the same probability.
@@ -76,7 +89,18 @@ trimer_scheme <- data.frame(class=c("A", "Z"),
                             aacids=c("SLRAGPTVIDEFHKNQYMW", "*"), 
                             c=c(1, 0))
 
+#' Nucleotide library  scheme Trimer with Cysteine
+#'
+#' Only valid peptide sequences are created. Each sequence appears with the same probability.
+#' @name trimerc_scheme
+#' @title Nucleotide library scheme TrimerC
+#' @description This data set contains descriptions of amino acid classes under the TrimerC library scheme.
+#' @docType data
+#' @usage libBuild(1, libscheme="trimerc_scheme")
 
+trimerc_scheme <- data.frame(class=c("A", "Z"), 
+                            aacids=c("SLRAGPTVIDEFHKNQYMWC", "*"), 
+                            c=c(1, 0))
 
 
 
