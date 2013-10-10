@@ -62,8 +62,10 @@ libscheme <- function(schm, k = 1) {
 #' makowski(3, "NNK")
 #' makowski(3, "Trimer")
 makowski <- function(k, libscheme) {
-    libscheme <- as.character(substitute(libscheme)) ## Compatibility with old interface
-    scheme_def <- libscheme(libscheme, k)
+    libschm <- as.character(substitute(libscheme)) ## Compatibility with old interface
+    if (inherits(try(scheme(libschm), silent = TRUE), 'try-error')) libschm <- libscheme
+    
+    scheme_def <- libscheme(libschm, k)
     
     dframe <- scheme_def$data
     info <- scheme_def$info$scheme
@@ -87,9 +89,10 @@ makowski <- function(k, libscheme) {
 #' coverage(2, "NNK", 10^3)
 #' coverage(2, "Trimer", 10^3) ## Trimer coverage is not 1 because of random sampling.
 coverage <- function(k, libscheme, N, lib=NULL) {
-    libscheme <- as.character(substitute(libscheme)) ## Compatibility with old interface
+    libschm <- as.character(substitute(libscheme)) ## Compatibility with old interface
+    if (inherits(try(scheme(libschm), silent = TRUE), 'try-error')) libschm <- libscheme
     
-    if (is.null(lib)) lib <- libscheme(libscheme, k)
+    if (is.null(lib)) lib <- libscheme(libschm, k)
     libdata <- lib$data
     
     initialloss <- (1-(lib$info$valid/lib$info$nucleotides)^k)
@@ -115,9 +118,10 @@ coverage <- function(k, libscheme, N, lib=NULL) {
 #' efficiency(3, "NNK", 10^2)
 #' efficiency(3, "Trimer", 10^2) ## Trimer efficiency is not 1 because of random sampling.
 efficiency <- function(k, libscheme, N, lib=NULL) {
-    libscheme <- as.character(substitute(libscheme)) ## Compatibility with old interface
+    libschm <- as.character(substitute(libscheme)) ## Compatibility with old interface
+    if (inherits(try(scheme(libschm), silent = TRUE), 'try-error')) libschm <- libscheme
     
-    if (is.null(lib)) lib <- libscheme(libscheme, k)
+    if (is.null(lib)) lib <- libscheme(libschm, k)
     libdata <- lib$data
     
     initialloss <- (1-(lib$info$valid/lib$info$nucleotides)^k)
@@ -231,7 +235,7 @@ getNofNeighborsOne <- function(x, blosum = 1, method="peptide", libscheme=NULL) 
     if (method == "peptide") return(length(unlist(replacements))+1)
     
     stopifnot(!(is.null(libscheme) & nchar(libscheme) == 0))    
-    lib <- libscheme(libscheme)$info$scheme
+    lib <- peptider::libscheme(libscheme)$info$scheme
     
     dnas <- sum(unlist(llply(unlist(replacements), function(w) { 
         lib[grep(w, lib$aacid),"c"]
@@ -260,11 +264,12 @@ getNofNeighborsOne <- function(x, blosum = 1, method="peptide", libscheme=NULL) 
 #' getNofNeighbors("N", method="dna", libscheme="NNK")
 getNofNeighbors <- function(x, blosum = 1, method="peptide", libscheme=NULL) {
     data(BLOSUM80, envir=environment())
-    libscheme <- as.character(substitute(libscheme)) ## Compatibility with old interface
+    libschm <- as.character(substitute(libscheme)) ## Compatibility with old interface
+    if (inherits(try(scheme(libschm), silent = TRUE), 'try-error')) libschm <- libscheme
     
-    if (length(x) == 1) return(getNofNeighborsOne(x, blosum, method, libscheme))
+    if (length(x) == 1) return(getNofNeighborsOne(x, blosum, method, libschm))
     
-    return(llply(x, getNofNeighborsOne, blosum, method, libscheme))
+    return(llply(x, getNofNeighborsOne, blosum, method, libschm))
 }
 
 #' Compute the number of codons for a vector of peptide sequences
@@ -279,10 +284,14 @@ getNofNeighbors <- function(x, blosum = 1, method="peptide", libscheme=NULL) {
 #' codons("APE", libscheme="NNK")
 #' codons("HENNING", libscheme="NNK")
 codons <- function(x, libscheme=NULL, flag = FALSE) {
-    if (!flag) libscheme <- as.character(substitute(libscheme)) ## Compatibility with old interface
-    if (length(x) == 1) return(codonsOne(x, libscheme))
+    libschm <- libscheme
+    if (!flag) {
+        libschm <- as.character(substitute(libscheme)) ## Compatibility with old interface
+        if (inherits(try(scheme(libschm), silent = TRUE), 'try-error')) libschm <- libscheme
+    }
+    if (length(x) == 1) return(codonsOne(x, libschm))
     
-    unlist(llply(x, codonsOne, libscheme=libscheme))
+    unlist(llply(x, codonsOne, libscheme=libschm))
 }
 
 codonsOne <- function(x, libscheme) {
@@ -306,10 +315,11 @@ codonsOne <- function(x, libscheme) {
 #' ppeptide("APE", libscheme="NNK", N=10^8)
 #' ppeptide("HENNING", libscheme="NNK", N=10^8)
 ppeptide <- function(x, libscheme, N) {
-    libscheme <- as.character(substitute(libscheme)) ## Compatibility with old interface
+    libschm <- as.character(substitute(libscheme)) ## Compatibility with old interface
+    if (inherits(try(scheme(libschm), silent = TRUE), 'try-error')) libschm <- libscheme
     
-    n <- sum(codons(x, libscheme=libscheme, flag = TRUE))
-    Max <- libscheme(libscheme, 1)$info$valid^nchar(as.character(x[1]))
+    n <- sum(codons(x, libscheme=libschm, flag = TRUE))
+    Max <- peptider::libscheme(libschm, 1)$info$valid^nchar(as.character(x[1]))
     1 - exp(-N*n/Max)
 }
 
