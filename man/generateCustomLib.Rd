@@ -2,10 +2,10 @@
 \alias{generateCustomLib}
 \title{For a given scheme, generate a dataset with the library information}
 \usage{
-  generateCustomLib(Custom)
+  generateCustomLib(scheme_def)
 }
 \arguments{
-  \item{Custom}{function representing the scheme to use}
+  \item{scheme_def}{definition of the custom scheme}
 }
 \value{
   A data frame of library information

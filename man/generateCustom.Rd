@@ -23,7 +23,7 @@
 \examples{
 \dontrun{
 generateCustom()
-generateCustom(scheme_name = "NNK_S", scheme_def = peptider:::nnk_scheme)
+generateCustom(scheme_name = "NNN", scheme_def = scheme("NNN"))
 }
 }
 
