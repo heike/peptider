@@ -1,126 +1,75 @@
-
-#' k-nucleotide library of scheme NNN
+#' Built-in library schemes
 #'
-#' @param k length of peptide sequences
-#' @return list consisting of a data frame of peptide classes, size of class, and its probabilities, 
-#' and a list of additional information relating to the library scheme
-#' @export
-#' @examples
-#' NNN(2)
-NNN <- function(k) {
+#' @name schemes
+#' @title Built-in library schemes for peptider
+#' @description This data set contains descriptions of amino acid classes several commonly used library schemes: NNN, NNB, NNK, trimer, and variations of each in which Cysteine is considered a viable amino acid.
+#' @docType data
+#' @usage data(schemes)
+NULL
 
-  libBuild(k, libscheme=nnn_scheme)
-}
-
-#' k-nucleotide library of scheme NNNC
-#'
-#' @param k length of peptide sequences
-#' @return list consisting of a data frame of peptide classes, size of class, and its probabilities, 
-#' and a list of additional information relating to the library scheme
+#' Get the specified library scheme definition
+#' 
+#' @param name name of the scheme as a character vector
+#' 
+#' @return list consisting of a data frame of peptide classes, amino acids, and size of the classes
+#' 
 #' @export
+#' 
 #' @examples
-#' NNNC(2)
-NNNC <- function(k) {
+#' scheme("NNN")
+#' scheme("NNK")
+scheme <- function(name) {
+    schemes <- NULL ## R Check
+    data(schemes, envir=environment())
     
-    libBuild(k, libscheme=nnnc_scheme)
-}
-
-#' Nucleotide library  scheme NNN
-#'
-#' @name nnn_scheme
-#' @title Nucleotide library scheme NNN
-#' @description This data set contains descriptions of amino acid classes under the NNN library scheme.
-#' @docType data
-#' @usage libBuild(1, libscheme=nnn_scheme)
-
-nnn_scheme <- data.frame(class=c("A", "B", "C", "D", "E", "Z"), 
-                            aacids=c("SLR", "AGPTV", "I", "DEFHKNQY", "MW", "C*"), 
-                            c=c(6,4,3,2,1,2.5))
-
-#' Nucleotide library scheme NNNC
-#'
-#' @name nnnc_scheme
-#' @title Nucleotide library scheme NNNC
-#' @description This data set contains descriptions of amino acid classes under the NNN library scheme with C.
-#' @docType data
-#' @usage libBuild(1, libscheme=nnnc_scheme)
-
-nnnc_scheme <- data.frame(class=c("A", "B", "C", "D", "E", "Z"), 
-                         aacids=c("SLR", "AGPTV", "I", "DEFHKNQYC", "MW", "*"), 
-                         c=c(6,4,3,2,1,3))
-
-
-#' k-nucleotide library of scheme Trimer
-#'
-#' @param k length of peptide sequences
-#' @return list consisting of a data frame of peptide classes, size of class, and its probabilities, 
-#' and a list of additional information relating to the library scheme
-#' @export
-#' @examples
-#' Trimer(2)
-Trimer <- function(k) {
-
-  libBuild(k, libscheme=trimer_scheme)
-}
-
-#' k-nucleotide library of scheme Trimer with Cysteine
-#'
-#' @param k length of peptide sequences
-#' @return list consisting of a data frame of peptide classes, size of class, and its probabilities, 
-#' and a list of additional information relating to the library scheme
-#' @export
-#' @examples
-#' TrimerC(2)
-TrimerC <- function(k) {
+    scheme_def <- schemes[[paste(tolower(name), "scheme", sep = "_")]]
+    if (is.null(scheme_def)) stop(paste("No library with name", name, "is included in peptider"))
     
-    libBuild(k, libscheme=trimerc_scheme)
+    return(scheme_def)
 }
 
-#' Nucleotide library  scheme Trimer
-#'
-#' Only valid peptide sequences are created. Each sequence appears with the same probability.
-#' @name trimer_scheme
-#' @title Nucleotide library scheme Trimer
-#' @description This data set contains descriptions of amino acid classes under the Trimer library scheme.
-#' @docType data
-#' @usage libBuild(1, libscheme="trimer_scheme")
-
-trimer_scheme <- data.frame(class=c("A", "Z"), 
-                            aacids=c("SLRAGPTVIDEFHKNQYMW", "*"), 
-                            c=c(1, 0))
-
-#' Nucleotide library  scheme Trimer with Cysteine
-#'
-#' Only valid peptide sequences are created. Each sequence appears with the same probability.
-#' @name trimerc_scheme
-#' @title Nucleotide library scheme TrimerC
-#' @description This data set contains descriptions of amino acid classes under the TrimerC library scheme.
-#' @docType data
-#' @usage libBuild(1, libscheme="trimerc_scheme")
-
-trimerc_scheme <- data.frame(class=c("A", "Z"), 
-                            aacids=c("SLRAGPTVIDEFHKNQYMWC", "*"), 
-                            c=c(1, 0))
-
-
-
+#' Get the specified library scheme
+#' 
+#' @param schm either a character vector giving the name of a built-in scheme, or a data frame consisting of the scheme definition
+#' @param k length of peptide sequences
+#' 
+#' @return list consisting of a data frame of peptide classes, size of class, and its probabilities, and a list of additional information relating to the library scheme
+#' 
+#' @export
+#' 
+#' @examples
+#' libscheme("NNN")
+#' libscheme("NNK", 2)
+#' 
+#' # Build a custom trimer library
+#' custom <- data.frame(class = c("A", "Z"), aacids = c("SLRAGPTVIDEFHKNQYMW", "*"), c = c(1, 0))
+#' libscheme(custom)
+libscheme <- function(schm, k = 1) {
+    if (is.character(schm)) return(libBuild(scheme(schm), k = k))
+    else if (is.data.frame(schm)) return(libBuild(schm, k = k))
+    else stop("scheme must be either a character or a data frame")
+}
 
 #' Diversity index according to Makowski
 #'
 #' Diversity according to Makowski is defined as ... need a reference to Makowski & Soares 2003 here. 
 #' @param k length of peptide sequences
-#' @param libscheme function 
+#' @param libscheme Name (character vector) or definition (data frame) of scheme
 #' @return diversity index between 0 and 1
 #' @export
 #' @examples
-#' makowski(2, NNN)
-#' makowski(3, NNK)
-#' makowski(3, Trimer)
+#' makowski(2, "NNN")
+#' makowski(3, "NNK")
+#' makowski(3, "Trimer")
 makowski <- function(k, libscheme) {
-  dframe <- libscheme(k)$data
-  info <- libscheme(1)$info$scheme
-  numAA <- sum(info$s[-nrow(info)]) 
-  with(dframe, 1/(numAA^k*sum(probs^2/di)))
+    libscheme <- as.character(substitute(libscheme)) ## Compatibility with old interface
+    scheme_def <- libscheme(libscheme, k)
+    
+    dframe <- scheme_def$data
+    info <- scheme_def$info$scheme
+    numAA <- sum(info$s[-nrow(info)]) 
+    
+    with(dframe, 1/(numAA^k*sum(probs^2/di)))
 }
 
 #' Coverage as expected number of peptides given all possible peptides
@@ -128,202 +77,57 @@ makowski <- function(k, libscheme) {
 #' Coverage of library of size N given random sampling from the pool of all possible peptides according 
 #' to probabilities determined according to the library scheme.
 #' @param k length of peptide sequences
-#' @param libscheme function 
+#' @param libscheme Name (character vector) or definition (data frame) of scheme
 #' @param N size of the library 
-#' @param lib library, if null, libscheme will be used to create it
+#' @param lib library scheme
 #' @return coverage index between 0 and 1
 #' @export
 #' @examples
-#' coverage(2, NNN, 10^3)
-#' coverage(2, NNK, 10^3)
-#' coverage(2, Trimer, 10^3) ## Trimer coverage is not 1 because of random sampling.
+#' coverage(2, "NNN", 10^3)
+#' coverage(2, "NNK", 10^3)
+#' coverage(2, "Trimer", 10^3) ## Trimer coverage is not 1 because of random sampling.
 coverage <- function(k, libscheme, N, lib=NULL) {
-  if (is.null(lib)) lib <- libscheme(k)
-  libdata <- lib$data
-  
-  initialloss <- (1-(lib$info$valid/lib$info$nucleotides)^k)
-  libdata$expected <- libdata$probs*N*(1-initialloss)
-  libdata$z <- with(libdata, di*(1-exp(-expected/di)))
-  
-  s_count <- sum(subset(lib$info$scheme, class != "Z")$s)
-  
-  with(libdata, min(sum(z)/s_count^k,1))
+    libscheme <- as.character(substitute(libscheme)) ## Compatibility with old interface
+    
+    if (is.null(lib)) lib <- libscheme(libscheme, k)
+    libdata <- lib$data
+    
+    initialloss <- (1-(lib$info$valid/lib$info$nucleotides)^k)
+    libdata$expected <- libdata$probs*N*(1-initialloss)
+    libdata$z <- with(libdata, di*(1-exp(-expected/di)))
+    
+    s_count <- sum(subset(lib$info$scheme, class != "Z")$s)
+    
+    with(libdata, min(sum(z)/s_count^k,1))
 }
 
 #' Relative efficiency of a library
 #'
 #' efficiency according to our paper
 #' @param k length of peptide sequences
-#' @param libscheme function 
+#' @param libscheme Name (character vector) or definition (data frame) of scheme
 #' @param N size of the library 
 #' @param lib library, if null, libscheme will be used to create it
 #' @return relative efficiency index between 0 and 1
 #' @export
 #' @examples
-#' efficiency(3, NNN, 10^2)
-#' efficiency(3, NNK, 10^2)
-#' efficiency(3, Trimer, 10^2) ## Trimer efficiency is not 1 because of random sampling.
+#' efficiency(3, "NNN", 10^2)
+#' efficiency(3, "NNK", 10^2)
+#' efficiency(3, "Trimer", 10^2) ## Trimer efficiency is not 1 because of random sampling.
 efficiency <- function(k, libscheme, N, lib=NULL) {
-  if (is.null(lib)) lib <- libscheme(k)
-  libdata <- lib$data
-  
-  initialloss <- (1-(lib$info$valid/lib$info$nucleotides)^k)
-  libdata$expected <- libdata$probs*N*(1-initialloss)
-  libdata$z <- with(libdata, di*(1-exp(-expected/di)))
-  
-  s_count <- sum(subset(lib$info$scheme, class != "Z")$s)
-  
-  with(libdata, min(s_count^k,sum(z))/N)
-}
-
-
-#' k-nucleotide library of scheme NNK
-#'
-#' @param k length of peptide sequences
-#' @return list consisting of a data frame of peptide classes, size of class, and its probabilities, 
-#' and a list of additional information relating to the library scheme
-#' @export
-#' @examples
-#' NNK(2)
-NNK <- function(k) {
-
-  libBuild(k, nnk_scheme)
-}
-
-#' k-nucleotide library of scheme NNKC
-#'
-#' @param k length of peptide sequences
-#' @return list consisting of a data frame of peptide classes, size of class, and its probabilities, 
-#' and a list of additional information relating to the library scheme
-#' @export
-#' @examples
-#' NNKC(2)
-NNKC <- function(k) {
+    libscheme <- as.character(substitute(libscheme)) ## Compatibility with old interface
     
-    libBuild(k, nnkc_scheme)
-}
-
-#' Nucleotide library  scheme NNK
-#'
-#' The last DNA nucleus in the sequence is restricted to be one of G, or T.
-#' @name nnk_scheme
-#' @title Nucleotide library scheme NNK
-#' @description This data set contains descriptions of amino acid classes under the NNK library scheme.
-#' @docType data
-#' @usage libBuild(1, libscheme=nnk_scheme)
-
-nnk_scheme <- data.frame(class=c("A", "B", "C", "Z"),
-                         aacid=c("SLR", "AGPTV", "DEFHIKMNQWY", "C*"),
-                         c=c(3,2,1,1))
-
-#' Nucleotide library  scheme NNKC
-#'
-#' The last DNA nucleus in the sequence is restricted to be one of G, or T.
-#' @name nnkc_scheme
-#' @title Nucleotide library scheme NNKC
-#' @description This data set contains descriptions of amino acid classes under the NNKC library scheme.
-#' @docType data
-#' @usage libBuild(1, libscheme=nnkc_scheme)
-
-nnkc_scheme <- data.frame(class=c("A", "B", "C", "Z"),
-                         aacid=c("SLR", "AGPTV", "DEFHIKMNQWYC", "*"),
-                         c=c(3,2,1,1))
-
-#' Nucleotide library  scheme NNS
-#'
-#' The last DNA nucleus in the sequence is restricted to be one of C, or G.
-#' @name nns_scheme
-#' @title Nucleotide library scheme NNS
-#' @description This data set contains descriptions of amino acid classes under the NNS library scheme.
-#' @docType data
-#' @usage libBuild(1, libscheme=nns_scheme)
-nns_scheme <- nnk_scheme
-
-#' Nucleotide library  scheme NNSC
-#'
-#' The last DNA nucleus in the sequence is restricted to be one of C, or G.
-#' @name nnsc_scheme
-#' @title Nucleotide library scheme NNSC
-#' @description This data set contains descriptions of amino acid classes under the NNSC library scheme.
-#' @docType data
-#' @usage libBuild(1, libscheme=nnsc_scheme)
-nnsc_scheme <- nnkc_scheme
-
-#' k nucleotide library of scheme NNS
-#'
-#' @param k length of peptide sequences
-#' @return data frame of peptide classes, size of class, and its probability
-#' @export
-#' @examples
-#' NNS(2)
-NNS <- function(k) {
-  ## from a codon to amino acid encoding point of view NNK and NNS are identical.
-  NNK(k)
-}
-
-#' k nucleotide library of scheme NNSC
-#'
-#' @param k length of peptide sequences
-#' @return data frame of peptide classes, size of class, and its probability
-#' @export
-#' @examples
-#' NNSC(2)
-NNSC <- function(k) {
-    ## from a codon to amino acid encoding point of view NNKC and NNSC are identical.
-    NNKC(k)
-}
-
-#' k nucleotide library of scheme NNB
-#'
-#' The last DNA nucleus in the sequence is restricted to be one of C, G, or T.
-#' @param k length of peptide sequences
-#' @return data frame of peptide classes, size of class, and its probability
-#' @export
-#' @examples
-#' NNB(2)
-NNB <- function(k) {
-
-  libBuild(k, libscheme=nnb_scheme)
-}
-
-#' k nucleotide library of scheme NNBC
-#'
-#' The last DNA nucleus in the sequence is restricted to be one of C, G, or T.
-#' @param k length of peptide sequences
-#' @return data frame of peptide classes, size of class, and its probability
-#' @export
-#' @examples
-#' NNBC(2)
-NNBC <- function(k) {
+    if (is.null(lib)) lib <- libscheme(libscheme, k)
+    libdata <- lib$data
     
-    libBuild(k, libscheme=nnbc_scheme)
+    initialloss <- (1-(lib$info$valid/lib$info$nucleotides)^k)
+    libdata$expected <- libdata$probs*N*(1-initialloss)
+    libdata$z <- with(libdata, di*(1-exp(-expected/di)))
+    
+    s_count <- sum(subset(lib$info$scheme, class != "Z")$s)
+    
+    with(libdata, min(s_count^k,sum(z))/N)
 }
-
-#' Nucleotide library  scheme NNB
-#'
-#' The last DNA nucleus in the sequence is restricted to be one of C, G, or T.
-#' @name nnb_scheme
-#' @title Nucleotide library scheme NNB
-#' @description This data set contains descriptions of amino acid classes under the NNB library scheme.
-#' @docType data
-#' @usage libBuild(1, libscheme="nnb_scheme")
-
-nnb_scheme <- data.frame(class=c("A", "B", "C", "D", "E", "Z"),
-              aacid=c("S", "LR", "AGPTV", "DFHINY", "EKMQW", "*C"),
-              c=c(5,4,3,2,1, 1.5))
-
-#' Nucleotide library  scheme NNBC
-#'
-#' The last DNA nucleus in the sequence is restricted to be one of C, G, or T.
-#' @name nnbc_scheme
-#' @title Nucleotide library scheme NNBC
-#' @description This data set contains descriptions of amino acid classes under the NNBC library scheme with C.
-#' @docType data
-#' @usage libBuild(1, libscheme="nnbc_scheme")
-
-nnbc_scheme <- data.frame(class=c("A", "B", "C", "D", "E", "Z"),
-                         aacid=c("S", "LR", "AGPTV", "DFHINYC", "EKMQW", "*"),
-                         c=c(5,4,3,2,1,1))
 
 #' Build peptide library of k-length sequences according to specified scheme
 #' 
@@ -338,29 +142,27 @@ nnbc_scheme <- data.frame(class=c("A", "B", "C", "D", "E", "Z"),
 #'                           c=c(3,2,1,1))
 #' user_library <- libBuild(3, user_scheme)                        
 #' @export
- 
 libBuild <- function(k, libscheme) {
-  libscheme$class <- as.character(libscheme$class)
-  libscheme$s <- nchar(as.character(libscheme$aacid))
-  seq <- with(libscheme[-nrow(libscheme),], make.RV(class, s*c))
-  d <- with(libscheme[-nrow(libscheme),], make.RV(class, s))
-  
-  d7 <- multN(d,k)
-  seq7 <- multN(seq,k)
-  di <- with(libscheme, round(probs(d7)*sum(s[-length(unique(class))])^k,0))
-  pi <- probs(seq7)
-  mult <- with(libscheme, s*c)
-  list(data=data.frame(class = as.vector(d7), di = di, probs = pi),
-       info=list(nucleotides=sum(with(libscheme, mult)), 
-                 valid=with(libscheme, sum(mult[-length(mult)])),
-                 scheme=libscheme))
+    libscheme$class <- as.character(libscheme$class)
+    libscheme$s <- nchar(as.character(libscheme$aacid))
+    seq <- with(libscheme[-nrow(libscheme),], make.RV(class, s*c))
+    d <- with(libscheme[-nrow(libscheme),], make.RV(class, s))
+    
+    d7 <- multN(d,k)
+    seq7 <- multN(seq,k)
+    di <- with(libscheme, round(probs(d7)*sum(s[-length(unique(class))])^k,0))
+    pi <- probs(seq7)
+    mult <- with(libscheme, s*c)
+    list(data=data.frame(class = as.vector(d7), di = di, probs = pi),
+         info=list(nucleotides=sum(with(libscheme, mult)), 
+                   valid=with(libscheme, sum(mult[-length(mult)])),
+                   scheme=libscheme))
 }
 
 
 #' Detection probability in a single library of size N
 #'
-#' The last DNA nucleus in the sequence is restricted to be one of C, G, or T.
-#' @param lib library used in experiment, defaults to NNK(7)
+#' @param lib library used in experiment, defaults to NNK with peptide length 7
 #' @param size size of the library, defaults to 10^8
 #' @return vector of detection probabilities for peptide sequences in each class
 #' @export
@@ -368,34 +170,33 @@ libBuild <- function(k, libscheme) {
 #' summary(detect())
 #'
 #' require(ggplot2)
-#' lib = NNK(7)
+#' lib <- libscheme("NNK", 7)
 #' qplot(detect(lib, size=10^8), weight=di, geom="histogram", data=lib$data)
-detect <- function(lib = NNK(7), size = 10^8) {
-  with(lib$data, 1 - exp(-size*probs/di))
+detect <- function(lib = libscheme("NNK", 7), size = 10^8) {
+    with(lib$data, 1 - exp(-size*probs/di))
 }
 
-
 getNeighborOne <- function(x, blosum=1) {
-  ## For CRAN check
-  BLOSUM80 <- AA1 <- Blosum <- AA2 <- NULL
+    ## For CRAN check
+    BLOSUM80 <- AA1 <- Blosum <- AA2 <- NULL
     
-  data(BLOSUM80, envir=environment())
-  
-  replacements <- llply(strsplit(x,""), function(y) {
-    llply(y, function(z) {
-      as.character(subset(BLOSUM80, (AA1 == z) & (Blosum >= blosum)& (AA2 != z))$AA2 )
-    })
-  })[[1]]
-  neighbors <- NULL
+    data(BLOSUM80, envir=environment())
+    
+    replacements <- llply(strsplit(x,""), function(y) {
+        llply(y, function(z) {
+            as.character(subset(BLOSUM80, (AA1 == z) & (Blosum >= blosum)& (AA2 != z))$AA2 )
+        })
+    })[[1]]
+    neighbors <- NULL
     for (i in 1:nchar(x)) {
-      neighbors <- c(neighbors, paste(substr(x, 1,i-1), replacements[[i]], substr(x, i+1, nchar(x)), sep=""))
+        neighbors <- c(neighbors, paste(substr(x, 1,i-1), replacements[[i]], substr(x, i+1, nchar(x)), sep=""))
     }
-  # check that all neighbors have the correct length
-  idx <- which(nchar(neighbors) != nchar(x))
-  if (length(idx)>0) neighbors <- neighbors[-idx]
-  neighbors <- unique(c(x, neighbors))
-  
-  return(neighbors)
+    # check that all neighbors have the correct length
+    idx <- which(nchar(neighbors) != nchar(x))
+    if (length(idx)>0) neighbors <- neighbors[-idx]
+    neighbors <- unique(c(x, neighbors))
+    
+    return(neighbors)
 }
 
 #' Find all neighbors of degree one for a set of peptide sequences
@@ -413,32 +214,32 @@ getNeighborOne <- function(x, blosum=1) {
 #' ## degree 2 neighbors:
 #' unique(unlist(getNeighbors(getNeighbors("APE"))))
 getNeighbors <- function(x, blosum=1) {
-  if (length(x) == 1) return(getNeighborOne(x, blosum))
-  llply(x, getNeighborOne)
+    if (length(x) == 1) return(getNeighborOne(x, blosum))
+    llply(x, getNeighborOne)
 }
 
 getNofNeighborsOne <- function(x, blosum = 1, method="peptide", libscheme=NULL) {
-  ## For CRAN check
-  BLOSUM80 <- AA1 <- Blosum <- AA2 <- NULL
+    ## For CRAN check
+    BLOSUM80 <- AA1 <- Blosum <- AA2 <- NULL
     
-  data(BLOSUM80, envir=environment())
-  replacements <- llply(strsplit(x,""), function(y) {
-    llply(y, function(z) {
-      as.character(subset(BLOSUM80, (AA1 == z) & (Blosum >= blosum) & (AA2 != z))$AA2)
-    })
-  })[[1]]
-  if (method == "peptide") return(length(unlist(replacements))+1)
-  
-  stopifnot(!is.null(libscheme))
-  lib <- libscheme(1)$info$scheme
-   
-  dnas <- sum(unlist(llply(unlist(replacements), function(w) { 
-    lib[grep(w, lib$aacid),"c"]
-  })))
-  dnas <- dnas + sum(unlist(llply(unlist(strsplit(x, split="")), function(w) { 
-    lib[grep(w, lib$aacid),"c"]
-  })))
-  return(dnas)
+    data(BLOSUM80, envir=environment())
+    replacements <- llply(strsplit(x,""), function(y) {
+        llply(y, function(z) {
+            as.character(subset(BLOSUM80, (AA1 == z) & (Blosum >= blosum) & (AA2 != z))$AA2)
+        })
+    })[[1]]
+    if (method == "peptide") return(length(unlist(replacements))+1)
+    
+    stopifnot(!(is.null(libscheme) & nchar(libscheme) == 0))    
+    lib <- libscheme(libscheme)$info$scheme
+    
+    dnas <- sum(unlist(llply(unlist(replacements), function(w) { 
+        lib[grep(w, lib$aacid),"c"]
+    })))
+    dnas <- dnas + sum(unlist(llply(unlist(strsplit(x, split="")), function(w) { 
+        lib[grep(w, lib$aacid),"c"]
+    })))
+    return(dnas)
 }
 
 #' Compute the number of neighbor of degree one for a set of peptide sequences
@@ -456,40 +257,41 @@ getNofNeighborsOne <- function(x, blosum = 1, method="peptide", libscheme=NULL) 
 #' getNofNeighbors("APE")
 #' getNofNeighbors(c("NEAREST", "EARNEST"))
 #' getNofNeighbors("N")
-#' getNofNeighbors("N", method="dna", libscheme=NNK)
+#' getNofNeighbors("N", method="dna", libscheme="NNK")
 getNofNeighbors <- function(x, blosum = 1, method="peptide", libscheme=NULL) {
-  data(BLOSUM80, envir=environment())
-  if (length(x) == 1) return(getNofNeighborsOne(x, blosum, method, libscheme))
-
-  return(llply(x, getNofNeighborsOne, blosum, method, libscheme))
+    data(BLOSUM80, envir=environment())
+    libscheme <- as.character(substitute(libscheme)) ## Compatibility with old interface
+    
+    if (length(x) == 1) return(getNofNeighborsOne(x, blosum, method, libscheme))
+    
+    return(llply(x, getNofNeighborsOne, blosum, method, libscheme))
 }
-
-
-
 
 #' Compute the number of codons for a vector of peptide sequences
 #' 
 #' use this function for only a few peptide sequences. Any larger number of peptide sequences should be dealt with in the framework of the library scheme and the detect function.
 #' @param x (vector) of character strings of  peptide sequences.
 #' @param libscheme library scheme under which neighbors are being calculated. this is only of importance, if method="dna"
+#' @param flag internal use only: Set to true if calling this from another function
 #' @return vector of numbers of codons 
 #' @export
 #' @examples
-#' codons("APE", libscheme=NNK)
-#' codons("HENNING", libscheme=NNK)
-codons <- function(x, libscheme=NULL) {
-  if (length(x) == 1) return(codonsOne(x, libscheme))
-
-  unlist(llply(x, codonsOne, libscheme=libscheme))
+#' codons("APE", libscheme="NNK")
+#' codons("HENNING", libscheme="NNK")
+codons <- function(x, libscheme=NULL, flag = FALSE) {
+    if (!flag) libscheme <- as.character(substitute(libscheme)) ## Compatibility with old interface
+    if (length(x) == 1) return(codonsOne(x, libscheme))
+    
+    unlist(llply(x, codonsOne, libscheme=libscheme))
 }
 
 codonsOne <- function(x, libscheme) {
-  stopifnot(!is.null(libscheme))
-  lib <- libscheme(1)$info$scheme
-
-  prod(unlist(llply(strsplit(x, split="")[[1]], function(w) { 
-    lib[grep(w, lib$aacid),"c"]
-  })))
+    stopifnot(!(is.null(libscheme) & nchar(libscheme) == 0))    
+    lib <- libscheme(libscheme)$info$scheme
+    
+    prod(unlist(llply(strsplit(x, split="")[[1]], function(w) { 
+        lib[grep(w, lib$aacid),"c"]
+    })))
 }
 
 #' Probability of detection of a peptide sequence 
@@ -501,15 +303,15 @@ codonsOne <- function(x, libscheme) {
 #' @return probability of detection
 #' @export
 #' @examples
-#' ppeptide("APE", libscheme=NNK, N=10^8)
-#' ppeptide("HENNING", libscheme=NNK, N=10^8)
-
+#' ppeptide("APE", libscheme="NNK", N=10^8)
+#' ppeptide("HENNING", libscheme="NNK", N=10^8)
 ppeptide <- function(x, libscheme, N) {
-  n <- sum(codons(x, libscheme=libscheme))
-  Max <- libscheme(1)$info$valid^nchar(as.character(x[1]))
-  1 - exp(-N*n/Max)
+    libscheme <- as.character(substitute(libscheme)) ## Compatibility with old interface
+    
+    n <- sum(codons(x, libscheme=libscheme, flag = TRUE))
+    Max <- libscheme(libscheme, 1)$info$valid^nchar(as.character(x[1]))
+    1 - exp(-N*n/Max)
 }
-
 
 #' BLOSUM80 matrix
 #' 

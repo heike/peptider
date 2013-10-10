@@ -7,7 +7,8 @@
 \arguments{
   \item{k}{length of peptide sequences}
 
-  \item{libscheme}{function}
+  \item{libscheme}{Name (character vector) or definition
+  (data frame) of scheme}
 }
 \value{
   diversity index between 0 and 1
@@ -17,8 +18,8 @@
   reference to Makowski & Soares 2003 here.
 }
 \examples{
-makowski(2, NNN)
-makowski(3, NNK)
-makowski(3, Trimer)
+makowski(2, "NNN")
+makowski(3, "NNK")
+makowski(3, "Trimer")
 }
 

@@ -2,7 +2,7 @@
 \alias{codons}
 \title{Compute the number of codons for a vector of peptide sequences}
 \usage{
-  codons(x, libscheme = NULL)
+  codons(x, libscheme = NULL, flag = FALSE)
 }
 \arguments{
   \item{x}{(vector) of character strings of peptide
@@ -11,6 +11,9 @@
   \item{libscheme}{library scheme under which neighbors are
   being calculated. this is only of importance, if
   method="dna"}
+
+  \item{flag}{internal use only: Set to true if calling
+  this from another function}
 }
 \value{
   vector of numbers of codons
@@ -22,7 +25,7 @@
   function.
 }
 \examples{
-codons("APE", libscheme=NNK)
-codons("HENNING", libscheme=NNK)
+codons("APE", libscheme="NNK")
+codons("HENNING", libscheme="NNK")
 }
 

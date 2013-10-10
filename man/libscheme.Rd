@@ -1,0 +1,30 @@
+\name{libscheme}
+\alias{libscheme}
+\title{Get the specified library scheme}
+\usage{
+  libscheme(schm, k = 1)
+}
+\arguments{
+  \item{schm}{either a character vector giving the name of
+  a built-in scheme, or a data frame consisting of the
+  scheme definition}
+
+  \item{k}{length of peptide sequences}
+}
+\value{
+  list consisting of a data frame of peptide classes, size
+  of class, and its probabilities, and a list of additional
+  information relating to the library scheme
+}
+\description{
+  Get the specified library scheme
+}
+\examples{
+libscheme("NNN")
+libscheme("NNK", 2)
+
+# Build a custom trimer library
+custom <- data.frame(class = c("A", "Z"), aacids = c("SLRAGPTVIDEFHKNQYMW", "*"), c = c(1, 0))
+libscheme(custom)
+}
+

@@ -36,6 +36,6 @@
 getNofNeighbors("APE")
 getNofNeighbors(c("NEAREST", "EARNEST"))
 getNofNeighbors("N")
-getNofNeighbors("N", method="dna", libscheme=NNK)
+getNofNeighbors("N", method="dna", libscheme="NNK")
 }
 

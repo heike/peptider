@@ -23,7 +23,7 @@
   function.
 }
 \examples{
-ppeptide("APE", libscheme=NNK, N=10^8)
-ppeptide("HENNING", libscheme=NNK, N=10^8)
+ppeptide("APE", libscheme="NNK", N=10^8)
+ppeptide("HENNING", libscheme="NNK", N=10^8)
 }
 

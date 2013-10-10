@@ -7,12 +7,12 @@
 \arguments{
   \item{k}{length of peptide sequences}
 
-  \item{libscheme}{function}
+  \item{libscheme}{Name (character vector) or definition
+  (data frame) of scheme}
 
   \item{N}{size of the library}
 
-  \item{lib}{library, if null, libscheme will be used to
-  create it}
+  \item{lib}{library scheme}
 }
 \value{
   coverage index between 0 and 1
@@ -23,8 +23,8 @@
   probabilities determined according to the library scheme.
 }
 \examples{
-coverage(2, NNN, 10^3)
-coverage(2, NNK, 10^3)
-coverage(2, Trimer, 10^3) ## Trimer coverage is not 1 because of random sampling.
+coverage(2, "NNN", 10^3)
+coverage(2, "NNK", 10^3)
+coverage(2, "Trimer", 10^3) ## Trimer coverage is not 1 because of random sampling.
 }
 
