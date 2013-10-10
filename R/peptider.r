@@ -46,7 +46,7 @@ scheme <- function(name) {
 #' libscheme(custom)
 libscheme <- function(schm, k = 1) {
     if (is.character(schm)) return(libBuild(scheme(schm), k = k))
-    else if (is.data.frame(schm)) return(libBuild(schm, k = k))
+    else if (is.data.frame(schm)) return(libBuild(k, schm))
     else stop("scheme must be either a character or a data frame")
 }
 
