@@ -2,7 +2,18 @@
 #'
 #' @name schemes
 #' @title Built-in library schemes for peptider
-#' @description This data set contains descriptions of amino acid classes several commonly used library schemes: NNN, NNB, NNK, trimer, and variations of each in which Cysteine is considered a viable amino acid.
+#' @description This data set contains descriptions of amino acid classes several commonly used library schemes: NNN, NNB, NNK, trimer, and variations of each in which Cysteine is not considered a viable amino acid.
+#' 
+#' NNN: All four bases (\"N\" = G/A/T/C) possible at all three positions in the codon.
+#' NNB: All four bases in the first two codon positions possible, the third position is restricted to G, T or C (= \"B\")
+#' NNK/S: All four bases in the first two codon positions possible, the third position is restricted to G/T (= \"K\") or two C/G (= \"S\").
+#' trimer: trimer describes the concept that DNA is assembled from prefabricated trimeric building blocks. This allows the generation of libraries from a predefined set of codons and thereby complete exclusion of Stop codons and other unwanted codons.
+#' NNN (-C): NNN with Cysteine ignored.
+#' NNB (+C): NNB with Cysteine ignored.
+#' NNK/SC (+C): NNK/S with Cysteine ignored.
+#' trimer (+C): Trimer with Cysteine ignored.
+#' 
+#' The schemes differ in the number of used codons, ranging from 64 (NNN), 48 (NNB), 32 (NNK/S) to 20 or less (trimer). Coding schemes that allow varying ratios of codons/amino acid, result in libraries biased towards amino acids which are encoded more often. Further, the number of Stop codons that can lead to premature termination of the peptide sequence influences the performance of the library.
 #' @docType data
 #' @usage data(schemes)
 NULL
@@ -325,10 +336,9 @@ ppeptide <- function(x, libscheme, N) {
 
 #' BLOSUM80 matrix
 #' 
-#' where does this matrix come from and what does it describe?
 #' @name BLOSUM80
 #' @title BLOSUM80 matrix
-#' @description where does this matrix come from and what does it describe?
+#' @description The BLOSUM80 matrix, which stands for Blocks Substitution Matrix, defines log-odds scores for the ratio of the chance of two amino acids appearing in a sequence over the chance that the two amino acids appear in any sequence.  Larger scores indicate a higher probability of substitutions.  This matrix is used in order to compute sequences which are in the neighborhood of other sequences.
 #' @docType data
 #' @usage data(BLOSUM80)
 NULL
