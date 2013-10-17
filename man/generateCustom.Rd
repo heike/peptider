@@ -17,8 +17,9 @@
   files
 }
 \description{
-  Generate peptide and library information for a given
-  scheme
+  This function will generate library properties for a
+  custom scheme.  It is primarily intended to be used on
+  http://www.pelica.org.
 }
 \examples{
 \dontrun{

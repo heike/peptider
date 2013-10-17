@@ -19,7 +19,9 @@
   relative efficiency index between 0 and 1
 }
 \description{
-  efficiency according to our paper
+  Relative efficiency of a peptide library, defined as the
+  ratio of expected diversity of a peptide library relative
+  to its overall number of oligonucleotides
 }
 \examples{
 efficiency(3, "NNN", 10^2)

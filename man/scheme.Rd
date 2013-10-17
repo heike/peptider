@@ -8,8 +8,8 @@
   \item{name}{name of the scheme as a character vector}
 }
 \value{
-  list consisting of a data frame of peptide classes, amino
-  acids, and size of the classes
+  a data frame of peptide classes, amino acids, and size of
+  the classes corresponding to the selected scheme
 }
 \description{
   Get the specified library scheme definition

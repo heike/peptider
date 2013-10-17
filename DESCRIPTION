@@ -1,8 +1,8 @@
 Package: peptider
 Type: Package
 Title: Evaluation of diversity in nucleotide libraries
-Version: 0.1.0
-Date: 2013-10-07
+Version: 0.1.1
+Date: 2013-10-17
 Author: Heike Hofmann, Eric Hare, ggobi Foundation
 Maintainer: Eric Hare <erichare@iastate.edu>
 Description: Functions for evaluating diversity in peptide libraries, including

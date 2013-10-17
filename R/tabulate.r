@@ -119,6 +119,8 @@ generateCustomLib <- function(scheme_def) {
 }
 
 #' Generate peptide and library information for a given scheme
+#' 
+#' This function will generate library properties for a custom scheme.  It is primarily intended to be used on http://www.pelica.org.
 #' @param scheme_name The name of the resulting encoding scheme
 #' @param scheme_def A data frame containing encoding information for the scheme
 #' @return TRUE upon completion of the script and output of the CSV files

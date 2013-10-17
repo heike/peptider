@@ -3,17 +3,21 @@
 #' @name schemes
 #' @title Built-in library schemes for peptider
 #' @description This data set contains descriptions of amino acid classes several commonly used library schemes: NNN, NNB, NNK, trimer, and variations of each in which Cysteine is not considered a viable amino acid.
-#' 
+
+#' @details
+#' The schemes are defined as:
+#' #' 
 #' NNN: All four bases (\"N\" = G/A/T/C) possible at all three positions in the codon.
 #' NNB: All four bases in the first two codon positions possible, the third position is restricted to G, T or C (= \"B\")
 #' NNK/S: All four bases in the first two codon positions possible, the third position is restricted to G/T (= \"K\") or two C/G (= \"S\").
 #' trimer: trimer describes the concept that DNA is assembled from prefabricated trimeric building blocks. This allows the generation of libraries from a predefined set of codons and thereby complete exclusion of Stop codons and other unwanted codons.
 #' NNN (-C): NNN with Cysteine ignored.
-#' NNB (+C): NNB with Cysteine ignored.
-#' NNK/SC (+C): NNK/S with Cysteine ignored.
-#' trimer (+C): Trimer with Cysteine ignored.
+#' NNB (-C): NNB with Cysteine ignored.
+#' NNK/SC (-C): NNK/S with Cysteine ignored.
+#' trimer (-C): Trimer with Cysteine ignored.
 #' 
 #' The schemes differ in the number of used codons, ranging from 64 (NNN), 48 (NNB), 32 (NNK/S) to 20 or less (trimer). Coding schemes that allow varying ratios of codons/amino acid, result in libraries biased towards amino acids which are encoded more often. Further, the number of Stop codons that can lead to premature termination of the peptide sequence influences the performance of the library.
+#' 
 #' @docType data
 #' @usage data(schemes)
 NULL
@@ -22,7 +26,7 @@ NULL
 #' 
 #' @param name name of the scheme as a character vector
 #' 
-#' @return list consisting of a data frame of peptide classes, amino acids, and size of the classes
+#' @return a data frame of peptide classes, amino acids, and size of the classes corresponding to the selected scheme
 #' 
 #' @export
 #' 
@@ -63,9 +67,13 @@ libscheme <- function(schm, k = 1) {
 
 #' Diversity index according to Makowski
 #'
-#' Diversity according to Makowski is defined as ... need a reference to Makowski & Soares 2003 here. 
+#' The Diversity of a peptide library of length k according to Makowski and colleagues
 #' @param k length of peptide sequences
 #' @param libscheme Name (character vector) or definition (data frame) of scheme
+#' 
+#' @details
+#' Makowski and colleagues [Makowski, Soares 2003] present another approach by defining functional diversity. They provide the mathematical background to determine the quality of a peptide library based on the probability of individual peptides to appear. In an ideal case, where every peptide has the same frequency the functional diversity is at a maximum of 1. With increasingly skew distributions, this value drops towards a minimum of 0. It is mostly independent of the actual number of sequences in a library but reflects effects caused by the degeneration of the genetic code. In the genetic code the number of codons per amino acid varies from one to six. Therefore random DNA sequences are biased towards encoding peptides enriched in amino acids encoded more frequently, which results in skew distributions of peptide frequencies. 
+#' 
 #' @return diversity index between 0 and 1
 #' @export
 #' @examples
@@ -87,8 +95,7 @@ makowski <- function(k, libscheme) {
 
 #' Coverage as expected number of peptides given all possible peptides
 #'
-#' Coverage of library of size N given random sampling from the pool of all possible peptides according 
-#' to probabilities determined according to the library scheme.
+#' Coverage of library of size N given random sampling from the pool of all possible peptides according to probabilities determined according to the library scheme.
 #' @param k length of peptide sequences
 #' @param libscheme Name (character vector) or definition (data frame) of scheme
 #' @param N size of the library 
@@ -117,7 +124,7 @@ coverage <- function(k, libscheme, N, lib=NULL) {
 
 #' Relative efficiency of a library
 #'
-#' efficiency according to our paper
+#' Relative efficiency of a peptide library, defined as the ratio of expected diversity of a peptide library relative to its overall number of oligonucleotides
 #' @param k length of peptide sequences
 #' @param libscheme Name (character vector) or definition (data frame) of scheme
 #' @param N size of the library 
@@ -146,7 +153,6 @@ efficiency <- function(k, libscheme, N, lib=NULL) {
 
 #' Build peptide library of k-length sequences according to specified scheme
 #' 
-#' some more explanation here
 #' @param k length of peptide sequences
 #' @param libscheme library scheme specifying classes of amino acids according to number of encodings
 #' last class is reserved for stop tags and other amino acids we are not interested in. 
@@ -177,6 +183,7 @@ libBuild <- function(k, libscheme) {
 
 #' Detection probability in a single library of size N
 #'
+#' The probability that at least one of a number of specific peptide sequences (e. g. the `best' and closely related sequences) is contained in a library
 #' @param lib library used in experiment, defaults to NNK with peptide length 7
 #' @param size size of the library, defaults to 10^8
 #' @return vector of detection probabilities for peptide sequences in each class

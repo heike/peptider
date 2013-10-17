@@ -16,7 +16,8 @@
   library and library scheme used
 }
 \description{
-  some more explanation here
+  Build peptide library of k-length sequences according to
+  specified scheme
 }
 \examples{
 user_scheme <- data.frame(class=c("A", "B", "C", "Z"),

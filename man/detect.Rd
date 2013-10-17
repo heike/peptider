@@ -15,7 +15,9 @@
   in each class
 }
 \description{
-  Detection probability in a single library of size N
+  The probability that at least one of a number of specific
+  peptide sequences (e. g. the `best' and closely related
+  sequences) is contained in a library
 }
 \examples{
 summary(detect())
