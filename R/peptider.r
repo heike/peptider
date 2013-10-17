@@ -6,7 +6,7 @@
 
 #' @details
 #' The schemes are defined as:
-#' #' 
+#'
 #' NNN: All four bases (\"N\" = G/A/T/C) possible at all three positions in the codon.
 #' NNB: All four bases in the first two codon positions possible, the third position is restricted to G, T or C (= \"B\")
 #' NNK/S: All four bases in the first two codon positions possible, the third position is restricted to G/T (= \"K\") or two C/G (= \"S\").
