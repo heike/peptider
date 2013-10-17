@@ -11,21 +11,22 @@
 \details{
   Built-in library schemes
 
-  The schemes are defined as: #' NNN: All four bases (\"N\"
-  = G/A/T/C) possible at all three positions in the codon.
-  NNB: All four bases in the first two codon positions
-  possible, the third position is restricted to G, T or C
-  (= \"B\") NNK/S: All four bases in the first two codon
-  positions possible, the third position is restricted to
-  G/T (= \"K\") or two C/G (= \"S\"). trimer: trimer
-  describes the concept that DNA is assembled from
-  prefabricated trimeric building blocks. This allows the
-  generation of libraries from a predefined set of codons
-  and thereby complete exclusion of Stop codons and other
-  unwanted codons. NNN (-C): NNN with Cysteine ignored. NNB
-  (-C): NNB with Cysteine ignored. NNK/SC (-C): NNK/S with
-  Cysteine ignored. trimer (-C): Trimer with Cysteine
-  ignored.
+  The schemes are defined as:
+
+  NNN: All four bases (\"N\" = G/A/T/C) possible at all
+  three positions in the codon. NNB: All four bases in the
+  first two codon positions possible, the third position is
+  restricted to G, T or C (= \"B\") NNK/S: All four bases
+  in the first two codon positions possible, the third
+  position is restricted to G/T (= \"K\") or two C/G (=
+  \"S\"). trimer: trimer describes the concept that DNA is
+  assembled from prefabricated trimeric building blocks.
+  This allows the generation of libraries from a predefined
+  set of codons and thereby complete exclusion of Stop
+  codons and other unwanted codons. NNN (-C): NNN with
+  Cysteine ignored. NNB (-C): NNB with Cysteine ignored.
+  NNK/SC (-C): NNK/S with Cysteine ignored. trimer (-C):
+  Trimer with Cysteine ignored.
 
   The schemes differ in the number of used codons, ranging
   from 64 (NNN), 48 (NNB), 32 (NNK/S) to 20 or less
