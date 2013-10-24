@@ -46,12 +46,12 @@ getChoices <- function(str) {
 
 #' For a given scheme, generate a dataset with the peptide probabilities
 #' @param scheme_def definition of the custom scheme
+#' @param k peptide lengths to include
+#' @param n exponents of the library size to include
 #' @return A data frame of peptide probabilities
-generateCustomProbs <- function(scheme_def) {
-    ## The Constants
-    k <- 6:10
-    N <- c(10^6, 10^7, 10^8, 10^9, 10^10, 10^11, 10^12)
-    n <- as.vector(sapply(10^seq(6, 12, by = 1), `*`, seq(1.0, 9.9, by = 0.1)))
+generateCustomProbs <- function(scheme_def, k = 6:10, n = 6:14) {
+    ## Library sizes
+    n <- as.vector(sapply(10^n, `*`, seq(1.0, 9.9, by = 0.1)))
     
     ## Generate scheme
     lib <- libscheme(scheme_def)
@@ -87,12 +87,12 @@ generateCustomProbs <- function(scheme_def) {
 
 #' For a given scheme, generate a dataset with the library information
 #' @param scheme_def definition of the custom scheme
+#' @param k peptide lengths to include
+#' @param n exponents of the library size to include
 #' @return A data frame of library information
-generateCustomLib <- function(scheme_def) {
-    ## The Constants
-    k <- 6:10
-    N <- c(10^6, 10^7, 10^8, 10^9, 10^10, 10^11, 10^12)
-    n <- as.vector(sapply(10^seq(6, 12, by = 1), `*`, seq(1.0, 9.9, by = 0.1)))
+generateCustomLib <- function(scheme_def, k = 6:10, n = 6:14) {
+    ## Library sizes
+    n <- as.vector(sapply(10^n, `*`, seq(1.0, 9.9, by = 0.1)))
     
     cat("Generating library properties...\n")
     lib.stats <- ldply(k, function(k1) {
@@ -123,6 +123,8 @@ generateCustomLib <- function(scheme_def) {
 #' This function will generate library properties for a custom scheme.  It is primarily intended to be used on http://www.pelica.org.
 #' @param scheme_name The name of the resulting encoding scheme
 #' @param scheme_def A data frame containing encoding information for the scheme
+#' @param k peptide lengths to include
+#' @param n exponents of the library size to include
 #' @return TRUE upon completion of the script and output of the CSV files
 #' @export
 #' @examples
@@ -130,9 +132,9 @@ generateCustomLib <- function(scheme_def) {
 #' generateCustom()
 #' generateCustom(scheme_name = "NNN", scheme_def = scheme("NNN"))
 #' }
-generateCustom <- function(scheme_name = "Custom", scheme_def = read.csv(file.choose())) {
-    custom.probs <- generateCustomProbs(scheme_def)
-    custom.lib <- generateCustomLib(scheme_def)
+generateCustom <- function(scheme_name = "Custom", scheme_def = read.csv(file.choose()), k = 6:10, n = 6:14) {
+    custom.probs <- generateCustomProbs(scheme_def, k, n)
+    custom.lib <- generateCustomLib(scheme_def, k, n)
     
     write.csv(custom.probs, paste("prob-", scheme_name, ".csv", sep = ""), row.names = FALSE)
     write.csv(custom.lib, paste("lib-", scheme_name, ".csv", sep = ""), row.names = FALSE)
