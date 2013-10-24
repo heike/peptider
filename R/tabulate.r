@@ -99,7 +99,6 @@ generateCustomLib <- function(scheme_def, k = 6:10, n = 6:14) {
         cat("Processing for k =", k1, "\n")
         
         lib <- libscheme(scheme_def, k = k1)
-        n <- as.vector(sapply(10^seq(6, 12, by = 1), `*`, seq(1.0, 9.9, by = 0.1)))
         
         lib.stats <- ldply(n, .progress = "text", function(n1) {  
             # cat("Processing for n =", n1, "\n")
