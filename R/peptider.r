@@ -65,6 +65,12 @@ libscheme <- function(schm, k = 1) {
     else stop("scheme must be either a character or a data frame")
 }
 
+libscheme_new <- function(schm, k = 1) {
+    if (is.character(schm)) return(libBuild_new(scheme(schm), k = k))
+    else if (is.data.frame(schm)) return(libBuild_new(k, schm))
+    else stop("scheme must be either a character or a data frame")
+}
+
 #' Diversity index according to Makowski
 #'
 #' The Diversity of a peptide library of length k according to Makowski and colleagues
@@ -120,6 +126,22 @@ coverage <- function(k, libscheme, N, lib=NULL) {
     s_count <- sum(subset(lib$info$scheme, class != "Z")$s)
     
     with(libdata, min(sum(z)/s_count^k,1))
+}
+
+coverage_new <- function(k, libscheme, N, lib=NULL) {
+    libschm <- as.character(substitute(libscheme)) ## Compatibility with old interface
+    if (inherits(try(scheme(libschm), silent = TRUE), 'try-error')) libschm <- libscheme
+    
+    if (is.null(lib)) lib <- libscheme_new(libschm, k)
+    libdata <- lib$data
+    
+    initialloss <- (1-(lib$info$valid/lib$info$nucleotides)^k)
+    expected <- rep(libdata$probs, libdata$choices)*N*(1-initialloss)
+    z <- with(libdata, rep(di, choices)*(1-exp(-expected/rep(di, choices))))
+    
+    s_count <- sum(subset(lib$info$scheme, class != "Z")$s)
+    
+    min(sum(z)/s_count^k,1)
 }
 
 #' Relative efficiency of a library
@@ -180,6 +202,37 @@ libBuild <- function(k, libscheme) {
                    scheme=libscheme))
 }
 
+#' Build peptide library of k-length sequences according to specified scheme
+#' 
+#' @param k length of peptide sequences
+#' @param libscheme library scheme specifying classes of amino acids according to number of encodings
+#' last class is reserved for stop tags and other amino acids we are not interested in. 
+#' @return library and library scheme used
+#' @examples
+#' user_scheme <- data.frame(class=c("A", "B", "C", "Z"),
+#'                           aacid=c("SLR", "AGPTV", "CDEFHIKMNQWY", "*"),
+#'                           c=c(3,2,1,1))
+#' user_library <- libBuild(3, user_scheme)                        
+#' @export
+libBuild_new <- function(k, libscheme) {
+    libscheme$class <- as.character(libscheme$class)
+    libscheme$s <- nchar(as.character(libscheme$aacid))
+    seq <- with(libscheme[-nrow(libscheme),], make.RV(class, s*c))
+    d <- with(libscheme[-nrow(libscheme),], make.RV(class, s))
+    
+    #d7 <- multN(d,k)
+    d7 <- multN2(d, k)
+    #seq7 <- multN(seq,k)
+    seq7 <- multN2(seq, k)
+    
+    di <- with(libscheme, round(d7$Prob*sum(s[-length(unique(class))])^k,0))
+    pi <- seq7$Prob
+    mult <- with(libscheme, s*c)
+    list(data=data.frame(class = as.vector(d7[,1]), di = di, choices = seq7$Choices, probs = pi),
+         info=list(nucleotides=sum(with(libscheme, mult)), 
+                   valid=with(libscheme, sum(mult[-length(mult)])),
+                   scheme=libscheme))
+}
 
 #' Detection probability in a single library of size N
 #'
