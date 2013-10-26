@@ -99,6 +99,19 @@ makowski <- function(k, libscheme) {
     with(dframe, 1/(numAA^k*sum(probs^2/di)))
 }
 
+makowski_new <- function(k, libscheme) {
+    libschm <- as.character(substitute(libscheme)) ## Compatibility with old interface
+    if (inherits(try(scheme(libschm), silent = TRUE), 'try-error')) libschm <- libscheme
+    
+    scheme_def <- libscheme_new(libschm, k)
+    
+    dframe <- scheme_def$data
+    info <- scheme_def$info$scheme
+    numAA <- sum(info$s[-nrow(info)]) 
+    
+    with(dframe, 1/(numAA^k*sum(((probs^2)*choices)/di)))
+}
+
 #' Coverage as expected number of peptides given all possible peptides
 #'
 #' Coverage of library of size N given random sampling from the pool of all possible peptides according to probabilities determined according to the library scheme.

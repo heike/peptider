@@ -117,6 +117,33 @@ generateCustomLib <- function(scheme_def, k = 6:10, n = 6:14, diversity = TRUE) 
     return(lib.stats)
 }
 
+generateCustomLib_new <- function(scheme_def, k = 6:10, n = 6:14) {
+    ## Library sizes
+    n <- as.vector(sapply(10^n, `*`, seq(1.0, 9.9, by = 0.1)))
+    
+    cat("Generating library properties...\n")
+    lib.stats <- ldply(k, function(k1) {
+        cat("Processing for k =", k1, "\n")
+        
+        lib <- libscheme_new(scheme_def, k = k1)
+        
+        lib.stats <- ldply(n, .progress = "text", function(n1) {  
+            # cat("Processing for n =", n1, "\n")
+            
+            cov = coverage_new(k=k1, libscheme=scheme_def, N=n1, lib=lib)
+            eff = efficiency_new(k=k1, libscheme=scheme_def, N=n1, lib=lib)
+            c(k=k1, n=n1, cov=cov, eff=eff)
+        })
+        
+        cat("Generating library diversity...\n")
+        lib.stats$div = makowski_new(k=k1, libscheme=scheme_def)
+        
+        lib.stats
+    })
+    
+    return(lib.stats)
+}
+
 #' Generate peptide and library information for a given scheme
 #' 
 #' This function will generate library properties for a custom scheme.  It is primarily intended to be used on http://www.pelica.org.
