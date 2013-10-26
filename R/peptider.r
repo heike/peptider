@@ -136,12 +136,12 @@ coverage_new <- function(k, libscheme, N, lib=NULL) {
     libdata <- lib$data
     
     initialloss <- (1-(lib$info$valid/lib$info$nucleotides)^k)
-    expected <- rep(libdata$probs, libdata$choices)*N*(1-initialloss)
-    z <- with(libdata, rep(di, choices)*(1-exp(-expected/rep(di, choices))))
+    expected <- libdata$probs*N*(1-initialloss)
+    z <- with(libdata, di*(1-exp(-expected/di)))
     
     s_count <- sum(subset(lib$info$scheme, class != "Z")$s)
     
-    min(sum(z)/s_count^k,1)
+    min(sum(z*libdata$choices)/s_count^k,1)
 }
 
 #' Relative efficiency of a library
