@@ -173,6 +173,22 @@ efficiency <- function(k, libscheme, N, lib=NULL) {
     with(libdata, min(s_count^k,sum(z))/N)
 }
 
+efficiency_new <- function(k, libscheme, N, lib=NULL) {
+    libschm <- as.character(substitute(libscheme)) ## Compatibility with old interface
+    if (inherits(try(scheme(libschm), silent = TRUE), 'try-error')) libschm <- libscheme
+    
+    if (is.null(lib)) lib <- libscheme_new(libschm, k)
+    libdata <- lib$data
+    
+    initialloss <- (1-(lib$info$valid/lib$info$nucleotides)^k)
+    libdata$expected <- libdata$probs*N*(1-initialloss)
+    libdata$z <- with(libdata, di*(1-exp(-expected/di)))
+    
+    s_count <- sum(subset(lib$info$scheme, class != "Z")$s)
+    
+    with(libdata, min(s_count^k,sum(z*choices))/N)
+}
+
 #' Build peptide library of k-length sequences according to specified scheme
 #' 
 #' @param k length of peptide sequences
