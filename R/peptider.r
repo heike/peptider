@@ -231,28 +231,46 @@ libBuild <- function(k, libscheme) {
                    scheme=libscheme))
 }
 
-#' Build peptide library of k-length sequences according to specified scheme
-#' 
-#' @param k length of peptide sequences
-#' @param libscheme library scheme specifying classes of amino acids according to number of encodings
-#' last class is reserved for stop tags and other amino acids we are not interested in. 
-#' @return library and library scheme used
-#' @examples
-#' user_scheme <- data.frame(class=c("A", "B", "C", "Z"),
-#'                           aacid=c("SLR", "AGPTV", "CDEFHIKMNQWY", "*"),
-#'                           c=c(3,2,1,1))
-#' user_library <- libBuild(3, user_scheme)                        
-#' @export
+getChoices <- function(str) {
+    test <- as.numeric(unlist(strsplit(str, split = ",")))
+    
+    left <- sum(test)
+    total <- 1
+    for (i in 1:length(test)) {
+        val <- choose(left, test[i])
+        left <- left - test[i]
+        total <- total * val
+    }
+    
+    return(total)
+}
+
+mult_reduced <- function(X, n = 2) {
+    num_outcomes <- length(X)
+    
+    str.func <- paste("expand.grid(", paste(rep(paste("0:", n, sep = ""), times = num_outcomes), collapse = ", "), ")")
+    
+    grid.df <- eval(parse(text = str.func))
+    grid.sub <- subset(grid.df, apply(grid.df, 1, sum) == n)
+    
+    grid.str <- apply(grid.sub, 1, paste, collapse = ",")
+    grid.list <- split(grid.sub, 1:nrow(grid.sub))
+    grid.prob <- lapply(grid.list, function(x) {
+        prod(probs(X)^x)
+    })
+    
+    grid.choices <- lapply(grid.str, getChoices)
+    data.frame(Encoding = as.character(grid.str), Prob = as.numeric(grid.prob), Choices = as.numeric(grid.choices))
+}
+
 libBuild_new <- function(k, libscheme) {
     libscheme$class <- as.character(libscheme$class)
     libscheme$s <- nchar(as.character(libscheme$aacid))
     seq <- with(libscheme[-nrow(libscheme),], make.RV(class, s*c))
     d <- with(libscheme[-nrow(libscheme),], make.RV(class, s))
     
-    #d7 <- multN(d,k)
-    d7 <- multN2(d, k)
-    #seq7 <- multN(seq,k)
-    seq7 <- multN2(seq, k)
+    d7 <- mult_reduced(d, k)
+    seq7 <- mult_reduced(seq, k)
     
     di <- with(libscheme, round(d7$Prob*sum(s[-length(unique(class))])^k,0))
     pi <- seq7$Prob

@@ -90,7 +90,7 @@ generateCustomProbs <- function(scheme_def, k = 6:10, n = 6:14) {
 #' @param k peptide lengths to include
 #' @param n exponents of the library size to include
 #' @return A data frame of library information
-generateCustomLib <- function(scheme_def, k = 6:10, n = 6:14, diversity = TRUE) {
+generateCustomLib <- function(scheme_def, k = 6:10, n = 6:14) {
     ## Library sizes
     n <- as.vector(sapply(10^n, `*`, seq(1.0, 9.9, by = 0.1)))
     
@@ -109,7 +109,7 @@ generateCustomLib <- function(scheme_def, k = 6:10, n = 6:14, diversity = TRUE) 
         })
         
         cat("Generating library diversity...\n")
-        if (diversity) lib.stats$div = makowski(k=k1, libscheme=scheme_def)
+        lib.stats$div = makowski(k=k1, libscheme=scheme_def)
         
         lib.stats
     })
