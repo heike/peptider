@@ -298,6 +298,13 @@ detect <- function(lib = libscheme("NNK", 7), size = 10^8) {
     with(lib$data, 1 - exp(-size*probs/di))
 }
 
+# require(ggplot2)
+# lib <- libscheme_new("NNK", 7)
+# qplot(detect_new(lib, size=10^8), weight=di*choices, geom="histogram", data=lib$data)
+detect_new <- function(lib = libscheme_new("NNK", 7), size = 10^8) {
+    with(lib$data, 1 - exp(-size*probs/di))
+}
+
 getNeighborOne <- function(x, blosum=1) {
     ## For CRAN check
     BLOSUM80 <- AA1 <- Blosum <- AA2 <- NULL
