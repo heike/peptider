@@ -189,7 +189,7 @@ generateCustom <- function(scheme_name = "Custom", scheme_def = read.csv(file.ch
 }
 
 generateCustom_new <- function(scheme_name = "Custom", scheme_def = read.csv(file.choose()), k = 6:18, n = 6:25) {
-    custom.probs <- generateCustomProbs_new(scheme_def, k, n)
+    custom.probs <- generateCustomProbs_new(scheme_def, k)
     custom.lib <- generateCustomLib_new(scheme_def, k, n)
     
     write.csv(custom.probs, paste("prob-", scheme_name, ".csv", sep = ""), row.names = FALSE)
