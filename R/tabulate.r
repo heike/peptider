@@ -85,6 +85,41 @@ generateCustomProbs <- function(scheme_def, k = 6:10, n = 6:14) {
     return(lib.probs)
 }
 
+generateCustomProbs_new <- function(scheme_def, k = 6:10, n = 6:14) {
+    ## Library sizes
+    n <- as.vector(sapply(10^n, `*`, seq(1.0, 9.9, by = 0.1)))
+    
+    ## Generate scheme
+    lib <- libscheme_new(scheme_def)
+    
+    cat("Getting possible peptide encodings...\n")
+    lib.probs.tmp <- ldply(k, function(y) {
+        df <- data.frame(Counts = getCounts(lib, y))
+        df$k <- y
+        
+        df
+    })
+    
+    cat("Getting a sample peptide encoding...\n")
+    lib.probs.tmp$samp.encoding <- apply(lib.probs.tmp, 1, function(z) { paste(rep(lib$info$scheme$class, as.numeric(c(strsplit(as.character(z), split = ",")[[1]], 0))), collapse = "") })
+    
+    cat("Processing probabilities...\n")
+    lib.probs <- ldply(k, .progress = "text", .fun = function(y) {
+        lib.data <- libscheme_new(scheme_def, y)$data
+        lib.data$class <- gsub("\\.", "", lib.data$class)
+        lib.data.subset <- subset(lib.data, class %in% lib.probs.tmp$samp.encoding)
+        
+        return.df <- data.frame(Counts = encodingReduce(as.character(lib.data.subset$class), lib), samp.encoding = lib.data.subset$class, probs = lib.data.subset$probs)
+        return.df$k <- y
+        return.df$di <- lib.data.subset$di
+        return.df$choices <- sapply(as.character(return.df$Counts), getChoices)
+        
+        return.df
+    })
+    
+    return(lib.probs)
+}
+
 #' For a given scheme, generate a dataset with the library information
 #' @param scheme_def definition of the custom scheme
 #' @param k peptide lengths to include
