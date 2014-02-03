@@ -71,6 +71,32 @@ libscheme_new <- function(schm, k = 1) {
     else stop("scheme must be either a character or a data frame")
 }
 
+diversity <- function (k, libscheme, N, lib = NULL) 
+{
+    libschm <- as.character(substitute(libscheme))
+    if (inherits(try(scheme(libschm), silent = TRUE), "try-error")) 
+        libschm <- libscheme
+    if (is.null(lib)) 
+        lib <- libscheme(libschm, k)
+    libdata <- lib$data
+    initialloss <- (1 - (lib$info$valid/lib$info$nucleotides)^k)
+    libdata$expected <- libdata$probs * N * (1 - initialloss)
+    return(sum(with(libdata, di * (1 - exp(-expected/di)))))
+}
+
+diversity_new <- function (k, libscheme, N, lib = NULL) 
+{
+    libschm <- as.character(substitute(libscheme))
+    if (inherits(try(scheme(libschm), silent = TRUE), "try-error")) 
+        libschm <- libscheme
+    if (is.null(lib)) 
+        lib <- libscheme_new(libschm, k)
+    libdata <- lib$data
+    initialloss <- (1 - (lib$info$valid/lib$info$nucleotides)^k)
+    libdata$expected <- libdata$probs * N * (1 - initialloss)
+    return(sum(with(libdata, di * choices * (1 - exp(-expected/di)))))
+}
+
 #' Diversity index according to Makowski
 #'
 #' The Diversity of a peptide library of length k according to Makowski and colleagues
