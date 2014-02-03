@@ -2,7 +2,7 @@
 \alias{encodingReduce}
 \title{Reduce the regular encoding to an easier/faster format}
 \usage{
-  encodingReduce(class, libscheme)
+encodingReduce(class, libscheme)
 }
 \arguments{
   \item{class}{The peptide class}
@@ -10,9 +10,9 @@
   \item{libscheme}{The scheme to use}
 }
 \value{
-  Vector of reduced peptide encodings
+Vector of reduced peptide encodings
 }
 \description{
-  Reduce the regular encoding to an easier/faster format
+Reduce the regular encoding to an easier/faster format
 }
 

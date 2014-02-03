@@ -2,7 +2,7 @@
 \alias{efficiency}
 \title{Relative efficiency of a library}
 \usage{
-  efficiency(k, libscheme, N, lib = NULL)
+efficiency(k, libscheme, N, lib = NULL)
 }
 \arguments{
   \item{k}{length of peptide sequences}
@@ -16,12 +16,12 @@
   create it}
 }
 \value{
-  relative efficiency index between 0 and 1
+relative efficiency index between 0 and 1
 }
 \description{
-  Relative efficiency of a peptide library, defined as the
-  ratio of expected diversity of a peptide library relative
-  to its overall number of oligonucleotides
+Relative efficiency of a peptide library, defined as the
+ratio of expected diversity of a peptide library relative
+to its overall number of oligonucleotides
 }
 \examples{
 efficiency(3, "NNN", 10^2)

@@ -2,7 +2,7 @@
 \alias{libBuild}
 \title{Build peptide library of k-length sequences according to specified scheme}
 \usage{
-  libBuild(k, libscheme)
+libBuild(k, libscheme)
 }
 \arguments{
   \item{k}{length of peptide sequences}
@@ -13,11 +13,11 @@
   not interested in.}
 }
 \value{
-  library and library scheme used
+library and library scheme used
 }
 \description{
-  Build peptide library of k-length sequences according to
-  specified scheme
+Build peptide library of k-length sequences according to
+specified scheme
 }
 \examples{
 user_scheme <- data.frame(class=c("A", "B", "C", "Z"),

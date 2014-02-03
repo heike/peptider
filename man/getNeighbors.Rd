@@ -2,7 +2,7 @@
 \alias{getNeighbors}
 \title{Find all neighbors of degree one for a set of peptide sequences}
 \usage{
-  getNeighbors(x, blosum = 1)
+getNeighbors(x, blosum = 1)
 }
 \arguments{
   \item{x}{(vector) of character strings of peptide
@@ -12,14 +12,14 @@
   positive loadings only}
 }
 \value{
-  list of neighbor sequences
+list of neighbor sequences
 }
 \description{
-  first degree neighbors - a neighbor of a peptide is
-  defined as a peptide sequence that differs in at most one
-  amino acid from a given sequence. Additionally, we can
-  restrict neighbors to regard only those sequences that
-  have a certain minimal BLOSUM loading.
+first degree neighbors - a neighbor of a peptide is defined
+as a peptide sequence that differs in at most one amino
+acid from a given sequence. Additionally, we can restrict
+neighbors to regard only those sequences that have a
+certain minimal BLOSUM loading.
 }
 \examples{
 getNeighbors("APE")

@@ -2,7 +2,7 @@
 \alias{makowski}
 \title{Diversity index according to Makowski}
 \usage{
-  makowski(k, libscheme)
+makowski(k, libscheme)
 }
 \arguments{
   \item{k}{length of peptide sequences}
@@ -11,29 +11,28 @@
   (data frame) of scheme}
 }
 \value{
-  diversity index between 0 and 1
+diversity index between 0 and 1
 }
 \description{
-  The Diversity of a peptide library of length k according
-  to Makowski and colleagues
+The Diversity of a peptide library of length k according to
+Makowski and colleagues
 }
 \details{
-  Makowski and colleagues [Makowski, Soares 2003] present
-  another approach by defining functional diversity. They
-  provide the mathematical background to determine the
-  quality of a peptide library based on the probability of
-  individual peptides to appear. In an ideal case, where
-  every peptide has the same frequency the functional
-  diversity is at a maximum of 1. With increasingly skew
-  distributions, this value drops towards a minimum of 0.
-  It is mostly independent of the actual number of
-  sequences in a library but reflects effects caused by the
-  degeneration of the genetic code. In the genetic code the
-  number of codons per amino acid varies from one to six.
-  Therefore random DNA sequences are biased towards
-  encoding peptides enriched in amino acids encoded more
-  frequently, which results in skew distributions of
-  peptide frequencies.
+Makowski and colleagues [Makowski, Soares 2003] present
+another approach by defining functional diversity. They
+provide the mathematical background to determine the
+quality of a peptide library based on the probability of
+individual peptides to appear. In an ideal case, where
+every peptide has the same frequency the functional
+diversity is at a maximum of 1. With increasingly skew
+distributions, this value drops towards a minimum of 0. It
+is mostly independent of the actual number of sequences in
+a library but reflects effects caused by the degeneration
+of the genetic code. In the genetic code the number of
+codons per amino acid varies from one to six. Therefore
+random DNA sequences are biased towards encoding peptides
+enriched in amino acids encoded more frequently, which
+results in skew distributions of peptide frequencies.
 }
 \examples{
 makowski(2, "NNN")

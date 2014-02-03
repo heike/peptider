@@ -2,7 +2,7 @@
 \alias{coverage}
 \title{Coverage as expected number of peptides given all possible peptides}
 \usage{
-  coverage(k, libscheme, N, lib = NULL)
+coverage(k, libscheme, N, lib = NULL)
 }
 \arguments{
   \item{k}{length of peptide sequences}
@@ -15,12 +15,12 @@
   \item{lib}{library scheme}
 }
 \value{
-  coverage index between 0 and 1
+coverage index between 0 and 1
 }
 \description{
-  Coverage of library of size N given random sampling from
-  the pool of all possible peptides according to
-  probabilities determined according to the library scheme.
+Coverage of library of size N given random sampling from
+the pool of all possible peptides according to
+probabilities determined according to the library scheme.
 }
 \examples{
 coverage(2, "NNN", 10^3)

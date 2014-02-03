@@ -2,7 +2,7 @@
 \alias{libscheme}
 \title{Get the specified library scheme}
 \usage{
-  libscheme(schm, k = 1)
+libscheme(schm, k = 1)
 }
 \arguments{
   \item{schm}{either a character vector giving the name of
@@ -12,12 +12,12 @@
   \item{k}{length of peptide sequences}
 }
 \value{
-  list consisting of a data frame of peptide classes, size
-  of class, and its probabilities, and a list of additional
-  information relating to the library scheme
+list consisting of a data frame of peptide classes, size of
+class, and its probabilities, and a list of additional
+information relating to the library scheme
 }
 \description{
-  Get the specified library scheme
+Get the specified library scheme
 }
 \examples{
 libscheme("NNN")

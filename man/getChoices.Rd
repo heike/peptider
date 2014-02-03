@@ -2,17 +2,17 @@
 \alias{getChoices}
 \title{Get the number of peptides that reduce to a particular reduced encoding}
 \usage{
-  getChoices(str)
+getChoices(str)
 }
 \arguments{
   \item{str}{The reduced encoding string}
 }
 \value{
-  An integer of the possible number of peptides reducing to
-  this encoding
+An integer of the possible number of peptides reducing to
+this encoding
 }
 \description{
-  Get the number of peptides that reduce to a particular
-  reduced encoding
+Get the number of peptides that reduce to a particular
+reduced encoding
 }
 
