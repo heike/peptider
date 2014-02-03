@@ -1,6 +1,7 @@
 export(codons)
 export(coverage)
 export(detect)
+export(diversity)
 export(efficiency)
 export(generateCustom)
 export(getNeighbors)

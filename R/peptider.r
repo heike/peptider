@@ -71,6 +71,20 @@ libscheme_new <- function(schm, k = 1) {
     else stop("scheme must be either a character or a data frame")
 }
 
+#' Diversity according to peptides paper (Sieber)
+#' 
+#' @param k length of peptide sequences
+#' @param libscheme Name (character vector) or definition (data frame) of scheme
+#' @param N size of the library 
+#' @param lib library scheme
+#' 
+#' @return Expected Diversity of the library
+#' 
+#' @export
+#' 
+#' @examples
+#' diversity(2, "NNN", 10^3)
+#' diversity(2, "NNK", 10^3)
 diversity <- function (k, libscheme, N, lib = NULL) 
 {
     libschm <- as.character(substitute(libscheme))
