@@ -6,8 +6,8 @@ Date: 2014-04-02
 Author: Heike Hofmann, Eric Hare, ggobi Foundation
 Maintainer: Eric Hare <erichare@iastate.edu>
 Description: Functions for evaluating diversity in peptide libraries, including
-    NNN, NNB, NNK/S, and NNN schemes.  This includes expected coverage, relative
-    efficiency, and functional diversity of the library.
+    NNN, NNB, NNK/S, and trimer schemes.  This includes expected coverage,
+    relative efficiency, and functional diversity of the library.
 License: GPL-3
 Imports:
     discreteRV (>= 1.1),
