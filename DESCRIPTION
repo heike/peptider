@@ -10,7 +10,7 @@ Description: Functions for evaluating diversity in peptide libraries, including
     efficiency, and functional diversity of the library.
 License: GPL-3
 Imports:
-    discreteRV,
+    discreteRV (>= 1.1),
     plyr
 Suggests:
     ggplot2
