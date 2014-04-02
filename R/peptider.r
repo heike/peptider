@@ -244,6 +244,8 @@ efficiency_new <- function(k, libscheme, N, lib=NULL) {
 
 #' Build peptide library of k-length sequences according to specified scheme
 #' 
+#' @import discreteRV
+#' 
 #' @param k length of peptide sequences
 #' @param libscheme library scheme specifying classes of amino acids according to number of encodings
 #' last class is reserved for stop tags and other amino acids we are not interested in. 
@@ -257,8 +259,8 @@ efficiency_new <- function(k, libscheme, N, lib=NULL) {
 libBuild <- function(k, libscheme) {
     libscheme$class <- as.character(libscheme$class)
     libscheme$s <- nchar(as.character(libscheme$aacid))
-    seq <- with(libscheme[-nrow(libscheme),], make.RV(class, s*c))
-    d <- with(libscheme[-nrow(libscheme),], make.RV(class, s))
+    seq <- with(libscheme[-nrow(libscheme),], make.RV(class, s*c / sum(s*c), fractions = FALSE))
+    d <- with(libscheme[-nrow(libscheme),], make.RV(class, s / sum(s), fractions = FALSE))
     
     d7 <- multN(d,k)
     seq7 <- multN(seq,k)
@@ -306,8 +308,8 @@ mult_reduced <- function(X, n = 2) {
 libBuild_new <- function(k, libscheme) {
     libscheme$class <- as.character(libscheme$class)
     libscheme$s <- nchar(as.character(libscheme$aacid))
-    seq <- with(libscheme[-nrow(libscheme),], make.RV(class, s*c))
-    d <- with(libscheme[-nrow(libscheme),], make.RV(class, s))
+    seq <- with(libscheme[-nrow(libscheme),], make.RV(class, s*c / sum(s*c), fractions = FALSE))
+    d <- with(libscheme[-nrow(libscheme),], make.RV(class, s / sum(s), fractions = FALSE))
     
     d7 <- mult_reduced(d, k)
     seq7 <- mult_reduced(seq, k)
@@ -372,6 +374,7 @@ getNeighborOne <- function(x, blosum=1) {
 #' 
 #' first degree neighbors - a neighbor of a peptide is defined as a peptide sequence that differs in at most one amino acid from a given sequence. 
 #' Additionally, we can restrict neighbors to regard only those sequences that have a certain minimal BLOSUM loading. 
+#' @import plyr
 #' @param x (vector) of character strings of  peptide sequences.
 #' @param blosum minimal BLOSUM loading, defaults to 1 for positive loadings only
 #' @return list of neighbor sequences
@@ -421,6 +424,7 @@ getNofNeighborsOne <- function(x, blosum = 1, method="peptide", libscheme=NULL) 
 #' @param method character string, one of "peptide" or "dna". This specifies the level at which the neighbors are calculated.
 #' @param libscheme library scheme under which neighbors are being calculated. this is only of importance, if method="dna"
 #' @return vector of numbers of neighbors 
+#' @import plyr
 #' @export
 #' @examples
 #' getNofNeighbors("APE")
@@ -445,6 +449,7 @@ getNofNeighbors <- function(x, blosum = 1, method="peptide", libscheme=NULL) {
 #' @param flag internal use only: Set to true if calling this from another function
 #' @return vector of numbers of codons 
 #' @export
+#' @import plyr
 #' @examples
 #' codons("APE", libscheme="NNK")
 #' codons("HENNING", libscheme="NNK")

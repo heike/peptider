@@ -48,6 +48,7 @@ getChoices <- function(str) {
 #' @param scheme_def definition of the custom scheme
 #' @param k peptide lengths to include
 #' @param n exponents of the library size to include
+#' @import plyr
 #' @return A data frame of peptide probabilities
 generateCustomProbs <- function(scheme_def, k = 6:10, n = 6:14) {
     ## Library sizes
@@ -108,6 +109,7 @@ generateCustomProbs_new <- function(scheme_def, k = 6:18) {
 #' @param scheme_def definition of the custom scheme
 #' @param k peptide lengths to include
 #' @param n exponents of the library size to include
+#' @import plyr
 #' @return A data frame of library information
 generateCustomLib <- function(scheme_def, k = 6:10, n = 6:14) {
     ## Library sizes
