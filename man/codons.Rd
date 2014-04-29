@@ -2,7 +2,7 @@
 \alias{codons}
 \title{Compute the number of codons for a vector of peptide sequences}
 \usage{
-codons(x, libscheme = NULL, flag = FALSE)
+codons(x, libscheme, flag = FALSE)
 }
 \arguments{
   \item{x}{(vector) of character strings of peptide

@@ -60,7 +60,7 @@ scheme <- function(name) {
 #' custom <- data.frame(class = c("A", "Z"), aacids = c("SLRAGPTVIDEFHKNQYMW", "*"), c = c(1, 0))
 #' libscheme(custom)
 libscheme <- function(schm, k = 1) {
-    if (is.character(schm)) return(libBuild(scheme(schm), k = k))
+    if (is.character(schm)) return(libBuild(k, scheme(schm)))
     else if (is.data.frame(schm)) return(libBuild(k, schm))
     else stop("scheme must be either a character or a data frame")
 }
@@ -453,20 +453,18 @@ getNofNeighbors <- function(x, blosum = 1, method="peptide", libscheme=NULL) {
 #' @examples
 #' codons("APE", libscheme="NNK")
 #' codons("HENNING", libscheme="NNK")
-codons <- function(x, libscheme=NULL, flag = FALSE) {
-    libschm <- libscheme
-    if (!flag) {
-        libschm <- as.character(substitute(libscheme)) ## Compatibility with old interface
-        if (inherits(try(scheme(libschm), silent = TRUE), 'try-error')) libschm <- libscheme
-    }
+codons <- function(x, libscheme, flag = FALSE) {
+    libschm <- as.character(substitute(libscheme)) ## Compatibility with old interface
+    if (inherits(try(scheme(libschm), silent = TRUE), 'try-error')) libschm <- libscheme
+    
     if (length(x) == 1) return(codonsOne(x, libschm))
     
-    unlist(llply(x, codonsOne, libscheme=libschm))
+    unlist(llply(x, codonsOne, schm=libschm))
 }
 
-codonsOne <- function(x, libscheme) {
-    stopifnot(!(is.null(libscheme) & nchar(libscheme) == 0))    
-    lib <- libscheme(libscheme)$info$scheme
+codonsOne <- function(x, schm) {
+    stopifnot(!(is.null(schm) & nchar(schm) == 0))
+    lib <- libscheme(schm)$info$scheme
     
     prod(unlist(llply(strsplit(x, split="")[[1]], function(w) { 
         lib[grep(w, lib$aacid),"c"]
