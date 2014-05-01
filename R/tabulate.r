@@ -86,7 +86,7 @@ generateCustomProbs <- function(scheme_def, k = 6:10, n = 6:14) {
     return(lib.probs)
 }
 
-generateCustomProbs_new <- function(scheme_def, k = 6:18) {
+generateCustomProbs_new <- function(scheme_def, k = 6:10) {
     lib <- libscheme_new(scheme_def)
     
     cat("Getting possible peptide encodings...\n")
@@ -138,7 +138,7 @@ generateCustomLib <- function(scheme_def, k = 6:10, n = 6:14) {
     return(lib.stats)
 }
 
-generateCustomLib_new <- function(scheme_def, k = 6:18, n = 6:25) {
+generateCustomLib_new <- function(scheme_def, k = 6:10, n = 6:14) {
     ## Library sizes
     n <- as.vector(sapply(10^n, `*`, seq(1.0, 9.9, by = 0.1)))
     
@@ -190,13 +190,13 @@ generateCustom <- function(scheme_name = "Custom", scheme_def = read.csv(file.ch
     TRUE
 }
 
-generateCustom_new <- function(scheme_name = "Custom", scheme_def = read.csv(file.choose()), k = 6:18, n = 6:25) {
+generateCustom_new <- function(scheme_name = "custom", scheme_def = read.csv(file.choose()), k = 6:10, n = 6:14) {
     custom.probs <- generateCustomProbs_new(scheme_def, k)
     custom.lib <- generateCustomLib_new(scheme_def, k, n)
     
-    write.csv(custom.probs, paste("prob-", scheme_name, ".csv", sep = ""), row.names = FALSE)
-    write.csv(custom.lib, paste("lib-", scheme_name, ".csv", sep = ""), row.names = FALSE)
-    write.csv(file, paste("scheme-", scheme_name, ".csv", sep = ""), row.names = FALSE)
+    write.csv(custom.probs, paste("peptide_", scheme_name, ".csv", sep = ""), row.names = FALSE)
+    write.csv(custom.lib, paste("library_", scheme_name, ".csv", sep = ""), row.names = FALSE)
+    write.csv(file, paste("scheme_", scheme_name, ".csv", sep = ""), row.names = FALSE)
     
     TRUE
 }
