@@ -2,10 +2,13 @@
 \alias{scheme}
 \title{Get the specified library scheme definition}
 \usage{
-scheme(name)
+scheme(name, file = NULL)
 }
 \arguments{
   \item{name}{name of the scheme as a character vector}
+
+  \item{file}{CSV file hosting scheme definition, if
+  provided}
 }
 \value{
 a data frame of peptide classes, amino acids, and size of

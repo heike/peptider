@@ -25,6 +25,7 @@ NULL
 #' Get the specified library scheme definition
 #' 
 #' @param name name of the scheme as a character vector
+#' @param file CSV file hosting scheme definition, if provided
 #' 
 #' @return a data frame of peptide classes, amino acids, and size of the classes corresponding to the selected scheme
 #' 
@@ -33,14 +34,18 @@ NULL
 #' @examples
 #' scheme("NNN")
 #' scheme("NNK")
-scheme <- function(name) {
-    schemes <- NULL ## R Check
-    data(schemes, envir=environment())
-    
-    scheme_def <- schemes[[paste(tolower(name), "scheme", sep = "_")]]
-    if (is.null(scheme_def)) stop(paste("No library with name", name, "is included in peptider"))
-    
-    return(scheme_def)
+scheme <- function(name, file = NULL) {
+    if (is.null(file)) {
+        schemes <- NULL ## R Check
+        data(schemes, envir=environment())
+        
+        scheme_def <- schemes[[paste(tolower(name), "scheme", sep = "_")]]
+        if (is.null(scheme_def)) stop(paste("No library with name", name, "is included in peptider"))
+        
+        return(scheme_def)
+    } else {
+        return(read.csv(file))
+    }
 }
 
 #' Get the specified library scheme
