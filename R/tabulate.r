@@ -191,7 +191,7 @@ generateCustom_new <- function(scheme_name = "custom", scheme_def = read.csv(fil
     
     write.csv(custom.probs, paste("peptide_", scheme_name, ".csv", sep = ""), row.names = FALSE)
     write.csv(custom.lib, paste("library_", scheme_name, ".csv", sep = ""), row.names = FALSE)
-    write.csv(file, paste("scheme_", scheme_name, ".csv", sep = ""), row.names = FALSE)
+    write.csv(scheme_def, paste("scheme_", scheme_name, ".csv", sep = ""), row.names = FALSE)
     
     TRUE
 }
