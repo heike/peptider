@@ -87,20 +87,15 @@ generateCustomProbs <- function(scheme_def, k = 6:10, n = 6:14) {
 }
 
 generateCustomProbs_new <- function(scheme_def, k = 6:10) {
-    lib <- libscheme_new(scheme_def)
-    
     cat("Getting possible peptide encodings...\n")
     lib.probs.tmp <- ldply(k, function(y) {
         ## Generate scheme
         df <- libscheme_new(scheme_def, y)$data
         df$k <- y
-        names(df)[1] <- "Counts" #compat
         
         df
     })
-    
-    cat("Getting a sample peptide encoding...\n")
-    lib.probs.tmp$samp.encoding <- apply(lib.probs.tmp, 1, function(z) { paste(rep(lib$info$scheme$class, as.numeric(c(strsplit(as.character(z), split = ",")[[1]], 0))), collapse = "") })
+    lib.probs.tmp$scheme <- "Custom"
 
     return(lib.probs.tmp)
 }
@@ -153,11 +148,11 @@ generateCustomLib_new <- function(scheme_def, k = 6:10, n = 6:14) {
             
             cov = coverage_new(k=k1, libscheme=scheme_def, N=n1, lib=lib)
             eff = efficiency_new(k=k1, libscheme=scheme_def, N=n1, lib=lib)
-            c(k=k1, n=n1, cov=cov, eff=eff)
-        })
-        
+            c(k=k1, N=n1, coverage=cov, efficiency=eff)
+        })        
         cat("Generating library diversity...\n")
-        lib.stats$div = makowski_new(k=k1, libscheme=scheme_def)
+        lib.stats$diversity = makowski_new(k=k1, libscheme=scheme_def)
+        lib.stats$scheme <- "Custom"
         
         lib.stats
     })
