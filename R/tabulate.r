@@ -160,6 +160,38 @@ generateCustomLib_new <- function(scheme_def, k = 6:10, n = 6:14) {
     return(lib.stats)
 }
 
+generateCustomNei_new <- function(scheme_def, k = 6:10, n = 6:14) {
+    ## Library sizes
+    n <- as.vector(sapply(10^n, `*`, seq(1.0, 9.9, by = 0.1)))
+    
+    nei.dat <- ldply(k, function(x) {
+        
+        worst.aa <- strsplit(as.character(scheme_def$aacid)[which.min(scheme_def$c)], "")[[1]]
+        best.aa <- strsplit(as.character(scheme_def$aacid)[which.max(scheme_def$c)], "")[[1]]
+        
+        peps.worst <- sapply(worst.aa, function(aa){paste(rep(aa, x), collapse = "")})
+        peps.best <- sapply(best.aa, function(aa){paste(rep(aa, x), collapse = "")})
+        
+        worst.tmp <- sapply(peps.worst, function(pep){
+            ppeptide(getNeighbors(pep), scheme_def, n)
+        })
+        worst <- apply(worst.tmp, 1, min)
+        worst.which <- which.min(worst.tmp[1,])
+        worst2 <- ppeptide(unique(unlist(getNeighbors(getNeighbors(peps.worst[worst.which])))), scheme_def, n)
+        
+        best.tmp <- sapply(peps.best, function(pep){
+            ppeptide(getNeighbors(pep), scheme_def, n)
+        })
+        best <- apply(best.tmp, 1, max)
+        best.which <- which.max(best.tmp[1,])
+        best2 <- ppeptide(unique(unlist(getNeighbors(getNeighbors(peps.best[best.which])))), scheme_def, n)
+        
+        data.frame(scheme = "Custom", k = x, N = rep(n, times = 2), degree = rep(1:2, each = length(n)), worst = c(worst, worst2), best = c(best, best2))
+    })
+    
+    nei.dat
+}
+
 #' Generate peptide and library information for a given scheme
 #' 
 #' This function will generate library properties for a custom scheme.  It is primarily intended to be used on http://www.pelica.org.
@@ -188,9 +220,11 @@ generateCustom <- function(scheme_name = "Custom", scheme_def = read.csv(file.ch
 generateCustom_new <- function(scheme_name = "custom", scheme_def = read.csv(file.choose()), k = 6:10, n = 6:14) {
     custom.probs <- generateCustomProbs_new(scheme_def, k)
     custom.lib <- generateCustomLib_new(scheme_def, k, n)
+    custom.nei <- generateCustomNei_new(scheme_def, k, n)
     
     write.csv(custom.probs, paste("peptide_", scheme_name, ".csv", sep = ""), row.names = FALSE)
     write.csv(custom.lib, paste("library_", scheme_name, ".csv", sep = ""), row.names = FALSE)
+    write.csv(custom.nei, paste("neighborhood_", scheme_name, ".csv", sep = ""), row.names = FALSE)
     write.csv(scheme_def, paste("scheme_", scheme_name, ".csv", sep = ""), row.names = FALSE)
     
     TRUE

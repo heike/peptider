@@ -62,7 +62,7 @@ scheme <- function(name, file = NULL) {
 #' libscheme("NNK", 2)
 #' 
 #' # Build a custom trimer library
-#' custom <- data.frame(class = c("A", "Z"), aacids = c("SLRAGPTVIDEFHKNQYMW", "*"), c = c(1, 0))
+#' custom <- data.frame(class = c("A", "Z"), aacid = c("SLRAGPTVIDEFHKNQYMW", "*"), c = c(1, 0))
 #' libscheme(custom)
 libscheme <- function(schm, k = 1) {
     if (is.character(schm)) return(libBuild(k, scheme(schm)))
