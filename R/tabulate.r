@@ -166,7 +166,7 @@ generateCustomNei_new <- function(scheme_def, k = 6:10, n = 6:14) {
     
     nei.dat <- ldply(k, function(x) {
         
-        worst.aa <- strsplit(as.character(scheme_def$aacid)[which.min(scheme_def$c)], "")[[1]]
+        worst.aa <- strsplit(as.character(scheme_def$aacid)[which.min(scheme_def$c[scheme_def$c > 0])], "")[[1]]
         best.aa <- strsplit(as.character(scheme_def$aacid)[which.max(scheme_def$c)], "")[[1]]
         
         peps.worst <- sapply(worst.aa, function(aa){paste(rep(aa, x), collapse = "")})
