@@ -217,14 +217,14 @@ generateCustom <- function(scheme_name = "Custom", scheme_def = read.csv(file.ch
     TRUE
 }
 
-generateCustom_new <- function(scheme_name = "custom", scheme_def = read.csv(file.choose()), k = 6:10, n = 6:14) {
+generateCustom_new <- function(scheme_name = "custom", scheme_def = read.csv(file.choose()), k = 6:10, n = 6:14, savefile = TRUE) {
     custom.probs <- generateCustomProbs_new(scheme_def, k)
     custom.lib <- generateCustomLib_new(scheme_def, k, n)
     custom.nei <- generateCustomNei_new(scheme_def, k, n)
     
     custom.data <- list(custom.probs = custom.probs, custom.lib = custom.lib, custom.nei = custom.nei, scheme_def = scheme_def)
     
-    save(list = c("custom.probs", "custom.lib", "custom.nei", "scheme_def"), file = "peptider_custom.RData")
+    if (savefile) save(list = c("custom.probs", "custom.lib", "custom.nei", "scheme_def"), file = "peptider_custom.RData")
     
-    TRUE
+    return(custom.data)
 }
