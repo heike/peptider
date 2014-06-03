@@ -82,6 +82,7 @@ libscheme_new <- function(schm, k = 1) {
 #' @param libscheme Name (character vector) or definition (data frame) of scheme
 #' @param N size of the library 
 #' @param lib library scheme
+#' @param variance return the variance instead of the expected value
 #' 
 #' @return Expected Diversity of the library
 #' 
@@ -90,7 +91,7 @@ libscheme_new <- function(schm, k = 1) {
 #' @examples
 #' diversity(2, "NNN", 10^3)
 #' diversity(2, "NNK", 10^3)
-diversity <- function (k, libscheme, N, lib = NULL) 
+diversity <- function (k, libscheme, N, lib = NULL, variance = FALSE) 
 {
     libschm <- as.character(substitute(libscheme))
     if (inherits(try(scheme(libschm), silent = TRUE), "try-error")) 
@@ -100,10 +101,11 @@ diversity <- function (k, libscheme, N, lib = NULL)
     libdata <- lib$data
     initialloss <- (1 - (lib$info$valid/lib$info$nucleotides)^k)
     libdata$expected <- libdata$probs * N * (1 - initialloss)
+    if (variance) return(with(libdata, sum(-2*di * (1- exp(-expected/di))^2 + (2*di - 1) * (1 - exp(-expected/di)) + 1)))
     return(sum(with(libdata, di * (1 - exp(-expected/di)))))
 }
 
-diversity_new <- function (k, libscheme, N, lib = NULL) 
+diversity_new <- function (k, libscheme, N, lib = NULL, variance = FALSE) 
 {
     libschm <- as.character(substitute(libscheme))
     if (inherits(try(scheme(libschm), silent = TRUE), "try-error")) 
@@ -113,7 +115,16 @@ diversity_new <- function (k, libscheme, N, lib = NULL)
     libdata <- lib$data
     initialloss <- (1 - (lib$info$valid/lib$info$nucleotides)^k)
     libdata$expected <- libdata$probs * N * (1 - initialloss)
-    return(sum(with(libdata, di * choices * (1 - exp(-expected/di)))))
+    
+    curdigits <- options()$digits
+    options(digits = 22)
+    
+    val <- sum(with(libdata, di * choices * (1 - exp(-expected/di))))
+    if (variance) val <- with(libdata, sum(choices * (-2*di * (1- exp(-expected/di))^2 + (2*di - 1) * (1 - exp(-expected/di)) + 1)))
+    
+    options(digits = curdigits)
+    
+    return(val)
 }
 
 #' Diversity index according to Makowski
@@ -170,36 +181,32 @@ makowski_new <- function(k, libscheme) {
 #' coverage(2, "NNN", 10^3)
 #' coverage(2, "NNK", 10^3)
 #' coverage(2, "Trimer", 10^3) ## Trimer coverage is not 1 because of random sampling.
-coverage <- function(k, libscheme, N, lib=NULL) {
+coverage <- function(k, libscheme, N, lib=NULL, variance = FALSE) {
     libschm <- as.character(substitute(libscheme)) ## Compatibility with old interface
     if (inherits(try(scheme(libschm), silent = TRUE), 'try-error')) libschm <- libscheme
     
     if (is.null(lib)) lib <- libscheme(libschm, k)
-    libdata <- lib$data
-    
-    initialloss <- (1-(lib$info$valid/lib$info$nucleotides)^k)
-    libdata$expected <- libdata$probs*N*(1-initialloss)
-    libdata$z <- with(libdata, di*(1-exp(-expected/di)))
-    
+
     s_count <- sum(subset(lib$info$scheme, class != "Z")$s)
     
-    with(libdata, min(sum(z)/s_count^k,1))
+    val <- min(diversity(k, libscheme, N, lib, variance) / s_count^k, 1)
+    if (variance) val <- val / s_count^k
+    
+    return(val)
 }
 
-coverage_new <- function(k, libscheme, N, lib=NULL) {
+coverage_new <- function(k, libscheme, N, lib=NULL, variance = FALSE) {
     libschm <- as.character(substitute(libscheme)) ## Compatibility with old interface
     if (inherits(try(scheme(libschm), silent = TRUE), 'try-error')) libschm <- libscheme
     
     if (is.null(lib)) lib <- libscheme_new(libschm, k)
-    libdata <- lib$data
-    
-    initialloss <- (1-(lib$info$valid/lib$info$nucleotides)^k)
-    expected <- libdata$probs*N*(1-initialloss)
-    z <- with(libdata, di*(1-exp(-expected/di)))
     
     s_count <- sum(subset(lib$info$scheme, class != "Z")$s)
     
-    min(sum(z*libdata$choices)/s_count^k,1)
+    val <- min(diversity_new(k, libscheme, N, lib, variance) / s_count^k, 1)
+    if (variance) val <- val / s_count^k
+    
+    return(val)
 }
 
 #' Relative efficiency of a library
@@ -215,36 +222,34 @@ coverage_new <- function(k, libscheme, N, lib=NULL) {
 #' efficiency(3, "NNN", 10^2)
 #' efficiency(3, "NNK", 10^2)
 #' efficiency(3, "Trimer", 10^2) ## Trimer efficiency is not 1 because of random sampling.
-efficiency <- function(k, libscheme, N, lib=NULL) {
+efficiency <- function(k, libscheme, N, lib=NULL, variance = FALSE) {
     libschm <- as.character(substitute(libscheme)) ## Compatibility with old interface
     if (inherits(try(scheme(libschm), silent = TRUE), 'try-error')) libschm <- libscheme
     
     if (is.null(lib)) lib <- libscheme(libschm, k)
     libdata <- lib$data
     
-    initialloss <- (1-(lib$info$valid/lib$info$nucleotides)^k)
-    libdata$expected <- libdata$probs*N*(1-initialloss)
-    libdata$z <- with(libdata, di*(1-exp(-expected/di)))
-    
     s_count <- sum(subset(lib$info$scheme, class != "Z")$s)
+
+    val <- min(diversity(k, libscheme, N, lib, variance), s_count^k) / N
+    if (variance) val <- val / N
     
-    with(libdata, min(s_count^k,sum(z))/N)
+    return(val)
 }
 
-efficiency_new <- function(k, libscheme, N, lib=NULL) {
+efficiency_new <- function(k, libscheme, N, lib=NULL, variance = FALSE) {
     libschm <- as.character(substitute(libscheme)) ## Compatibility with old interface
     if (inherits(try(scheme(libschm), silent = TRUE), 'try-error')) libschm <- libscheme
     
     if (is.null(lib)) lib <- libscheme_new(libschm, k)
     libdata <- lib$data
     
-    initialloss <- (1-(lib$info$valid/lib$info$nucleotides)^k)
-    libdata$expected <- libdata$probs*N*(1-initialloss)
-    libdata$z <- with(libdata, di*(1-exp(-expected/di)))
-    
     s_count <- sum(subset(lib$info$scheme, class != "Z")$s)
     
-    with(libdata, min(s_count^k,sum(z*choices))/N)
+    val <- min(diversity_new(k, libscheme, N, lib, variance), s_count^k) / N
+    if (variance) val <- val / N
+    
+    return(val)
 }
 
 #' Build peptide library of k-length sequences according to specified scheme
