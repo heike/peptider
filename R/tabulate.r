@@ -47,50 +47,13 @@ getChoices <- function(str) {
 #' For a given scheme, generate a dataset with the peptide probabilities
 #' @param scheme_def definition of the custom scheme
 #' @param k peptide lengths to include
-#' @param n exponents of the library size to include
 #' @import plyr
 #' @return A data frame of peptide probabilities
-generateCustomProbs <- function(scheme_def, k = 6:10, n = 6:14) {
-    ## Library sizes
-    n <- as.vector(sapply(10^n, `*`, seq(1.0, 9.9, by = 0.1)))
-    
-    ## Generate scheme
-    lib <- libscheme(scheme_def)
-    
-    cat("Getting possible peptide encodings...\n")
-    lib.probs.tmp <- ldply(k, function(y) {
-        df <- data.frame(Counts = getCounts(lib, y))
-        df$k <- y
-        
-        df
-    })
-    
-    cat("Getting a sample peptide encoding...\n")
-    lib.probs.tmp$samp.encoding <- apply(lib.probs.tmp, 1, function(z) { paste(rep(lib$info$scheme$class, as.numeric(c(strsplit(as.character(z), split = ",")[[1]], 0))), collapse = "") })
-    
-    cat("Processing probabilities...\n")
-    lib.probs <- ldply(k, .progress = "text", .fun = function(y) {
-        lib.data <- libscheme(scheme_def, y)$data
-        lib.data$class <- gsub("\\.", "", lib.data$class)
-        lib.data.subset <- subset(lib.data, class %in% lib.probs.tmp$samp.encoding)
-        
-        return.df <- data.frame(Counts = encodingReduce(as.character(lib.data.subset$class), lib), samp.encoding = lib.data.subset$class, probs = lib.data.subset$probs)
-        #return.df$probs <- apply(return.df, 1, function(z) {as.numeric(z[3]) / prod(getProbCorrection(z[3], x))})
-        return.df$k <- y
-        return.df$di <- lib.data.subset$di
-        return.df$choices <- sapply(as.character(return.df$Counts), getChoices)
-        
-        return.df
-    })
-    
-    return(lib.probs)
-}
-
-generateCustomProbs_new <- function(scheme_def, k = 6:10) {
+generateCustomProbs <- function(scheme_def, k = 6:10) {
     cat("Getting possible peptide encodings...\n")
     lib.probs.tmp <- ldply(k, function(y) {
         ## Generate scheme
-        df <- libscheme_new(scheme_def, y)$data
+        df <- libscheme(scheme_def, y)$data
         df$k <- y
         
         df
@@ -121,37 +84,10 @@ generateCustomLib <- function(scheme_def, k = 6:10, n = 6:14) {
             
             cov = coverage(k=k1, libscheme=scheme_def, N=n1, lib=lib)
             eff = efficiency(k=k1, libscheme=scheme_def, N=n1, lib=lib)
-            c(k=k1, n=n1, cov=cov, eff=eff)
-        })
-        
-        cat("Generating library diversity...\n")
-        lib.stats$div = makowski(k=k1, libscheme=scheme_def)
-        
-        lib.stats
-    })
-    
-    return(lib.stats)
-}
-
-generateCustomLib_new <- function(scheme_def, k = 6:10, n = 6:14) {
-    ## Library sizes
-    n <- as.vector(sapply(10^n, `*`, seq(1.0, 9.9, by = 0.1)))
-    
-    cat("Generating library properties...\n")
-    lib.stats <- ldply(k, function(k1) {
-        cat("Processing for k =", k1, "\n")
-        
-        lib <- libscheme_new(scheme_def, k = k1)
-        
-        lib.stats <- ldply(n, .progress = "text", function(n1) {  
-            # cat("Processing for n =", n1, "\n")
-            
-            cov = coverage_new(k=k1, libscheme=scheme_def, N=n1, lib=lib)
-            eff = efficiency_new(k=k1, libscheme=scheme_def, N=n1, lib=lib)
             c(k=k1, N=n1, coverage=cov, efficiency=eff)
         })        
         cat("Generating library diversity...\n")
-        lib.stats$diversity = makowski_new(k=k1, libscheme=scheme_def)
+        lib.stats$diversity = makowski(k=k1, libscheme=scheme_def)
         lib.stats$scheme <- "Custom"
         
         lib.stats
@@ -160,7 +96,13 @@ generateCustomLib_new <- function(scheme_def, k = 6:10, n = 6:14) {
     return(lib.stats)
 }
 
-generateCustomNei_new <- function(scheme_def, k = 6:10, n = 6:14) {
+#' For a given scheme, generate a dataset with the neighborhood information
+#' @param scheme_def definition of the custom scheme
+#' @param k peptide lengths to include
+#' @param n exponents of the library size to include
+#' @import plyr
+#' @return A data frame of neighborhood information
+generateCustomNei <- function(scheme_def, k = 6:10, n = 6:14) {
     ## Library sizes
     n <- as.vector(sapply(10^n, `*`, seq(1.0, 9.9, by = 0.1)))
     
@@ -199,6 +141,7 @@ generateCustomNei_new <- function(scheme_def, k = 6:10, n = 6:14) {
 #' @param scheme_def A data frame containing encoding information for the scheme
 #' @param k peptide lengths to include
 #' @param n exponents of the library size to include
+#' @param savefile if true, save the results to an RData file
 #' @return TRUE upon completion of the script and output of the CSV files
 #' @export
 #' @examples
@@ -206,21 +149,10 @@ generateCustomNei_new <- function(scheme_def, k = 6:10, n = 6:14) {
 #' generateCustom()
 #' generateCustom(scheme_name = "NNN", scheme_def = scheme("NNN"))
 #' }
-generateCustom <- function(scheme_name = "Custom", scheme_def = read.csv(file.choose()), k = 6:10, n = 6:14) {
-    custom.probs <- generateCustomProbs(scheme_def, k, n)
+generateCustom <- function(scheme_name = "custom", scheme_def = read.csv(file.choose()), k = 6:10, n = 6:14, savefile = TRUE) {
+    custom.probs <- generateCustomProbs(scheme_def, k)
     custom.lib <- generateCustomLib(scheme_def, k, n)
-    
-    write.csv(custom.probs, paste("prob-", scheme_name, ".csv", sep = ""), row.names = FALSE)
-    write.csv(custom.lib, paste("lib-", scheme_name, ".csv", sep = ""), row.names = FALSE)
-    write.csv(file, paste("scheme-", scheme_name, ".csv", sep = ""), row.names = FALSE)
-    
-    TRUE
-}
-
-generateCustom_new <- function(scheme_name = "custom", scheme_def = read.csv(file.choose()), k = 6:10, n = 6:14, savefile = TRUE) {
-    custom.probs <- generateCustomProbs_new(scheme_def, k)
-    custom.lib <- generateCustomLib_new(scheme_def, k, n)
-    custom.nei <- generateCustomNei_new(scheme_def, k, n)
+    custom.nei <- generateCustomNei(scheme_def, k, n)
     
     custom.data <- list(custom.probs = custom.probs, custom.lib = custom.lib, custom.nei = custom.nei, scheme_def = scheme_def)
     

@@ -3,7 +3,7 @@
 \alias{diversity}
 \title{Diversity according to peptides paper (Sieber)}
 \usage{
-diversity(k, libscheme, N, lib = NULL)
+diversity(k, libscheme, N, lib = NULL, variance = FALSE)
 }
 \arguments{
 \item{k}{length of peptide sequences}
@@ -13,6 +13,8 @@ diversity(k, libscheme, N, lib = NULL)
 \item{N}{size of the library}
 
 \item{lib}{library scheme}
+
+\item{variance}{return the variance instead of the expected value}
 }
 \value{
 Expected Diversity of the library

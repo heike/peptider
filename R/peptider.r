@@ -65,14 +65,8 @@ scheme <- function(name, file = NULL) {
 #' custom <- data.frame(class = c("A", "Z"), aacid = c("SLRAGPTVIDEFHKNQYMW", "*"), c = c(1, 0))
 #' libscheme(custom)
 libscheme <- function(schm, k = 1) {
-    if (is.character(schm)) return(libBuild(k, scheme(schm)))
+    if (is.character(schm)) return(libBuild(scheme(schm), k = k))
     else if (is.data.frame(schm)) return(libBuild(k, schm))
-    else stop("scheme must be either a character or a data frame")
-}
-
-libscheme_new <- function(schm, k = 1) {
-    if (is.character(schm)) return(libBuild_new(scheme(schm), k = k))
-    else if (is.data.frame(schm)) return(libBuild_new(k, schm))
     else stop("scheme must be either a character or a data frame")
 }
 
@@ -101,26 +95,12 @@ diversity <- function (k, libscheme, N, lib = NULL, variance = FALSE)
     libdata <- lib$data
     initialloss <- (1 - (lib$info$valid/lib$info$nucleotides)^k)
     libdata$expected <- libdata$probs * N * (1 - initialloss)
-    if (variance) return(with(libdata, sum(-2*di * (1- exp(-expected/di))^2 + (2*di - 1) * (1 - exp(-expected/di)) + 1)))
-    return(sum(with(libdata, di * (1 - exp(-expected/di)))))
-}
-
-diversity_new <- function (k, libscheme, N, lib = NULL, variance = FALSE) 
-{
-    libschm <- as.character(substitute(libscheme))
-    if (inherits(try(scheme(libschm), silent = TRUE), "try-error")) 
-        libschm <- libscheme
-    if (is.null(lib)) 
-        lib <- libscheme_new(libschm, k)
-    libdata <- lib$data
-    initialloss <- (1 - (lib$info$valid/lib$info$nucleotides)^k)
-    libdata$expected <- libdata$probs * N * (1 - initialloss)
     
     curdigits <- options()$digits
     options(digits = 22)
     
     val <- sum(with(libdata, di * choices * (1 - exp(-expected/di))))
-    if (variance) val <- with(libdata, sum(choices * (-2*di * (1- exp(-expected/di))^2 + (2*di - 1) * (1 - exp(-expected/di)) + 1)))
+    if (variance) val <- with(libdata, sum(choices * (2*di * exp(-expected / di) * (1- exp(-expected/di)))))
     
     options(digits = curdigits)
     
@@ -152,19 +132,6 @@ makowski <- function(k, libscheme) {
     info <- scheme_def$info$scheme
     numAA <- sum(info$s[-nrow(info)]) 
     
-    with(dframe, 1/(numAA^k*sum(probs^2/di)))
-}
-
-makowski_new <- function(k, libscheme) {
-    libschm <- as.character(substitute(libscheme)) ## Compatibility with old interface
-    if (inherits(try(scheme(libschm), silent = TRUE), 'try-error')) libschm <- libscheme
-    
-    scheme_def <- libscheme_new(libschm, k)
-    
-    dframe <- scheme_def$data
-    info <- scheme_def$info$scheme
-    numAA <- sum(info$s[-nrow(info)]) 
-    
     with(dframe, 1/(numAA^k*sum(((probs^2)*choices)/di)))
 }
 
@@ -175,6 +142,7 @@ makowski_new <- function(k, libscheme) {
 #' @param libscheme Name (character vector) or definition (data frame) of scheme
 #' @param N size of the library 
 #' @param lib library scheme
+#' @param variance return the variance instead of the expected value
 #' @return coverage index between 0 and 1
 #' @export
 #' @examples
@@ -186,24 +154,10 @@ coverage <- function(k, libscheme, N, lib=NULL, variance = FALSE) {
     if (inherits(try(scheme(libschm), silent = TRUE), 'try-error')) libschm <- libscheme
     
     if (is.null(lib)) lib <- libscheme(libschm, k)
-
+    
     s_count <- sum(subset(lib$info$scheme, class != "Z")$s)
     
     val <- min(diversity(k, libscheme, N, lib, variance) / s_count^k, 1)
-    if (variance) val <- val / s_count^k
-    
-    return(val)
-}
-
-coverage_new <- function(k, libscheme, N, lib=NULL, variance = FALSE) {
-    libschm <- as.character(substitute(libscheme)) ## Compatibility with old interface
-    if (inherits(try(scheme(libschm), silent = TRUE), 'try-error')) libschm <- libscheme
-    
-    if (is.null(lib)) lib <- libscheme_new(libschm, k)
-    
-    s_count <- sum(subset(lib$info$scheme, class != "Z")$s)
-    
-    val <- min(diversity_new(k, libscheme, N, lib, variance) / s_count^k, 1)
     if (variance) val <- val / s_count^k
     
     return(val)
@@ -216,6 +170,7 @@ coverage_new <- function(k, libscheme, N, lib=NULL, variance = FALSE) {
 #' @param libscheme Name (character vector) or definition (data frame) of scheme
 #' @param N size of the library 
 #' @param lib library, if null, libscheme will be used to create it
+#' @param variance return the variance instead of the expected value
 #' @return relative efficiency index between 0 and 1
 #' @export
 #' @examples
@@ -230,23 +185,8 @@ efficiency <- function(k, libscheme, N, lib=NULL, variance = FALSE) {
     libdata <- lib$data
     
     s_count <- sum(subset(lib$info$scheme, class != "Z")$s)
-
+    
     val <- min(diversity(k, libscheme, N, lib, variance), s_count^k) / N
-    if (variance) val <- val / N
-    
-    return(val)
-}
-
-efficiency_new <- function(k, libscheme, N, lib=NULL, variance = FALSE) {
-    libschm <- as.character(substitute(libscheme)) ## Compatibility with old interface
-    if (inherits(try(scheme(libschm), silent = TRUE), 'try-error')) libschm <- libscheme
-    
-    if (is.null(lib)) lib <- libscheme_new(libschm, k)
-    libdata <- lib$data
-    
-    s_count <- sum(subset(lib$info$scheme, class != "Z")$s)
-    
-    val <- min(diversity_new(k, libscheme, N, lib, variance), s_count^k) / N
     if (variance) val <- val / N
     
     return(val)
@@ -272,12 +212,13 @@ libBuild <- function(k, libscheme) {
     seq <- with(libscheme[-nrow(libscheme),], make.RV(class, s*c / sum(s*c), fractions = FALSE))
     d <- with(libscheme[-nrow(libscheme),], make.RV(class, s / sum(s), fractions = FALSE))
     
-    d7 <- multN(d,k)
-    seq7 <- multN(seq,k)
-    di <- with(libscheme, round(probs(d7)*sum(s[-length(unique(class))])^k,0))
-    pi <- probs(seq7)
+    d7 <- mult_reduced(d, k)
+    seq7 <- mult_reduced(seq, k)
+    
+    di <- with(libscheme, round(d7$Prob*sum(s[-length(unique(class))])^k,0))
+    pi <- seq7$Prob
     mult <- with(libscheme, s*c)
-    list(data=data.frame(class = as.vector(d7), di = di, probs = pi),
+    list(data=data.frame(class = as.vector(d7[,1]), di = di, choices = seq7$Choices, probs = pi),
          info=list(nucleotides=sum(with(libscheme, mult)), 
                    valid=with(libscheme, sum(mult[-length(mult)])),
                    scheme=libscheme))
@@ -315,24 +256,6 @@ mult_reduced <- function(X, n = 2) {
     data.frame(Encoding = as.character(grid.str), Prob = as.numeric(grid.prob), Choices = as.numeric(grid.choices))
 }
 
-libBuild_new <- function(k, libscheme) {
-    libscheme$class <- as.character(libscheme$class)
-    libscheme$s <- nchar(as.character(libscheme$aacid))
-    seq <- with(libscheme[-nrow(libscheme),], make.RV(class, s*c / sum(s*c), fractions = FALSE))
-    d <- with(libscheme[-nrow(libscheme),], make.RV(class, s / sum(s), fractions = FALSE))
-    
-    d7 <- mult_reduced(d, k)
-    seq7 <- mult_reduced(seq, k)
-    
-    di <- with(libscheme, round(d7$Prob*sum(s[-length(unique(class))])^k,0))
-    pi <- seq7$Prob
-    mult <- with(libscheme, s*c)
-    list(data=data.frame(class = as.vector(d7[,1]), di = di, choices = seq7$Choices, probs = pi),
-         info=list(nucleotides=sum(with(libscheme, mult)), 
-                   valid=with(libscheme, sum(mult[-length(mult)])),
-                   scheme=libscheme))
-}
-
 #' Detection probability in a single library of size N
 #'
 #' The probability that at least one of a number of specific peptide sequences (e. g. the `best' and closely related sequences) is contained in a library
@@ -347,13 +270,6 @@ libBuild_new <- function(k, libscheme) {
 #' lib <- libscheme("NNK", 7)
 #' qplot(detect(lib, size=10^8), weight=di, geom="histogram", data=lib$data)
 detect <- function(lib = libscheme("NNK", 7), size = 10^8) {
-    with(lib$data, 1 - exp(-size*probs/di))
-}
-
-# require(ggplot2)
-# lib <- libscheme_new("NNK", 7)
-# qplot(detect_new(lib, size=10^8), weight=di*choices, geom="histogram", data=lib$data)
-detect_new <- function(lib = libscheme_new("NNK", 7), size = 10^8) {
     with(lib$data, 1 - exp(-size*probs/di))
 }
 

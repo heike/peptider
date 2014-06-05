@@ -3,7 +3,7 @@
 \alias{coverage}
 \title{Coverage as expected number of peptides given all possible peptides}
 \usage{
-coverage(k, libscheme, N, lib = NULL)
+coverage(k, libscheme, N, lib = NULL, variance = FALSE)
 }
 \arguments{
 \item{k}{length of peptide sequences}
@@ -13,6 +13,8 @@ coverage(k, libscheme, N, lib = NULL)
 \item{N}{size of the library}
 
 \item{lib}{library scheme}
+
+\item{variance}{return the variance instead of the expected value}
 }
 \value{
 coverage index between 0 and 1

@@ -3,8 +3,8 @@
 \alias{generateCustom}
 \title{Generate peptide and library information for a given scheme}
 \usage{
-generateCustom(scheme_name = "Custom", scheme_def = read.csv(file.choose()),
-  k = 6:10, n = 6:14)
+generateCustom(scheme_name = "custom", scheme_def = read.csv(file.choose()),
+  k = 6:10, n = 6:14, savefile = TRUE)
 }
 \arguments{
 \item{scheme_name}{The name of the resulting encoding scheme}
@@ -14,6 +14,8 @@ generateCustom(scheme_name = "Custom", scheme_def = read.csv(file.choose()),
 \item{k}{peptide lengths to include}
 
 \item{n}{exponents of the library size to include}
+
+\item{savefile}{if true, save the results to an RData file}
 }
 \value{
 TRUE upon completion of the script and output of the CSV files

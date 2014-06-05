@@ -3,7 +3,7 @@
 \alias{efficiency}
 \title{Relative efficiency of a library}
 \usage{
-efficiency(k, libscheme, N, lib = NULL)
+efficiency(k, libscheme, N, lib = NULL, variance = FALSE)
 }
 \arguments{
 \item{k}{length of peptide sequences}
@@ -13,6 +13,8 @@ efficiency(k, libscheme, N, lib = NULL)
 \item{N}{size of the library}
 
 \item{lib}{library, if null, libscheme will be used to create it}
+
+\item{variance}{return the variance instead of the expected value}
 }
 \value{
 relative efficiency index between 0 and 1
