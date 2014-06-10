@@ -107,6 +107,26 @@ diversity <- function (k, libscheme, N, lib = NULL, variance = FALSE)
     return(val)
 }
 
+covmatrix <- function(k, libscheme, N, lib = NULL) {
+    libschm <- as.character(substitute(libscheme))
+    if (inherits(try(scheme(libschm), silent = TRUE), "try-error")) 
+        libschm <- libscheme
+    if (is.null(lib)) 
+        lib <- libscheme(libschm, k)
+    libdata <- lib$data
+    initialloss <- (1 - (lib$info$valid/lib$info$nucleotides)^k)
+    
+    libdata$variance <- (1 - libdata$probs) * libdata$probs * N
+    mymat <- apply(libdata, 1, function(x) {
+        apply(libdata, 1, function(y) {
+            -N * as.numeric(x[4]) * as.numeric(y[4])
+        })
+    })
+    diag(mymat) <- libdata$variance
+    
+    return(mymat)
+}
+
 #' Diversity index according to Makowski
 #'
 #' The Diversity of a peptide library of length k according to Makowski and colleagues
