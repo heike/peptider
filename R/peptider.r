@@ -352,10 +352,10 @@ getNofNeighborsOne <- function(x, blosum = 1, method="peptide", libscheme=NULL) 
     lib <- peptider::libscheme(libscheme)$info$scheme
     
     dnas <- sum(unlist(llply(unlist(replacements), function(w) { 
-        lib[grep(w, lib$aacid),"c"]
+        lib[grep(w, lib$aacid, fixed=TRUE),"c"]
     })))
     dnas <- dnas + sum(unlist(llply(unlist(strsplit(x, split="")), function(w) { 
-        lib[grep(w, lib$aacid),"c"]
+        lib[grep(w, lib$aacid, fixed=TRUE),"c"]
     })))
     return(dnas)
 }
@@ -413,7 +413,7 @@ codonsOne <- function(x, schm) {
     lib <- libscheme(schm)$info$scheme
     
     prod(unlist(llply(strsplit(x, split="")[[1]], function(w) { 
-        lib[grep(w, lib$aacid),"c"]
+        lib[grep(w, lib$aacid, fixed=TRUE),"c"]
     })))
 }
 
