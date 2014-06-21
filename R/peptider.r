@@ -218,7 +218,9 @@ efficiency <- function(k, libscheme, N, lib=NULL, variance = FALSE) {
 #' 
 #' @param k length of peptide sequences
 #' @param libscheme library scheme specifying classes of amino acids according to number of encodings
-#' last class is reserved for stop tags and other amino acids we are not interested in. 
+#' last class is reserved for stop tags and other amino acids we are not interested in.
+#' @param scale1 Scaling factor for first probs
+#' @param scale2 Scaling factor for second probs
 #' @return library and library scheme used
 #' @examples
 #' user_scheme <- data.frame(class=c("A", "B", "C", "Z"),
@@ -226,11 +228,15 @@ efficiency <- function(k, libscheme, N, lib=NULL, variance = FALSE) {
 #'                           c=c(3,2,1,1))
 #' user_library <- libBuild(3, user_scheme)                        
 #' @export
-libBuild <- function(k, libscheme) {
+libBuild <- function(k, libscheme, scale1 = NULL, scale2 = NULL) {
     libscheme$class <- as.character(libscheme$class)
     libscheme$s <- nchar(as.character(libscheme$aacid))
-    seq <- with(libscheme[-nrow(libscheme),], make.RV(class, s*c / sum(s*c), fractions = FALSE))
-    d <- with(libscheme[-nrow(libscheme),], make.RV(class, s / sum(s), fractions = FALSE))
+    
+    if (is.null(scale1)) scale1 <- sum(libscheme$s * libscheme$c)
+    if (is.null(scale2)) scale2 <- sum(libscheme$s)
+    
+    seq <- with(libscheme[-nrow(libscheme),], make.RV(class, s*c / scale1, fractions = FALSE, verifyprobs = is.null(scale1)))
+    d <- with(libscheme[-nrow(libscheme),], make.RV(class, s / scale2, fractions = FALSE, verifyprobs = is.null(scale2)))
     
     d7 <- mult_reduced(d, k)
     seq7 <- mult_reduced(seq, k)
