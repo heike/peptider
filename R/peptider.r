@@ -107,26 +107,6 @@ diversity <- function (k, libscheme, N, lib = NULL, variance = FALSE)
     return(val)
 }
 
-covmatrix <- function(k, libscheme, N, lib = NULL) {
-    libschm <- as.character(substitute(libscheme))
-    if (inherits(try(scheme(libschm), silent = TRUE), "try-error")) 
-        libschm <- libscheme
-    if (is.null(lib)) 
-        lib <- libscheme(libschm, k)
-    libdata <- lib$data
-    initialloss <- (1 - (lib$info$valid/lib$info$nucleotides)^k)
-    
-    libdata$variance <- (1 - libdata$probs) * libdata$probs * N
-    mymat <- apply(libdata, 1, function(x) {
-        apply(libdata, 1, function(y) {
-            -N * as.numeric(x[4]) * as.numeric(y[4])
-        })
-    })
-    diag(mymat) <- libdata$variance
-    
-    return(mymat)
-}
-
 #' Diversity index according to Makowski
 #'
 #' The Diversity of a peptide library of length k according to Makowski and colleagues
@@ -228,15 +208,12 @@ efficiency <- function(k, libscheme, N, lib=NULL, variance = FALSE) {
 #'                           c=c(3,2,1,1))
 #' user_library <- libBuild(3, user_scheme)                        
 #' @export
-libBuild <- function(k, libscheme, scale1 = NULL, scale2 = NULL) {
+libBuild <- function(k, libscheme, scale1 = 1, scale2 = 1) {
     libscheme$class <- as.character(libscheme$class)
     libscheme$s <- nchar(as.character(libscheme$aacid))
     
-    if (is.null(scale1)) scale1 <- sum(libscheme$s * libscheme$c)
-    if (is.null(scale2)) scale2 <- sum(libscheme$s)
-    
-    seq <- with(libscheme[-nrow(libscheme),], make.RV(class, s*c / scale1, fractions = FALSE, verifyprobs = is.null(scale1)))
-    d <- with(libscheme[-nrow(libscheme),], make.RV(class, s / scale2, fractions = FALSE, verifyprobs = is.null(scale2)))
+    seq <- with(libscheme[-nrow(libscheme),], make.RV(class, scale1 * s*c / sum(s * c), fractions = FALSE, verifyprobs = (scale1 == 1)))
+    d <- with(libscheme[-nrow(libscheme),], make.RV(class, scale2 * s / sum(s), fractions = FALSE, verifyprobs = (scale2 == 1)))
     
     d7 <- mult_reduced(d, k)
     seq7 <- mult_reduced(seq, k)

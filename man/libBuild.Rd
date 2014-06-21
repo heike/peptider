@@ -3,7 +3,7 @@
 \alias{libBuild}
 \title{Build peptide library of k-length sequences according to specified scheme}
 \usage{
-libBuild(k, libscheme, scale1 = NULL, scale2 = NULL)
+libBuild(k, libscheme, scale1 = 1, scale2 = 1)
 }
 \arguments{
 \item{k}{length of peptide sequences}
