@@ -324,22 +324,32 @@ getNofNeighborsOne <- function(x, blosum = 1, method="peptide", libscheme=NULL) 
     BLOSUM80 <- AA1 <- Blosum <- AA2 <- NULL
     
     data(BLOSUM80, envir=environment())
+    
+    if (method == "peptide") {
+        replacements <- llply(strsplit(x,""), function(y) {
+            llply(y, function(z) {
+                as.character(subset(BLOSUM80, (AA1 == z) & (Blosum >= blosum) & (AA2 != z))$AA2)
+            })
+        })[[1]]
+        return(length(unlist(replacements))+1)
+    }
+    
     replacements <- llply(strsplit(x,""), function(y) {
         llply(y, function(z) {
-            as.character(subset(BLOSUM80, (AA1 == z) & (Blosum >= blosum) & (AA2 != z))$AA2)
+            as.character(subset(BLOSUM80, (AA1 == z) & (Blosum >= blosum))$AA2)
         })
     })[[1]]
-    if (method == "peptide") return(length(unlist(replacements))+1)
-    
     stopifnot(!(is.null(libscheme) & nchar(libscheme) == 0))    
     lib <- peptider::libscheme(libscheme)$info$scheme
     
-    dnas <- sum(unlist(llply(unlist(replacements), function(w) { 
-        lib[grep(w, lib$aacid, fixed=TRUE),"c"]
+    dnas <- prod(unlist(llply(replacements, function(x) {
+        sum(unlist(llply(strsplit(x, split=""), function(w) {
+            lib[grep(w, lib$aacid, fixed = TRUE), "c"]
+        }))) 
     })))
-    dnas <- dnas + sum(unlist(llply(unlist(strsplit(x, split="")), function(w) { 
-        lib[grep(w, lib$aacid, fixed=TRUE),"c"]
-    })))
+ #   dnas <- dnas + sum(unlist(llply(unlist(strsplit(x, split="")), function(w) { 
+ #       lib[grep(w, lib$aacid, fixed=TRUE),"c"]
+ #   })))
     return(dnas)
 }
 
