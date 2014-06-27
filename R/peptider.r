@@ -342,7 +342,7 @@ getNofNeighborsOne <- function(x, blosum = 1, method="peptide", libscheme=NULL) 
     stopifnot(!(is.null(libscheme) & nchar(libscheme) == 0))    
     lib <- peptider::libscheme(libscheme)$info$scheme
     
-    dnas <- prod(unlist(llply(replacements, function(x) {
+    dnas <- sum(unlist(llply(replacements, function(x) {
         sum(unlist(llply(strsplit(x, split=""), function(w) {
             lib[grep(w, lib$aacid, fixed = TRUE), "c"]
         }))) 
