@@ -315,6 +315,7 @@ getNeighborOne <- function(x, blosum=1) {
 #' ## degree 2 neighbors:
 #' unique(unlist(getNeighbors(getNeighbors("APE"))))
 getNeighbors <- function(x, blosum=1) {
+    x <- as.character(x)
     if (length(x) == 1) return(getNeighborOne(x, blosum))
     llply(x, getNeighborOne)
 }
@@ -334,19 +335,21 @@ getNofNeighborsOne <- function(x, blosum = 1, method="peptide", libscheme=NULL) 
         return(length(unlist(replacements))+1)
     }
     
-    replacements <- llply(strsplit(x,""), function(y) {
-        llply(y, function(z) {
-            as.character(subset(BLOSUM80, (AA1 == z) & (Blosum >= blosum))$AA2)
-        })
-    })[[1]]
+#     replacements <- llply(strsplit(x,""), function(y) {
+#         llply(y, function(z) {
+#             as.character(subset(BLOSUM80, (AA1 == z) & (Blosum >= blosum))$AA2)
+#         })
+#     })[[1]]
     stopifnot(!(is.null(libscheme) & nchar(libscheme) == 0))    
-    lib <- peptider::libscheme(libscheme)$info$scheme
+#    lib <- peptider::libscheme(libscheme)$info$scheme
     
-    dnas <- sum(unlist(llply(replacements, function(x) {
-        sum(unlist(llply(strsplit(x, split=""), function(w) {
-            lib[grep(w, lib$aacid, fixed = TRUE), "c"]
-        }))) 
-    })))
+    dnas <- sum(codons(getNeighbors(x, blosum=blosum), lib=libscheme))
+    
+#     dnas <- sum(unlist(llply(replacements, function(x) {
+#         sum(unlist(llply(strsplit(x, split=""), function(w) {
+#             lib[grep(w, lib$aacid, fixed = TRUE), "c"]
+#         }))) 
+#     })))
  #   dnas <- dnas + sum(unlist(llply(unlist(strsplit(x, split="")), function(w) { 
  #       lib[grep(w, lib$aacid, fixed=TRUE),"c"]
  #   })))
@@ -360,7 +363,7 @@ getNofNeighborsOne <- function(x, blosum = 1, method="peptide", libscheme=NULL) 
 #' Use this function for only a few peptide sequences. Any larger number of peptide sequences will take too much main memory.
 #' @param x (vector) of character strings of  peptide sequences.
 #' @param blosum minimal BLOSUM loading, defaults to 1 for positive loadings only
-#' @param method character string, one of "peptide" or "dna". This specifies the level at which the neighbors are calculated.
+#' @param method character string, one of "peptide" or "codon". This specifies the level at which the neighbors are calculated.
 #' @param libscheme library scheme under which neighbors are being calculated. this is only of importance, if method="dna"
 #' @return vector of numbers of neighbors 
 #' @import plyr
@@ -369,18 +372,19 @@ getNofNeighborsOne <- function(x, blosum = 1, method="peptide", libscheme=NULL) 
 #' getNofNeighbors("APE")
 #' getNofNeighbors(c("NEAREST", "EARNEST"))
 #' getNofNeighbors("N")
-#' getNofNeighbors("N", method="dna", libscheme="NNK")
+#' getNofNeighbors("N", method="codon", libscheme="NNK")
 getNofNeighbors <- function(x, blosum = 1, method="peptide", libscheme=NULL) {
     data(BLOSUM80, envir=environment())
     libschm <- as.character(substitute(libscheme)) ## Compatibility with old interface
     if (inherits(try(scheme(libschm), silent = TRUE), 'try-error')) libschm <- libscheme
     
+    x <- as.character(x)
     if (length(x) == 1) return(getNofNeighborsOne(x, blosum, method, libschm))
     
-    return(llply(x, getNofNeighborsOne, blosum, method, libschm))
+    return(laply(x, getNofNeighborsOne, blosum, method, libschm))
 }
 
-#' Compute the number of codons for a vector of peptide sequences
+#' Compute the number of codon representations for a (vector of) peptide sequence(s)
 #' 
 #' use this function for only a few peptide sequences. Any larger number of peptide sequences should be dealt with in the framework of the library scheme and the detect function.
 #' @param x (vector) of character strings of  peptide sequences.
