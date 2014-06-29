@@ -11,6 +11,7 @@ Description: Functions for evaluating diversity in peptide libraries, including
 License: GPL-3
 Imports:
     discreteRV (>= 1.1),
-    plyr
+    plyr,
+    dplyr
 Suggests:
     ggplot2

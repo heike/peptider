@@ -241,13 +241,14 @@ getChoices <- function(str) {
     return(total)
 }
 
+#' @importFrom dplyr filter
 mult_reduced <- function(X, n = 2) {
     num_outcomes <- length(X)
     
     str.func <- paste("expand.grid(", paste(rep(paste("0:", n, sep = ""), times = num_outcomes), collapse = ", "), ")")
     
     grid.df <- eval(parse(text = str.func))
-    grid.sub <- subset(grid.df, apply(grid.df, 1, sum) == n)
+    grid.sub <- filter(grid.df, apply(grid.df, 1, sum) == n)
     
     grid.str <- apply(grid.sub, 1, paste, collapse = ",")
     grid.list <- split(grid.sub, 1:nrow(grid.sub))
