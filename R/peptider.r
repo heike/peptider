@@ -410,6 +410,7 @@ codonsOne <- function(x, schm) {
     stopifnot(!(is.null(schm) & nchar(schm) == 0))
     lib <- libscheme(schm)$info$scheme
     
+    x <- as.character(x)
     prod(unlist(llply(strsplit(x, split="")[[1]], function(w) { 
         lib[grep(w, lib$aacid, fixed=TRUE),"c"]
     })))
