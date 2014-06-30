@@ -448,7 +448,7 @@ NULL
 #' Calculate neighborhood distribution
 #' 
 #' Calculate distribution of neighbors under library scheme lib for peptide sequences of length k.
-#' @param lib library scheme
+#' @param sch library scheme
 #' @param k length of the peptide sequences
 #' @return dataset of peptide sequences: AA are amino acid sequences, 
 #' c0 are codons for self representation, 
@@ -456,10 +456,10 @@ NULL
 #' N1 is the number of neighbors in codon representation (including self representation) 
 #' @export
 #' @examples
-#' calcNeighbors("NNK", 2)
-#' calcNeighbors("Trimer", 2)
-calcNeighbors <- function(lib, k) {
-    sch <- libscheme(lib,1)$info$scheme
+#' genNeighbors(scheme("NNK"), 2)
+#' genNeighbors("Trimer", 2)
+genNeighbors <- function(sch, k) {
+#    sch <- libscheme(lib,1)$info$scheme
     
     # don't include class Z
     schl <- unlist(strsplit(as.character(sch$aacid[-length(sch$aacid)]), ""))
