@@ -344,7 +344,7 @@ getNofNeighborsOne <- function(x, blosum = 1, method="peptide", libscheme=NULL) 
     stopifnot(!(is.null(libscheme) & nchar(libscheme) == 0))    
 #    lib <- peptider::libscheme(libscheme)$info$scheme
     
-    dnas <- sum(codons(getNeighbors(x, blosum=blosum), lib=libscheme))
+    dnas <- sum(codons(getNeighbors(x, blosum=blosum), libscheme=libscheme))
     
 #     dnas <- sum(unlist(llply(replacements, function(x) {
 #         sum(unlist(llply(strsplit(x, split=""), function(w) {
@@ -455,6 +455,7 @@ NULL
 #' cr is the ratio of #neighbors in first degree neighborhood (not counting self representations) and #codons in self representation
 #' N1 is the number of neighbors in codon representation (including self representation) 
 #' @export
+#' @import plyr
 #' @examples
 #' genNeighbors(scheme("NNK"), 2)
 #' genNeighbors(scheme("Trimer"), 2)
@@ -463,8 +464,8 @@ genNeighbors <- function(sch, k) {
     
     # don't include class Z
     schl <- unlist(strsplit(as.character(sch$aacid[-length(sch$aacid)]), ""))
-    schd <- data.frame(AA=schl, C0=codons(schl, lib=lib))
-    schd$C1 <- getNofNeighbors(schd$AA, method="codon", lib=lib) - schd$C0
+    schd <- data.frame(AA=schl, C0=codons(schl, libscheme=sch))
+    schd$C1 <- getNofNeighbors(schd$AA, method="codon", libscheme=sch) - schd$C0
     schd$C1T0 <- with(schd, C1/C0)
     
     ctabs <- function(values, labels) {
@@ -522,13 +523,14 @@ genNeighbors <- function(sch, k) {
 #' s is the number of peptide sequences described by the label
 #' o is the number of peptide sequences reached by permutations
 #' @export
+#' @import plyr
 #' @examples
 #' genNeighbors_reduced(scheme("NNK"), 2)
 #' genNeighbors_reduced(scheme("Trimer"), 2)
 genNeighbors_reduced <- function(sch, k) {    
     schl <- unlist(strsplit(as.character(sch$aacid[-length(sch$aacid)]), ""))
-    schd <- data.frame(AA=schl, C0=codons(schl, lib=lib))
-    schd$C1 <- getNofNeighbors(schd$AA, method="codon", lib=lib) - schd$C0
+    schd <- data.frame(AA=schl, C0=codons(schl, libscheme=sch))
+    schd$C1 <- getNofNeighbors(schd$AA, method="codon", libscheme=sch) - schd$C0
     schd$C1T0 <- with(schd, C1/C0)
     
     ctabs <- function(values, labels) {
@@ -579,7 +581,6 @@ genNeighbors_reduced <- function(sch, k) {
         
         #    save(L,C0,CR,S,O, file=sprintf("%s-%d.RData", lib, i))
         dx$N1 <- with(dx, c0*(cr+1))
-        dx$lib <- lib
         dx$k <- i+1
         #   cat(sprintf("stage %d done\n",i))
         #   write.table(dx, file="neighbors2.csv", sep=",", col.names=!file.exists("neighbors2.csv"), append=TRUE, row.names=FALSE)
