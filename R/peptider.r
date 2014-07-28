@@ -472,7 +472,6 @@ genNeighbors <- function(sch, k) {
         labels <- as.character(labels)
         
         tv <- xtabs(~values)
-        require(plyr)
         ct <- ldply(names(tv), function(x) {
             data.frame(AA=paste(labels[which(values == x)], collapse=""),
                        c=x)
@@ -537,7 +536,6 @@ genNeighbors_reduced <- function(sch, k) {
         labels <- as.character(labels)
         
         tv <- xtabs(~values)
-        require(plyr)
         ct <- ldply(names(tv), function(x) {
             data.frame(AA=paste(labels[which(values == x)], collapse=""),
                        c=x)
