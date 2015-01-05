@@ -96,10 +96,16 @@ diversity <- function (k, libscheme, N, lib = NULL, variance = FALSE)
         lib <- libscheme(libschm, k)
     libdata <- lib$data
     initialloss <- (1 - (lib$info$valid/lib$info$nucleotides)^k)
-    libdata$expected <- mpfr(libdata$probs, 64) * N * (1 - initialloss)
+    libdata$expected <- libdata$probs * N * (1 - initialloss)
 
     val <- sum(with(libdata, di * choices * (1 - exp(-expected/di))))
-    if (variance) val <- with(libdata, sum(choices * (2*di * exp(-expected / di) * (1- exp(-expected/di)))))
+    if (variance) {
+        cn <- with(libdata, (1 - 2/di)^expected)
+        cn[is.nan(cn)] <- 0
+        xn <- with(libdata, (1 - 1/di)^expected)
+        xn[is.nan(xn)] <- 0
+        val <- with(libdata, sum(di * choices * ((xn - cn) - di^2*(xn^2 - cn))))
+    }
 
     return(as.numeric(val))
 }
