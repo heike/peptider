@@ -101,10 +101,10 @@ diversity <- function (k, libscheme, N, lib = NULL, variance = FALSE)
     val <- sum(with(libdata, di * choices * (1 - exp(-expected/di))))
     if (variance) {
         cn <- with(libdata, (1 - 2/di)^expected)
-        cn[is.nan(cn)] <- 0
+        #cn[is.nan(cn)] <- 1
         xn <- with(libdata, (1 - 1/di)^expected)
-        xn[is.nan(xn)] <- 0
-        val <- with(libdata, sum(di * choices * ((xn - cn) - di^2*(xn^2 - cn))))
+        #xn[is.nan(xn)] <- 1
+        val <- with(libdata, sum(choices * (di * (xn - cn) - di^2 * (xn^2 - cn))))
     }
 
     return(as.numeric(val))
