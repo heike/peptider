@@ -49,7 +49,7 @@ getChoices <- function(str) {
 #' @param k peptide lengths to include
 #' @import plyr
 #' @return A data frame of peptide probabilities
-generateCustomProbs <- function(scheme_def, k = 6:10) {
+generateCustomProbs <- function(scheme_def, k = 1:20) {
     cat("Getting possible peptide encodings...\n")
     lib.probs.tmp <- ldply(k, function(y) {
         ## Generate scheme
@@ -69,7 +69,7 @@ generateCustomProbs <- function(scheme_def, k = 6:10) {
 #' @param n exponents of the library size to include
 #' @import plyr
 #' @return A data frame of library information
-generateCustomLib <- function(scheme_def, k = 6:10, n = 6:14) {
+generateCustomLib <- function(scheme_def, k = 1:20, n = 1:25) {
     ## Library sizes
     n <- as.vector(sapply(10^n, `*`, seq(1.0, 9.9, by = 0.1)))
     
@@ -102,7 +102,7 @@ generateCustomLib <- function(scheme_def, k = 6:10, n = 6:14) {
 #' @param n exponents of the library size to include
 #' @import plyr
 #' @return A data frame of neighborhood information
-generateCustomNei <- function(scheme_def, k = 6:10, n = 6:14) {
+generateCustomNei <- function(scheme_def, k = 1:20, n = 1:25) {
     ## Library sizes
     n <- as.vector(sapply(10^n, `*`, seq(1.0, 9.9, by = 0.1)))
     
@@ -149,7 +149,7 @@ generateCustomNei <- function(scheme_def, k = 6:10, n = 6:14) {
 #' generateCustom()
 #' generateCustom(scheme_name = "NNN", scheme_def = scheme("NNN"))
 #' }
-generateCustom <- function(scheme_name = "custom", scheme_def = read.csv(file.choose()), k = 6:10, n = 6:14, savefile = TRUE) {
+generateCustom <- function(scheme_name = "custom", scheme_def = read.csv(file.choose()), k = 1:20, n = 1:25, savefile = TRUE) {
     custom.probs <- generateCustomProbs(scheme_def, k)
     custom.lib <- generateCustomLib(scheme_def, k, n)
     custom.nei <- generateCustomNei(scheme_def, k, n)
