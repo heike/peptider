@@ -71,9 +71,7 @@ libscheme <- function(schm, k = 1) {
 }
 
 #' Diversity according to peptides paper (Sieber)
-#' 
-#' @import Rmpfr
-#' 
+#'
 #' @param k length of peptide sequences
 #' @param libscheme Name (character vector) or definition (data frame) of scheme
 #' @param N size of the library 
@@ -96,7 +94,7 @@ diversity <- function (k, libscheme, N, lib = NULL, variance = FALSE)
         lib <- libscheme(libschm, k)
     libdata <- lib$data
     initialloss <- (1 - (lib$info$valid/lib$info$nucleotides)^k)
-    libdata$expected <- mpfr(libdata$probs,128) * N * (1 - initialloss)
+    libdata$expected <- libdata$probs * N * (1 - initialloss)
     val <- sum(with(libdata, di * choices * (1 - exp(-expected/di))))
     if (variance) {
         cn <- with(libdata, (1 - 2/di)^expected)

@@ -4,7 +4,7 @@
 \alias{generateCustomProbs}
 \title{For a given scheme, generate a dataset with the peptide probabilities}
 \usage{
-generateCustomProbs(scheme_def, k = 6:10)
+generateCustomProbs(scheme_def, k = 1:20)
 }
 \arguments{
 \item{scheme_def}{definition of the custom scheme}

@@ -5,7 +5,7 @@
 \title{Generate peptide and library information for a given scheme}
 \usage{
 generateCustom(scheme_name = "custom", scheme_def = read.csv(file.choose()),
-  k = 6:10, n = 6:14, savefile = TRUE)
+  k = 1:20, n = 1:25, savefile = TRUE)
 }
 \arguments{
 \item{scheme_name}{The name of the resulting encoding scheme}

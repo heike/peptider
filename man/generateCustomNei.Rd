@@ -4,7 +4,7 @@
 \alias{generateCustomNei}
 \title{For a given scheme, generate a dataset with the neighborhood information}
 \usage{
-generateCustomNei(scheme_def, k = 6:10, n = 6:14)
+generateCustomNei(scheme_def, k = 1:20, n = 1:25)
 }
 \arguments{
 \item{scheme_def}{definition of the custom scheme}
