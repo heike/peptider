@@ -26,6 +26,6 @@ Coverage of library of size N given random sampling from the pool of all possibl
 \examples{
 coverage(2, "NNN", 10^3)
 coverage(2, "NNK", 10^3)
-coverage(2, "Trimer", 10^3) ## Trimer coverage is not 1 because of random sampling.
+coverage(2, "2020", 10^3) ## 20/20 coverage is not 1 because of random sampling.
 }
 

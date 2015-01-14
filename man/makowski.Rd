@@ -23,6 +23,6 @@ Makowski and colleagues [Makowski, Soares 2003] present another approach by defi
 \examples{
 makowski(2, "NNN")
 makowski(3, "NNK")
-makowski(3, "Trimer")
+makowski(3, "2020")
 }
 

@@ -26,6 +26,6 @@ Relative efficiency of a peptide library, defined as the ratio of expected diver
 \examples{
 efficiency(3, "NNN", 10^2)
 efficiency(3, "NNK", 10^2)
-efficiency(3, "Trimer", 10^2) ## Trimer efficiency is not 1 because of random sampling.
+efficiency(3, "2020", 10^2) ## 20/20 efficiency is not 1 because of random sampling.
 }
 

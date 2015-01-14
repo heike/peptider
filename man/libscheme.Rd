@@ -21,7 +21,7 @@ Get the specified library scheme
 libscheme("NNN")
 libscheme("NNK", 2)
 
-# Build a custom trimer library
+# Build a custom 20/20 library
 custom <- data.frame(class = c("A", "Z"), aacid = c("SLRAGPTVIDEFHKNQYMW", "*"), c = c(1, 0))
 libscheme(custom)
 }

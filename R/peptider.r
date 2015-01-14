@@ -2,7 +2,7 @@
 #'
 #' @name schemes
 #' @title Built-in library schemes for peptider
-#' @description This data set contains descriptions of amino acid classes several commonly used library schemes: NNN, NNB, NNK, trimer, and variations of each in which Cysteine is not considered a viable amino acid.
+#' @description This data set contains descriptions of amino acid classes several commonly used library schemes: NNN, NNB, NNK, 20/20, and variations of each in which Cysteine is not considered a viable amino acid.
 
 #' @details
 #' The schemes are defined as:
@@ -10,13 +10,13 @@
 #' NNN: All four bases (\"N\" = G/A/T/C) possible at all three positions in the codon.
 #' NNB: All four bases in the first two codon positions possible, the third position is restricted to G, T or C (= \"B\")
 #' NNK/S: All four bases in the first two codon positions possible, the third position is restricted to G/T (= \"K\") or two C/G (= \"S\").
-#' trimer: trimer describes the concept that DNA is assembled from prefabricated trimeric building blocks. This allows the generation of libraries from a predefined set of codons and thereby complete exclusion of Stop codons and other unwanted codons.
+#' 2020: 20/20 describes the concept that DNA is assembled from prefabricated trimeric building blocks. This allows the generation of libraries from a predefined set of codons and thereby complete exclusion of Stop codons and other unwanted codons.
 #' NNN (-C): NNN with Cysteine ignored.
 #' NNB (-C): NNB with Cysteine ignored.
 #' NNK/SC (-C): NNK/S with Cysteine ignored.
-#' trimer (-C): Trimer with Cysteine ignored.
+#' 2020 (-C): 20/20 with Cysteine ignored.
 #' 
-#' The schemes differ in the number of used codons, ranging from 64 (NNN), 48 (NNB), 32 (NNK/S) to 20 or less (trimer). Coding schemes that allow varying ratios of codons/amino acid, result in libraries biased towards amino acids which are encoded more often. Further, the number of Stop codons that can lead to premature termination of the peptide sequence influences the performance of the library.
+#' The schemes differ in the number of used codons, ranging from 64 (NNN), 48 (NNB), 32 (NNK/S) to 20 or less (20/20). Coding schemes that allow varying ratios of codons/amino acid, result in libraries biased towards amino acids which are encoded more often. Further, the number of Stop codons that can lead to premature termination of the peptide sequence influences the performance of the library.
 #' 
 #' @docType data
 #' @usage data(schemes)
@@ -61,7 +61,7 @@ scheme <- function(name, file = NULL) {
 #' libscheme("NNN")
 #' libscheme("NNK", 2)
 #' 
-#' # Build a custom trimer library
+#' # Build a custom 20/20 library
 #' custom <- data.frame(class = c("A", "Z"), aacid = c("SLRAGPTVIDEFHKNQYMW", "*"), c = c(1, 0))
 #' libscheme(custom)
 libscheme <- function(schm, k = 1) {
@@ -126,7 +126,7 @@ diversity <- function (k, libscheme, N, lib = NULL, variance = FALSE)
 #' @examples
 #' makowski(2, "NNN")
 #' makowski(3, "NNK")
-#' makowski(3, "Trimer")
+#' makowski(3, "2020")
 makowski <- function(k, libscheme) {
     libschm <- as.character(substitute(libscheme)) ## Compatibility with old interface
     if (inherits(try(scheme(libschm), silent = TRUE), 'try-error')) libschm <- libscheme
@@ -153,7 +153,7 @@ makowski <- function(k, libscheme) {
 #' @examples
 #' coverage(2, "NNN", 10^3)
 #' coverage(2, "NNK", 10^3)
-#' coverage(2, "Trimer", 10^3) ## Trimer coverage is not 1 because of random sampling.
+#' coverage(2, "2020", 10^3) ## 20/20 coverage is not 1 because of random sampling.
 coverage <- function(k, libscheme, N, lib=NULL, variance = FALSE) {
     libschm <- as.character(substitute(libscheme)) ## Compatibility with old interface
     if (inherits(try(scheme(libschm), silent = TRUE), 'try-error')) libschm <- libscheme
@@ -181,7 +181,7 @@ coverage <- function(k, libscheme, N, lib=NULL, variance = FALSE) {
 #' @examples
 #' efficiency(3, "NNN", 10^2)
 #' efficiency(3, "NNK", 10^2)
-#' efficiency(3, "Trimer", 10^2) ## Trimer efficiency is not 1 because of random sampling.
+#' efficiency(3, "2020", 10^2) ## 20/20 efficiency is not 1 because of random sampling.
 efficiency <- function(k, libscheme, N, lib=NULL, variance = FALSE) {
     libschm <- as.character(substitute(libscheme)) ## Compatibility with old interface
     if (inherits(try(scheme(libschm), silent = TRUE), 'try-error')) libschm <- libscheme
@@ -463,7 +463,7 @@ NULL
 #' @import plyr
 #' @examples
 #' genNeighbors(scheme("NNK"), 2)
-#' genNeighbors(scheme("Trimer"), 2)
+#' genNeighbors(scheme("2020"), 2)
 genNeighbors <- function(sch, k) {
 #    sch <- libscheme(lib,1)$info$scheme
     
@@ -530,7 +530,7 @@ genNeighbors <- function(sch, k) {
 #' @import plyr
 #' @examples
 #' genNeighbors_reduced(scheme("NNK"), 2)
-#' genNeighbors_reduced(scheme("Trimer"), 2)
+#' genNeighbors_reduced(scheme("2020"), 2)
 genNeighbors_reduced <- function(sch, k) {    
     schl <- unlist(strsplit(as.character(sch$aacid[-length(sch$aacid)]), ""))
     schd <- data.frame(AA=schl, C0=codons(schl, libscheme=sch))

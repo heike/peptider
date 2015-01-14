@@ -22,6 +22,6 @@ Calculate distribution of neighbors under library scheme lib for peptide sequenc
 }
 \examples{
 genNeighbors(scheme("NNK"), 2)
-genNeighbors(scheme("Trimer"), 2)
+genNeighbors(scheme("2020"), 2)
 }
 

@@ -2,11 +2,11 @@ Package: peptider
 Type: Package
 Title: Evaluation of Diversity in Nucleotide Libraries
 Version: 0.1.7
-Date: 2015-01-01
+Date: 2015-01-14
 Author: Heike Hofmann, Eric Hare, ggobi Foundation
 Maintainer: Eric Hare <erichare@iastate.edu>
 Description: Functions for evaluating diversity in peptide libraries, including
-    NNN, NNB, NNK/S, and trimer schemes.  This includes expected coverage,
+    NNN, NNB, NNK/S, and 20/20 schemes.  This includes expected coverage,
     relative efficiency, and functional diversity of the library.
 License: GPL-3
 Imports:
