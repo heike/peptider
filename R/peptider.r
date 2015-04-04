@@ -217,8 +217,8 @@ libBuild <- function(k, libscheme, scale1 = 1, scale2 = 1) {
     libscheme$class <- as.character(libscheme$class)
     libscheme$s <- nchar(as.character(libscheme$aacid))
     
-    seq <- with(libscheme[-nrow(libscheme),], make.RV(class, scale1 * s*c / sum(s * c), fractions = FALSE, verifyprobs = all(scale1 == 1)))
-    d <- with(libscheme[-nrow(libscheme),], make.RV(class, scale2 * s / sum(s), fractions = FALSE, verifyprobs = all(scale2 == 1)))
+    seq <- with(libscheme[-nrow(libscheme),], RV(class, scale1 * s*c / sum(s * c), fractions = FALSE, verifyprobs = all(scale1 == 1)))
+    d <- with(libscheme[-nrow(libscheme),], RV(class, scale2 * s / sum(s), fractions = FALSE, verifyprobs = all(scale2 == 1)))
     
     d7 <- mult_reduced(d, k)
     seq7 <- mult_reduced(seq, k)
