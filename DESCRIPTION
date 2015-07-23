@@ -1,6 +1,6 @@
 Package: peptider
 Title: Evaluation of Diversity in Nucleotide Libraries
-Version: 0.2.1
+Version: 0.2.1.9000
 Authors@R: c(
     person("Heike", "Hofmann", email = "hofmann@iastate.edu", role = "aut"),
     person("Eric", "Hare", email = "erichare@iastate.edu", role = c("aut", "cre")),

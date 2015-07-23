@@ -31,6 +31,9 @@ NULL
 #' 
 #' @export
 #' 
+#' @importFrom utils data
+#' @importFrom utils read.csv
+#' 
 #' @examples
 #' scheme("NNN")
 #' scheme("NNK")
@@ -282,6 +285,7 @@ detect <- function(lib = libscheme("NNK", 7), size = 10^8) {
     with(lib$data, 1 - exp(-size*probs/di))
 }
 
+#' @importFrom utils data
 getNeighborOne <- function(x, blosum=1) {
     ## For CRAN check
     BLOSUM80 <- AA1 <- Blosum <- AA2 <- NULL
@@ -326,6 +330,7 @@ getNeighbors <- function(x, blosum=1) {
     llply(x, getNeighborOne)
 }
 
+#' @importFrom utils data
 getNofNeighborsOne <- function(x, blosum = 1, method="peptide", libscheme=NULL) {
     ## For CRAN check
     BLOSUM80 <- AA1 <- Blosum <- AA2 <- NULL
@@ -461,6 +466,7 @@ NULL
 #' N1 is the number of neighbors in codon representation (including self representation) 
 #' @export
 #' @import plyr
+#' @importFrom stats xtabs
 #' @examples
 #' genNeighbors(scheme("NNK"), 2)
 #' genNeighbors(scheme("2020"), 2)
@@ -528,6 +534,7 @@ genNeighbors <- function(sch, k) {
 #' o is the number of peptide sequences reached by permutations
 #' @export
 #' @import plyr
+#' @importFrom stats xtabs
 #' @examples
 #' genNeighbors_reduced(scheme("NNK"), 2)
 #' genNeighbors_reduced(scheme("2020"), 2)

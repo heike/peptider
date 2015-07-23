@@ -144,6 +144,7 @@ generateCustomNei <- function(scheme_def, k = 1:20, n = 1:25) {
 #' @param savefile if true, save the results to an RData file
 #' @return TRUE upon completion of the script and output of the CSV files
 #' @export
+#' @importFrom utils read.csv
 #' @examples
 #' \dontrun{
 #' generateCustom()
