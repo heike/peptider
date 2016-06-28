@@ -1,0 +1,126 @@
+\documentclass[10pt]{article}
+\usepackage{xifthen}
+
+% amsmath package, useful for mathematical formulas
+\usepackage{amsmath}
+% amssymb package, useful for mathematical symbols
+\usepackage{amssymb}
+
+% cite package, to clean up citations in the main text. Do not remove.
+\usepackage{cite}
+
+\usepackage{hyperref}
+
+% line numbers
+\usepackage{lineno}
+
+% ligatures disabled
+\usepackage{microtype}
+\DisableLigatures[f]{encoding = *, family = * }
+
+% rotating package for sideways tables
+%\usepackage{rotating}
+
+% If you wish to include algorithms, please use one of the packages below. Also, please see the algorithm section of our LaTeX guidelines (http://www.plosone.org/static/latexGuidelines) for important information about required formatting.
+%\usepackage{algorithmic}
+%\usepackage{algorithmicx}
+
+% Use doublespacing - comment out for single spacing
+\usepackage{setspace} 
+\doublespacing
+
+
+% Text layout
+\topmargin 0.0cm
+\oddsidemargin 0.5cm
+\evensidemargin 0.5cm
+\textwidth 16cm 
+\textheight 21cm
+
+% Bold the 'Figure #' in the caption and separate it with a period
+% Captions will be left justified
+\usepackage[labelfont=bf,labelsep=period,justification=raggedright]{caption}
+
+% Use the PLoS provided BiBTeX style
+\bibliographystyle{plos2009}
+
+% Remove brackets from numbering in List of References
+\makeatletter
+\renewcommand{\@biblabel}[1]{\quad#1.}
+\makeatother
+
+
+% Leave date blank
+\date{}
+
+\pagestyle{myheadings}
+
+%% Include all macros below. Please limit the use of macros.
+\usepackage{amsthm}
+%\usepackage{endfloat}
+\usepackage{appendix}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{definition}{Definition}
+
+%\definecolor{Blue}{rgb}{0,0,0.5}
+\usepackage[usenames,dvipsnames]{xcolor}
+\newcommand{\hh}[1]{{\color{orange} #1}}
+\newcommand{\CHARTS}{OFF}%
+
+
+%% END MACROS SECTION
+
+\begin{document}
+
+%\usepackage{url}
+% \usepackage{amsthm}
+% \usepackage{amsmath}
+% \usepackage{color}
+% \usepackage[dvipsnames,svgnames]{xcolor}
+
+
+%\begin{document}
+
+% Title must be 150 characters or less
+\begin{flushleft}
+{\Large
+\textbf{Biomathematical Description of Synthetic Peptide Libraries}
+}
+% Insert Author names, affiliations and corresponding author email.
+\\
+Timo Sieber$^{1,\ast}$, 
+Eric Hare$^{2}$, 
+Heike Hofmann$^{2}$,
+Martin Treppel$^{3}$
+\\
+\bf{1}  Department of Oncology and Hematology/University Medical Center Hamburg-Eppendorf,  Hamburg, Germany
+\\
+\bf{2} Department of Statistics, Iowa State University, Ames, IA, USA
+\\
+\bf{3} Department of Hematology and Oncology/Augsburg Medical Center/Interdisciplinary Cancer Center,  Augsburg, Germany
+\\
+$\ast$ E-mail: t.sieber@uke.de
+\end{flushleft}
+
+
+
+\section*{Abstract}
+
+Libraries of randomised peptides displayed on phages or viral particles are essential tools in a wide spectrum of applications. However, there is only limited understanding of a library's fundamental dynamics and the influences of encoding schemes and sizes on their quality measured as peptide diversity. We are  presenting a mathematical framework that allows us to derive several properties of libraries, such as the expected number of different peptides, the library's  coverage and its relative efficiency. This helps to describe libraries in enough detail for researchers to plan new experiments in a more informed manner. In particular, these values allow us to answer -in a probabilistic fashion- the question of  whether a specific library does indeed contain one of the `best' possible peptides. The framework is implemented in a web-interface based on two packages, discreteRV and peptider, to the statistical software environment R. %We further provide a user-friendly web-interface called PeLiCa allowing scientists to plan and analyse their peptide libraries.
+
+
+<<main, child='main.Rnw', eval=TRUE>>=
+@
+% references section
+% argument is your BibTeX string definitions and bibliography database(s)
+\bibliography{references}
+
+\vfill
+\newpage
+
+<<supplement, child='supplement.Rnw', eval=TRUE>>=
+@
+
+
+\end{document}

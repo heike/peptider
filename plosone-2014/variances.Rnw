@@ -1,0 +1,55 @@
+\documentclass{article}
+\usepackage{amstext}
+\begin{document}
+\section*{Variance of $Z_i$}
+
+Let $Z_{i+1}$ be the random variable for the number of different peptides at draw $i+1$, with $Z_1 = 1$. 
+The overall number of possible different peptides is $b$.
+Then $Z_{i+1}$ depends on the result from the previous draw $Z_i$ and is either the same number or one higher:
+\begin{eqnarray*}
+P(Z_{i+1} = Z_i ) &=& Z_i/b \\
+P(Z_{i+1} = Z_i + 1) &=& 1- Z_i/b 
+\end{eqnarray*}
+
+The expected value of $Z_{i+1}$ again depends on the expected value of $Z_i$, and we get a recursion from that:
+\[
+E[Z_{i+1}] = ... = 1 + (1 - 1/b) E[Z_i] \approx b (1 - e^{-(i+1)/b})
+\]
+
+The variance of $Z_{i+1}$ is given as the difference of $E[Z_{i+1}^2]$ and $E[Z_{i+1}]^2$, where
+\begin{eqnarray*}
+E[Z_{i+1}^2] &=& P(Z_{i+1} = Z_i) E[ Z_i^2] +  P(Z_{i+1} = Z_i+1) E[ (Z_i + 1)^2] \text{ from first principles}\\
+             &=& E[Z_i] E[ Z_i^2]/ b + (1- E[Z_i]/b)(E[Z_i^2] + 2 E[Z_i] + 1) \\
+             &=& E[Z_i^2] + E[Z_i] (2-1/b) - 2/b E[Z_i]^2 + 1
+\end{eqnarray*}
+and 
+\begin{eqnarray*}
+E[Z_{i+1}]^2 &=& (1 + (1 - 1/b) E[Z_i])^2\\
+             &=& 1 + 2(1 - 1/b) E[Z_i] + (1 - 1/b)^2 (E[Z_i])^2  \\
+             &=& (E[Z_i])^2 + 2(1 - 1/b) E[Z_i] - 2/b (E[Z_i])^2 + 1/b^2 (E[Z_i])^2  + 1.  
+\end{eqnarray*}
+We therefore get for the variance of $Z_{i+1}$
+\begin{eqnarray*}
+\text{Var}[Z_{i+1}] &=& E[Z_{i+1}^2] - E[Z_{i+1}]^2 \\
+             &=& E[Z_i^2] + E[Z_i] (2-1/b) - 2/b E[Z_i]^2 + 1 \\
+             && - (E[Z_i])^2 - 2(1 - 1/b) E[Z_i] + 2/b (E[Z_i])^2 - 1/b^2 (E[Z_i])^2  - 1 \\
+             &=& \text{Var}[Z_{i}] + 1/b E[Z_i]- 1/b^2 (E[Z_i])^2 \\
+             &=& \text{Var}[Z_{i}] + 1/b E[Z_i] (1 - 1/b (E[Z_i])) \\
+             &=& \sum_{k=1}^i E[Z_k]/b ( 1 - E[Z_k]/b)  \\             
+             &\approx& \sum_{k=1}^i (1 - e^{-k/b}) e^{-k/b} \\
+             &=& \sum_{k=1}^i e^{-k/b} - \sum_{k=1}^i e^{-2k/b} \\
+             &=& (e^{-(i+1)/b} - 1)/(e^{-1/b} - 1) - (e^{-2(i+1)/b} - 1)/(e^{-2/b} - 1).
+\end{eqnarray*}
+
+
+<<>>=
+i <- 10^seq(5,14, by=0.1)
+b <- 100000000000
+vari <- (exp(-1/b*(i+1))-1)/(exp(-1/b)-1) - (exp(-2/b*(i+1))-1)/(exp(-2/b)-1)
+require(ggplot2)
+qplot(i, vari) + scale_y_log10() + scale_x_log10()
+
+#varwrong <- 2*b*exp(-i/b)*(1 - exp(-i/b))
+#qplot(i, vari) + scale_y_log10() + scale_x_log10() + geom_point(aes(y=varwrong), colour="red")
+@
+\end{document}

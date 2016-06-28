@@ -1,0 +1,26 @@
+{\bf Approximation Error in Theorem 1.} The question is how close the approximation of the expected value in Theorem 1 is:
+\begin{equation}\label{eqn:approx}
+(1- 1/b)^N = e^{-N/b} + {\mathcal O}\left( \min\left(\frac{1}{b} e^{-N/b-\epsilon}, \frac{N}{b^2}\right)\right).
+\end{equation}
+
+\begin{proof}
+In D\"orrie's elementary proof of problem 12  \cite{doerrie} (limits for sequences $\lim_{x \rightarrow \infty} (1+1/x)^x$ and $\lim_{x \rightarrow \infty} (1+1/x)^{x+1}$) we find the following inequality:
+ for x greater 0 and m such that $1 \pm x/m > 0$ it holds, that
+\[
+(1-x^2/m) e^x \le (1 + x/m)^m \le e^x.
+\]
+
+We can directly apply this to our situation with
+ $x := -N/b$ and $m = N$. Then $1 \pm x/m = 1 \pm 1/b > 0$, which is true for $b > 1$ -- this we can safely assume.
+ 
+The above inequality gives us
+\[
+(1-N/b^2) e^{-N/b} \le (1 -1/b)^N \le e^{-N/b}.
+\]
+This means that the error in equation (\ref{eqn:approx}) has an upper bound given by $Nb^{-2} e^{-N/b} = 1/b \cdot N/b \cdot e^{-N/b}$.
+
+It is easy to see that the expression $N/b \ e^{-N/b}$ is positive with a maximum of $e^{-1}$ at $N = b$. Both for large and small values of $N/b$ this function goes rapidly to zero: 
+For small values of $N/b$ the expression  $N/b \ e^{-N/b} = {\mathcal O}(N/b)$, while for large values of $N/b$ the expression  $N/b \ e^{-N/b} = {\mathcal O}(e^{-N/b-\epsilon})$ for some small $\epsilon > 0$.
+
+Upper and lower bound combined  give equation (\ref{eqn:approx}).
+\end{proof}

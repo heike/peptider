@@ -1,0 +1,149 @@
+{\bf Proof of Theorem 1.} Theorem 1 gives the expected value and the variance of the number of different peptides from a clone library of size N as:
+\begin{eqnarray*}
+E[Z_{N}] &=& \hh{b\left(1 - (1-b^{-1})^N\right)} \approx b \left(1 - e^{-N/b}\right). \\
+\Var[Z_{N}] &=& \hh{b \left[ \left(1-b^{-1}\right)^{N} -  \left(1-2b^{-1}\right)^{N}\right]  - b^2 \left[ \left(1-b^{-1} \right)^{2N} -  \left(1-2b^{-1}\right)^{N}\right]}\\
+&\approx& b (e^{-N/b} - e^{-2N/b}) - N e^{-2(N-1)/b}.
+\end{eqnarray*}
+
+\begin{proof}
+We will discuss the proof in a stepwise approach:
+
+Let Z\textsubscript{i} be the number of selected peptides after i subsequent draws, for i = 1, ..., N. After the first draw, i.e.  i = 1, we know that there is a single peptide sequence i in the `library', therefore Z\textsubscript{1} = 1. 
+
+Drawing one more peptide sequence opens up two possibilities: we either increase the number of different peptides in the library by one, or we draw a peptide sequence that we have already seen before. The probability to observe a new sequence depends on how many peptide sequences we have already observed (Z\textsubscript{i}), and how many are still left (b - Z\textsubscript{i}). 
+
+For draw i+1 we then get the following probabilities to either observe a new peptide, i.e. Z\textsubscript{i+1} = Z\textsubscript{i} + 1, or a previously drawn peptide, in which case the number of different peptides does not change, i.e. Z\textsubscript{i+1} = Z\textsubscript{i}:
+\begin{eqnarray*}
+P(Z_{i+1} = Z_i) &=& Z_i/b.\\
+P(Z_{i+1} = Z_i+1) &=& (b-Z_i)/b = (1 - Z_i/b) .
+\end{eqnarray*}
+For the expected number of selected peptides the above equations lead us to:
+\begin{eqnarray*}
+E[Z_{i+1}] &=& E[Z_i]^2/b  + (1-E[Z_i]/b) \cdot (E[Z_i] + 1)  = \\
+&=& 1-E[Z_i]/b + E[Z_i] = 1 + (1-1/b)E[Z_i].
+\end{eqnarray*}
+Since Z\textsubscript{1} = 1, we get 
+for the i\textsuperscript{th} draw an expected value of 
+\begin{eqnarray}
+E[Z_i] &=& \sum_{k=0}^{i-1} (1 - 1/b)^k = b \left(1 - (1-1/b)^i\right) \label{eq:exp}\\
+&\approx& b \left(1 - e^{-i/b}\right).\label{eq:approx}
+\end{eqnarray}
+The approximation holds for large values of b, and the expected diversity of a library of size N.
+
+\eh{In deriving the variance, Let again $Z\textsubscript{i+1}$ be the random variable for the number of different peptides at draw $i+1$, with $Z_1 = 1$. 
+% The overall number of possible different peptides is $b$.
+% Then $Z_{i+1}$ depends on the result from the previous draw $Z_i$ and is either the same number or one higher:
+% \begin{eqnarray*}
+% P(Z_{i+1} = Z_i ) &=& Z_i/b \\
+% P(Z_{i+1} = Z_i + 1) &=& 1- Z_i/b 
+% \end{eqnarray*}
+% 
+% The expected value of $Z_{i+1}$ again depends on the expected value of $Z_i$, and we get a recursion from that:
+% \[
+% E[Z_{i+1}] = ... = 1 + (1 - 1/b) E[Z_i] \approx b (1 - e^{-(i+1)/b})
+% \]
+% 
+% The variance of $Z_{i+1}$ is given as the difference of $E[Z_{i+1}^2]$ and $E[Z_{i+1}]^2$, where
+% \begin{eqnarray*}
+% E[Z_{i+1}^2] &=& P(Z_{i+1} = Z_i) E[ Z_i^2] +  P(Z_{i+1} = Z_i+1) E[ (Z_i + 1)^2] \text{ from first principles}\\
+%              &=& E[Z_i] E[ Z_i^2]/ b + (1- E[Z_i]/b)(E[Z_i^2] + 2 E[Z_i] + 1) \\
+%              &=& E[Z_i^2] + E[Z_i] (2-1/b) - 2/b E[Z_i]^2 + 1
+% \end{eqnarray*}
+% and 
+% \begin{eqnarray*}
+% E[Z_{i+1}]^2 &=& (1 + (1 - 1/b) E[Z_i])^2\\
+%              &=& 1 + 2(1 - 1/b) E[Z_i] + (1 - 1/b)^2 (E[Z_i])^2  \\
+%              &=& (E[Z_i])^2 + 2(1 - 1/b) E[Z_i] - 2/b (E[Z_i])^2 + 1/b^2 (E[Z_i])^2  + 1.  
+% \end{eqnarray*}
+% We therefore get for the variance of $Z_{i+1}$
+% \begin{eqnarray*}
+% \text{Var}[Z_{i+1}] &=& E[Z_{i+1}^2] - E[Z_{i+1}]^2 \\
+%              &=& E[Z_i^2] + E[Z_i] (2-1/b) - 2/b E[Z_i]^2 + 1 \\
+%              && - (E[Z_i])^2 - 2(1 - 1/b) E[Z_i] + 2/b (E[Z_i])^2 - 1/b^2 (E[Z_i])^2  - 1 \\
+%              &=& \text{Var}[Z_{i}] + 1/b E[Z_i]- 1/b^2 (E[Z_i])^2 \\
+%              &=& \text{Var}[Z_{i}] + 1/b E[Z_i] (1 - 1/b (E[Z_i])) \\
+%              &=& \sum_{k=1}^i E[Z_k]/b ( 1 - E[Z_k]/b)  \\             
+%              &\approx& \sum_{k=1}^i (1 - e^{-k/b}) e^{-k/b} \\
+%              &=& \sum_{k=1}^i e^{-k/b} - \sum_{k=1}^i e^{-2k/b} \\
+%              &=& (1-e^{-(i+1)/b} )/(1-e^{-1/b}) - (1-e^{-2(i+1)/b})/(1-e^{-2/b}) \\
+%              &=& \hh{e^{-1/b}/(1-e^{-2/b}) \left( 1- e^{-(i+1) /b}\right)\left( 1- e^{-i/b}\right)}.
+% \end{eqnarray*}
+% 
+% <<variance, echo=FALSE, eval=FALSE>>=
+% i <- 10^seq(5,14, by=0.1)
+% b <- 100000000000
+% vari <- (exp(-1/b*(i+1))-1)/(exp(-1/b)-1) - (exp(-2/b*(i+1))-1)/(exp(-2/b)-1)
+% require(ggplot2)
+% qplot(i, vari) + scale_y_log10() + scale_x_log10()
+% 
+% #varwrong <- 2*b*exp(-i/b)*(1 - exp(-i/b))
+% #qplot(i, vari) + scale_y_log10() + scale_x_log10() + geom_point(aes(y=varwrong), colour="red")
+% @
+}
+\hh{
+Consider the conditional random variable Z\textsubscript{i+1} given Z\textsubscript{i}. Expected value and variance are easily derived from first principles:
+
+\begin{eqnarray*}
+E\left[Z_{i+1} \mid Z_i \right] &=& b^{-1} Z_i \cdot Z_i + (1 - b^{-1} Z_i) \cdot (Z_i+1) = 1 + (1 - b^{-1}) Z_i.\\
+E\left[Z_{i+1}^2 \mid Z_i \right] &=&  b^{-1} Z_i \cdot Z_i^2 + (1 - b^{-1} Z_i) \cdot (Z_i+1)^2 \\
+&=& Z_i^2 (1- 2b^{-1}) + Z_i(2-b^{-1}) + 1.\\
+\Var\left[Z_{i+1} \mid Z_i \right] &=& E\left[Z_{i+1}^2 \mid Z_i \right] - E\left[Z_{i+1} \mid Z_i \right]^2\\
+&=& b^{-1}Z_i (1 - b^{-1}Z_i).
+\end{eqnarray*}
+}
+\hh{
+This leads to a recursive formula for the variance of Z\textsubscript{i}:
+\begin{eqnarray*}
+\Var(Z_{i+1}) &=& E\left[ \Var(Z_{i+1} \mid Z_i) \right] + \Var \left[ E(Z_{i+1} \mid Z_i )\right] \\
+&=&  E \left[  b^{-1}Z_i (1 - b^{-1} Z_i) \right] + \Var \left[ 1 + (1 - b^{-1}) Z_i \right] \\
+&=&b^{-1}  E \left[  Z_i \right]  -  b^{-2} E \left[Z_i^2 \right] + (1 - b^{-1})^2 \Var \left[  Z_i \right] \\
+&=& b^{-1} E \left[  Z_i \right]  -  b^{-2} \Var \left[Z_i^2 \right]  -b^{-2}  E \left[Z_i \right]^2 + (1 - b^{-1})^2 \Var \left[  Z_i \right] \\
+&=& b^{-1} E \left[  Z_i \right]    - b^{-2} E \left[Z_i \right]^2 + \left(1 - 2b^{-1}\right) \Var \left[  Z_i \right]. 
+\end{eqnarray*}
+}
+\hh{
+Using the exact result for expected values in (\ref{eq:exp}), the variance of Z\textsubscript{i+1} can be written as
+\[
+\Var(Z_{i+1}) =  \left(1-b^{-1}\right)^i - \left(1-b^{-1}\right)^{2i} + \left(1 - 2b^{-1}\right) \Var(Z_i). 
+\]
+%
+The recursion is resolved as 
+\[
+\Var(Z_{i+1}) = \sum_{j=0}^{i} a_{j}c^{i-j} + c^{i} \Var(Z_1) \stackrel{\Var(Z_1) = 0}{=} \sum_{j=0}^{i} a_{j}c^{i-j},
+\]
+with $a_{j} = (1-b^{-1})^j - (1-b^{-1})^{2j} = x^j - (x^2)^j$ and $c = 1 - 2b^{-1}$.
+
+\noindent
+The above summation leads to two geometric series for an explicit expression of the variance:
+\begin{eqnarray*}
+\Var(Z_{i+1}) &=& c^i \sum_{j=0}^{i} a_{j} \left(c^{-1}\right)^j \\
+&=& c^i \left[ \sum_{j=0}^{i}  \left(c^{-1}x \right)^j -  \sum_{j=0}^{i} \left(c^{-1}x^2 \right)^j \right] \\
+&=&  \frac{x^{i+1} - c^{i+1}}{x-c} -  \frac{(x^2)^{i+1} - c^{i+1}}{x^2-c}.
+\end{eqnarray*}
+This expression can be simplified somewhat, because the denominators are simple fractions in b:
+\begin{eqnarray*}
+x - c &=& 1 - \frac{1}{b} - \left(1 - \frac{2}{b}\right) = \frac{1}{b}\\
+x^2-c &=& 1 - \frac{2}{b} + \frac{1}{b^2} - \left(1 - \frac{2}{b}\right) = \frac{1}{b^2}.
+\end{eqnarray*}
+%
+\begin{eqnarray*}
+\Var(Z_{i+1}) &=& b (x^{i+1} - c^{i+1}) -  b^2 ((x^2)^{i+1} - c^{i+1})\\
+&=& b \left[ (1-b^{-1})^{i+1} -  (1-2b^{-1})^{i+1}\right] - b^2 \left[ (1-b^{-1})^{2(i+1)} -  (1-2b^{-1})^{i+1}\right].
+\end{eqnarray*}
+%
+%Note: it would be tempting to use the approximations $(1-b^{-1})^{i+1} \approx e^{-(i+1)/b)}$ and $(1-2b^{-1})^{i+1} \approx e^{-2(i+1)/b)}$ in the above equation. While individually correct and extremely accurate, its accuracy generally does not withstand the multiplication by $b^2$ in the second term. This leads to numerically unstable and, unfortunately, rather unpredictable results. 
+
+A direct calculation of the variance as stated above is generally not possible due to limited precision, which leads to numerically unstable and, unfortunately, rather unpredictable results. Instead, we make use of a Taylor approximation of the second term, which yields 
+in a first order approximation 
+\[
+(1-b^{-1})^{2(i+1)} -  (1-2b^{-1})^{i+1} = b^{-2} (i+1) \cdot \left(1 -2b^{-1}\right)^i + \mathcal{O}(ib^{-2}).
+\]
+
+At this point, we can, again, safely use the approximations of the exponential function and get in summary for the diversity $Z_N$:
+\begin{eqnarray*}
+ \Var[Z_N] &=& b \left[ \left(1-b^{-1}\right)^{N} -  \left(1-2b^{-1}\right)^{N}\right]  \\
+&& - b^2 \left[ \left(1-b^{-1} \right)^{2N} -  \left(1-2b^{-1}\right)^{N}\right] \\
+&\approx& b (e^{-N/b} - e^{-2N/b}) - N e^{-2(N-1)/b}.
+\end{eqnarray*}
+}
+\end{proof}

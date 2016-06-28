@@ -1,0 +1,139 @@
+\clearpage
+\section*{Supporting Information}
+% reset table and figure counter, refer to them by Sx
+\setcounter{table}{0}
+\renewcommand{\thetable}{S\arabic{table}}
+\setcounter{figure}{0}
+\renewcommand{\thefigure}{S\arabic{figure}}
+
+
+%\section*{Considerations to Theorem 1}
+\subsection*{S1 Text}\label{appendixProof}
+{\bf Proof of Theorem 1.}
+
+\subsection*{S2 Text}\label{appendixApprox}
+{\bf Approximation Error in Theorem 1.}
+
+
+\subsection*{S1 Table}\label{tab:nnn}
+\ifthenelse{\equal{\TABLES}{ON}}{
+\input{S1_Table.tex}
+}{
+{{\bf S1 Table. NNN\hh{-C} Library Scheme.}}
+}
+
+\subsection*{S2 Table}\label{tab:nnb}
+\ifthenelse{\equal{\TABLES}{ON}}{
+\input{S2_Table.tex}
+}
+{{\bf S2 Table. NNB\hh{-C} Library Scheme.}}
+
+
+\subsection*{S3 Text}\label{S3_Text}
+{\bf Simulation Results.}
+
+<<simresults, echo=FALSE, results='hide', cache=TRUE, message=FALSE>>=
+load("data/sm.RData")
+require(dplyr)
+stats <- sm %>% group_by(n, k, Scheme) %>% summarise(Variance=var(Diversity), Diversity=mean(Diversity))
+
+require(peptider)
+libsize <- unique(stats$n)
+
+div <- data.frame(expand.grid(k=unique(stats$k), n=libsize, Scheme=levels(sm$Scheme)))
+div$Diversity <- NULL
+div$Variance <- NULL
+for (i in 1:nrow(div)) {
+  div$Diversity[i] <- diversity(k=div$k[i], N=div$n[i], as.character(div$Scheme[i]))
+  div$Variance[i] <- diversity(k=div$k[i], N=div$n[i], as.character(div$Scheme[i]), variance=TRUE)
+}
+
+stats$Type <- "Observed"
+div$Type <- "Expected"
+simres <- rbind(stats, div)
+levels(simres$Scheme)[4] <- "20/20"
+simres$n <- round(log10(simres$n),1)
+library(reshape2)
+xt <- dcast(simres, n+k~Scheme+Type, value.var="Diversity")
+yt <- dcast(simres, n+k~Scheme+Type, value.var="Variance")
+
+
+require(xtable)
+print(xtable(xt, digits=c(0,1,0,rep(2,8))), include.rownames=FALSE)
+print(xtable(yt, digits=c(0,1,0,rep(2,8))), include.rownames=FALSE)
+
+library(ggplot2)
+levels(sm$Scheme)[2] <- "NNK/S"
+levels(div$Scheme)[2] <- "NNK/S"
+levels(sm$Scheme)[4] <- "20/20"
+levels(div$Scheme)[4] <- "20/20"
+
+v1 <- ggplot(aes(x=Diversity, fill=Scheme), data=subset(sm, k==8 & n==10^5)) + 
+  geom_vline(aes(xintercept=Diversity, colour=Scheme), size=1, data=subset(div, k==8 & n==10^5)) + 
+  geom_histogram(size=0.5, colour="grey20", binwidth=100) + 
+  theme_bw() + scale_fill_brewer("Library Scheme", palette="Set2") + theme(legend.position="bottom") +
+  scale_colour_brewer("Library Scheme", palette="Set2") + xlab("Peptide Diversity") + ylab("")
+suppressWarnings(ggsave(plot=v1, "images/simulation.eps", width = 8.5, height = 3.5))
+@
+
+
+
+
+\subsection*{S1 Figure}\label{fig:simulation}
+
+{\bf S1 Fig. Simulation results: 100 libraries of size 105 were sampled from each of the library schemes NNN, NNK/S, NNB, and 20/20, and the number of unique peptide sequences in each library was determined. }
+% \begin{figure}[!ht]
+% \captionsetup{labelformat=supp}
+% \ifthenelse{\equal{\CHARTS}{ON}}{
+% %\includegraphics[width=\linewidth]{images/simulation.eps}
+% \includegraphics[width=\linewidth]{S1_Fig.tif}
+% 
+% }
+% \caption{ \hh{ {\bf Simulation results: 100 libraries of size 10\textsuperscript{5} were sampled from each of the library schemes NNN, NNK/S, NNB, and 20/20, and the number of unique peptide sequences in each library was determined.} The resulting sampled peptide diversity is displayed in four histograms - one for each scheme. The vertical lines correspond to expected peptide diversity in each of these scenarios as given by equation (\ref{eq:diversity}).} }
+% 
+% \end{figure}
+
+\subsection*{S3 Table}\label{tab:simulation}
+
+\ifthenelse{\equal{\TABLES}{ON}}{
+\input{S3_Table.tex}
+}
+{{\bf \hh{S3 Table. Observed library diversity compared to expected library diversity for different library sizes N under various library schemes.}}}
+
+\subsection*{S4 Table}\label{tab:variance}
+%
+
+\ifthenelse{\equal{\TABLES}{ON}}{
+\input{S4_Table.tex}
+}
+{{\bf \hh{S4 Table. Variances of peptide diversity for different library sizes N under four library schemes.}}}
+
+\subsection*{S5 Table}\label{tab:nearest}
+
+\ifthenelse{\equal{\TABLES}{ON}}{
+\input{S5_Table.tex}
+}{{\bf S5 Table. Inclusion probabilities of specific heptapeptide sequences (degree~0) and  first and second degree neighborhoods (degree~1 and degree~2) under different library schemes in a library of size 100 Million DNA Sequences.}}
+
+
+\subsection*{S4 Text}\label{S4_Text}
+{\bf Examples for inclusion probability.}
+
+\subsection*{S5 Text}\label{S5_Text}
+{\bf Validation of results based on established software sources.}
+
+\subsection*{S6 Table}\label{tbl:div}
+%
+
+\ifthenelse{\equal{\TABLES}{ON}}{
+\input{S6_Table.tex}
+}{{\bf S6 Table. PeLiCa vs GLUE-IT comparison of peptide diversity/expected number of distinct amino acid variants in hexapeptides.}}
+
+
+\subsection*{S7 Table}\label{tbl:cov}
+
+\ifthenelse{\equal{\TABLES}{ON}}{
+\input{S7_Table.tex}
+}{{\bf S7 Table. PeLiCa vs GLUE-IT comparison of Coverage/Completeness of hexapeptides under different library schemes and library sizes.}}
+
+
+

@@ -1,0 +1,225 @@
+% Template for PLoS
+% Version 3.0 December 2014
+%
+% To compile to pdf, run:
+% latex plos.template
+% bibtex plos.template
+% latex plos.template
+% latex plos.template
+% dvipdf plos.template
+%
+% % % % % % % % % % % % % % % % % % % % % %
+%
+% -- IMPORTANT NOTE
+%
+% This template contains comments intended 
+% to minimize problems and delays during our production 
+% process. Please follow the template instructions
+% whenever possible.
+%
+% % % % % % % % % % % % % % % % % % % % % % % 
+%
+% Once your paper is accepted for publication, 
+% PLEASE REMOVE ALL TRACKED CHANGES in this file and leave only
+% the final text of your manuscript.
+%
+% There are no restrictions on package use within the LaTeX files except that 
+% no packages listed in the template may be deleted.
+%
+% Please do not include colors or graphics in the text.
+%
+% Please do not create a heading level below \subsection. For 3rd level headings, use \paragraph{}.
+%
+% % % % % % % % % % % % % % % % % % % % % % %
+%
+% -- FIGURES AND TABLES
+%
+% Please include tables/figure captions directly after the paragraph where they are first cited in the text.
+%
+% DO NOT INCLUDE GRAPHICS IN YOUR MANUSCRIPT
+% - Figures should be uploaded separately from your manuscript file. 
+% - Figures generated using LaTeX should be extracted and removed from the PDF before submission. 
+% - Figures containing multiple panels/subfigures must be combined into one image file before submission.
+% See http://www.plosone.org/static/figureGuidelines for PLOS figure guidelines.
+%
+% Tables should be cell-based and may not contain:
+% - tabs/spacing/line breaks within cells to alter layout or alignment
+% - vertically-merged cells (no tabular environments within tabular environments, do not use \multirow)
+% - colors, shading, or graphic objects
+% See http://www.plosone.org/static/figureGuidelines#tables for table guidelines.
+%
+% For tables that exceed the width of the text column, use the adjustwidth environment as illustrated in the example table in text below.
+%
+% % % % % % % % % % % % % % % % % % % % % % % %
+%
+% -- EQUATIONS, MATH SYMBOLS, SUBSCRIPTS, AND SUPERSCRIPTS
+%
+% IMPORTANT
+% Below are a few tips to help format your equations and other special characters according to our specifications. For more tips to help reduce the possibility of formatting errors during conversion, please see our LaTeX guidelines at http://www.plosone.org/static/latexGuidelines
+%
+% Please be sure to include all portions of an equation in the math environment.
+%
+% Do not include text that is not math in the math environment. For example, CO2 will be CO\textsubscript{2}.
+%
+% Please add line breaks to long display equations when possible in order to fit size of the column. 
+%
+% For inline equations, please do not include punctuation (commas, etc) within the math environment unless this is part of the equation.
+%
+% % % % % % % % % % % % % % % % % % % % % % % % 
+%
+% Please contact latex@plos.org with any questions.
+%
+% % % % % % % % % % % % % % % % % % % % % % % %
+
+\documentclass[10pt]{article}
+\usepackage{xifthen}
+
+% amsmath package, useful for mathematical formulas
+\usepackage{amsmath}
+% amssymb package, useful for mathematical symbols
+\usepackage{amssymb}
+
+\usepackage{hyperref}
+
+% cite package, to clean up citations in the main text. Do not remove.
+\usepackage{cite}
+
+
+% line numbers
+\usepackage{lineno}
+
+% ligatures disabled
+\usepackage{microtype}
+\DisableLigatures[f]{encoding = *, family = * }
+
+% rotating package for sideways tables
+%\usepackage{rotating}
+
+% If you wish to include algorithms, please use one of the packages below. Also, please see the algorithm section of our LaTeX guidelines (http://www.plosone.org/static/latexGuidelines) for important information about required formatting.
+%\usepackage{algorithmic}
+%\usepackage{algorithmicx}
+
+% Use doublespacing - comment out for single spacing
+\usepackage{setspace} 
+\doublespacing
+
+
+% Text layout
+\topmargin 0.0cm
+\oddsidemargin 0.5cm
+\evensidemargin 0.5cm
+\textwidth 16cm 
+\textheight 21cm
+
+% Bold the 'Figure #' in the caption and separate it with a period
+% Captions will be left justified
+\usepackage[labelfont=bf,labelsep=period,justification=raggedright,figurename=Fig.]{caption}
+
+% Use the PLoS provided BiBTeX style
+\bibliographystyle{plos2009}
+
+% Remove brackets from numbering in List of References
+\makeatletter
+\renewcommand{\@biblabel}[1]{\quad#1.}
+\makeatother
+
+% Include the tif format for graphics
+\DeclareGraphicsRule{.tif}{png}{.png}%
+{%
+  `convert #1 `dirname #1`/`basename #1 .tif`-tif-converted-to.png %
+}
+%\AppendGraphicsExtensions{.tif}
+
+% format for captions in the supporting material
+\DeclareCaptionLabelFormat{supp}{#2~#1}
+
+% Leave date blank
+\date{}
+
+\pagestyle{myheadings}
+
+%% Include all macros below. Please limit the use of macros.
+\usepackage{amsthm}
+%\usepackage{endfloat}
+\usepackage{appendix}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{definition}{Definition}
+
+%\definecolor{Blue}{rgb}{0,0,0.5}
+\usepackage[usenames,dvipsnames]{xcolor}
+\newcommand{\eh}[1]{{\color{blue} #1}}
+\newcommand{\ts}[1]{{\color{blue} #1}}
+\newcommand{\hh}[1]{{\color{blue} #1}}
+
+
+
+\newcommand{\Var}{{\text{Var}}}
+\newcommand{\CHARTS}{ON} % set to OFF for submission
+
+
+%% END MACROS SECTION
+
+\begin{document}
+
+%\usepackage{url}
+% \usepackage{amsthm}
+% \usepackage{amsmath}
+% \usepackage{color}
+% \usepackage[dvipsnames,svgnames]{xcolor}
+
+
+%\begin{document}
+
+% Title must be 150 characters or less
+\begin{flushleft}
+{\Large
+\textbf{Biomathematical Description of Synthetic Peptide Libraries}
+}
+% Insert Author names, affiliations and corresponding author email.
+\\
+Timo Sieber$^{1}$, 
+Eric Hare$^{2}$, 
+Heike Hofmann$^{2,\ast}$,
+Martin Trepel$^{3}$
+\\
+{\bf 1}  Department of Oncology and Hematology/University Medical Center Hamburg-Eppendorf,  Hamburg, Germany
+\\
+{\bf 2} Department of Statistics, Iowa State University, Ames, IA, USA
+\\
+{\bf 3} Department of Hematology and Oncology/Augsburg Medical Center/Interdisciplinary Cancer Center,  Augsburg, Germany
+\\
+$^\ast$ Corresponding author\\
+E-mail: hofmann@mail.iastate.edu (HH)
+\end{flushleft}
+
+
+
+\section*{Abstract}
+
+Libraries of randomised peptides displayed on phages or viral particles are essential tools in a wide spectrum of applications. However, there is only limited understanding of a library's fundamental dynamics and the influences of encoding schemes and sizes on their quality.% measured as peptide diversity.
+We are  presenting a mathematical framework that allows us to derive several properties of libraries, such as the expected number of different peptides, the library's  coverage and its relative efficiency. This helps to describe libraries in enough detail for researchers to plan new experiments in a more informed manner. In particular, these values allow us to answer -in a probabilistic fashion- the question of  whether a specific library does indeed contain one of the `best' possible peptides. The framework is implemented in a web-interface based on two packages, discreteRV and peptider, to the statistical software environment R. %We further provide a user-friendly web-interface called PeLiCa allowing scientists to plan and analyse their peptide libraries.
+
+
+
+<<main, child='main.Rnw', eval=TRUE>>=
+@
+% references section
+% argument is your BibTeX string definitions and bibliography database(s)
+\bibliography{references}
+
+\vfill
+\newpage
+
+\listoffigures
+\newpage
+\listoftables
+\newpage
+\vfill
+\newpage
+
+<<supplement, child='supplement.Rnw', eval=TRUE>>=
+@
+
+
+\end{document}

@@ -1,0 +1,11 @@
+{\bf Examples \ts{for inclusion probability}.}
+The \nameref{tab:nearest} gives the inclusion probabilities for some example sequences from a heptapeptide library of size 100 Million under common library schemes. For comparison, inclusion probabilities of the sequence itself  (denoted by degree 0) are given as well as the  probabilities to detect at least one sequence from the degree-1  and degree-2 neighborhoods, respectively. 
+
+While the probabilities to detect  individual sequences are highly dependent on the specific sequence and the library scheme, inclusion probabilities quickly grow as first and second degree neighborhoods (based on positive BLOSUM80 scores) are regarded. 
+
+\ts{
+The exemplary peptides in the \nameref{tab:nearest} cover the maximal range of inclusion probabilities. While the amino acids S, L and R are represented by 6 codons each in NNN-C (probability of 6/64), M is only encoded by ATG (probability of 1/64). The inclusion probability of {\tt SLRSLRS} is therefore much higher than that of {\tt MMMMMMM} if the NNN encoding scheme is used. However, with a 20/20-C encoding scheme in which each amino acid has only one representation, all individual peptides have the same inclusion probability (probability for each amino acid is 1/19).
+}
+\hh{This has the same effect on the neighborhoods of first and second degree. Because {\tt SLRSLRS} is higly probable under NNN-C, its first and second neighborhoods are large. This  makes it very  likely that one of these sequences is found in an NNN-C library.  The sequence {\tt MMMMMMM} is highly unlikely, because it is only encoded once among the 64\textsuperscript{7} peptides of an NNN-C scheme of heptapeptides. This implies that its first and second degree neighborhoods are also very small (and therefore fairly unlikely to be found) in an NNN-C library.
+Under a 20/20-C scheme these probabilities reverse, and neighborhood sizes are completely determined by the exchangeability of amino acids: amino acids {\tt S, L}, and {\tt R} are not as exchangeable (based on positive BLOSUM80 scores) as {\tt M}. {\tt M} can be exchanged by amino acids {\tt I, L,} and {\tt V}, whereas amino acids {\tt S, R} only have two possibilities for an exchange each, resulting in correspondingly smaller degree 1 and 2 neighborhoods for {\tt SLRSLRS} than {\tt MMMMMMM}. }
+

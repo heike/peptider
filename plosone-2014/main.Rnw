@@ -1,0 +1,688 @@
+%\setcounter{table}{0}
+%\renewcommand{\thetable}{S\arabic{table}}
+%\setcounter{figure}{0}
+%\renewcommand{\thefigure}{\arabic{figure}}
+
+\section*{Introduction}
+% 
+Since the year 2000 we see on average more than 500 publications a year that are based on the use of peptide libraries\footnote{\hh{PubMed query April 2014 on  ``peptide library"}}. This serves as a good measure to reflect on the importance of peptide libraries in a wide spectrum of biological applications ranging from the identification of protein interaction sites [e.g.\ \citen{rodi:1999}] and the development of enzyme inhibitors [e.g.\ \citen{lu:2012}] to identification of peptides that mediate cell type specific gene delivery by viral vector systems [e.g.\ \citen{mueller:2003}]. In all of these applications, chemically synthesized random oligonucleotides are introduced into plasmids encoding structural proteins of bacteriophages \cite{binder11} or viruses, such as  adeno-associated viruses \cite{mueller:2003},  adenoviruses \cite{nishimoto:2012} or  retroviruses \cite{bupp:2003}. Plasmids are then ligated and transformed into bacteria to generate a plasmid library, which in turn is used to produce virus or phage libraries. These can be utilised in a variety of selection procedures, aiming to isolate peptide bearing viruses and phages with desired properties or scaffold independent, functional peptides [e.g.\ peptide inhibitors; \citen{lu:2012}]. The success of this method is highly dependent on the diversity of the initial pool of peptides, as the chance to identify the ``best possible" sequence, or even a suitable sequence, is directly correlated with the number and diversity of the peptides in the library used for the screening procedure.
+\ts{A cheap, simple and powerful way to investigate, if the production of a library was successful is the Quick-Quality-Control (QQC) \cite{sanchis:2008, Bougioukou:2009}. In short, library material is pooled and used in a single sanger sequencing run to uncover undesired imbalances in the ratios of inserted bases as well as production errors like primer-dimer insertions etc.,\ which might lead to a reduced library diversity.}
+
+ Determining the diversity of a library is problematic, though, as the number of distinct peptides, which we will refer to as {\it peptide diversity}, cannot be measured easily. Direct measurements are generally impracticable: even though  next-generation sequencing is now widely accessible, the sheer size of current libraries [e.g.\ 2 x 10\textsuperscript{10} clones; \citen{deshayes02}] makes the use of this technique for counting purposes prohibitive due to the time and financial effort associated with  the very high sequencing depth required for a sufficient sequencing coverage.
+Other approaches of measuring library diversity in the literature include
+%Therefore, several attempts to describe diversity of peptide libraries by other means have been made. 
+DeGraaf et al.\ \cite{degraaf:1993}, who estimate  diversity of their phage decapeptide display library from the distribution of single amino acids and dipeptides in a sample. Rodi et al.\ define {\it functional diversity} as a measure of the distribution of peptides encoded in the library \cite{rodi:2002, makowski03}.
+% 
+% \enlargethispage{-65.1pt}
+% 
+ Both methods,  functional diversity and peptide diversity,  give valuable distributional information about peptide libraries. A library with an even distribution of sequence frequencies is advantageous, as all peptides enter the selection process in comparable numbers. This  supports a swift and successful selection of a suitable peptide. However, peptides that match the selection criteria can be gradually enriched during the selection process, even if they are vastly underrepresented in the initial library. A limitation of functional diversity is that it is a theoretical measure based purely on the library scheme.%, and does not take the size of the actual library into account. 
+ Functional diversity therefore does not represent the actual number of distinct peptides in a library, which increases with growing size independently of its scheme.
+ 
+%A library consisting of only a small number sequences can have the same functional diversity as a much bigger library, as long as  the  sequences in the small library are distributed evenly. %However, a large pool of distinct peptides is crucial for the success of a selection. 
+Therefore, many researchers \ts{estimate}
+%use clonal diversity instead of functional diversity. Clonal diversity describes the 
+diversity at the level of the plasmid library by counting successfully transformed bacterial colonies [e.g.\ \citen{noren:2001, michelfelder09b, maersch:2010}]. This number is easily assessable, and represents the maximally achievable diversity for the phage/virus library, as the diversity cannot be increased after the cloning and transformation process. Particular precautions must be taken to avoid -- or at least, to minimise -- losses to diversity in %subsequent 
+\ts{all} steps of the library production to make the %clonal diversity 
+\ts{number of bacterial colonies}
+a valid qualifier for the peptide library \cite{denault:2007}. 
+\ts{The number of bacterial colonies}
+%Clonal diversity 
+on its own is of limited value, as the relevant metric is the
+\ts{number of distinct peptides in the library}. However, the two measures are correlated \eh{and} \ts{the number of bacterial colonies}  can be used to estimate peptide diversity.
+% if certain considerations are taken into account: 
+Peptide diversity of the library is always lower than \ts{colony number}, due to the possibility that different bacterial clones encode identical peptides. This is caused  by several clones containing identical peptide encoding DNA \ts{and/}or by clones harboring distinct DNA sequences that encode the same peptide 
+%The reason for the latter possibility is 
+\hh{due to} the degenerate nature of the genetic code: amino acids are encoded by up to six distinct codons; multiple DNA sequences can therefore describe the same peptide. This has the effect that, for instance, a pool of randomised  codon DNA sequences of length seven has a nominal diversity of 64\textsuperscript{7} (64 codons; 4.4 x 10\textsuperscript{12}) while it encodes only 23\textsuperscript{7} (20 amino acids and three stop codons; 3.4 x 10\textsuperscript{9}) distinct amino acid sequences. Further, stop codons in the random nucleotide sequence prematurely terminate the peptide and can cause dysfunctional proteins in display systems \cite{lindner11, michelfelder09a}.
+% 
+ Libraries are therefore often encoded by limited subsets of the standard 64 codons to at least partially counteract both effects [as also discussed in \citen{patrick05}]. Instead of the NNN scheme, where ``N" represents any of the four bases, encoding schemes like NNB, NNK or NNS (B: C/G/T; K: G/T; S: G/C) are used. These schemes encode all twenty amino acids and one stop codon each, while the total number of codons is reduced to 48 (NNB) and 32 (NNK and NNS), respectively.
+\ts{Apart from the mentioned, a number of further encoding schemes exist. These are primarily developed in the framework of saturation mutagenesis, another area in which randomisation libraries are  used.   Special attention in saturation mutagenesis received the MAX randomization \cite{hughes:2003}, the 22c trick \cite{kille:2013} and the ``small-intelligent libraries" \cite{tang:2012}. However, as these techniques are not suited to produce long stretches [i.e.\ five or more amino acid positions, \citen{ashraf:2013}] of randomized sequences, they are not used for the production of peptide libraries.}
+
+\ts{One approach to overcome the problematic stemming from the degenerate nature of the genetic code
+ is common to both peptide libraries and saturation mutagenesis and consists of libraries in which  the ratio of the number of codons for each  amino acid is one.
+From here on, we will refer to these libraries as 20/20 libraries (20 codons for 20 amino acids). 
+20/20 libraries also allow a complete avoidance of stop codons, which have been shown to increase functional diversity in phage display \cite{krumpe07}.}
+
+\ts{The most common method to produce such peptide libraries is the trimer approach.}
+ In trimer libraries \cite{ono:1995} oligonucleotides are synthesised by assembling pre-fabricated trinucleotide phosphoramidites or trimers. 
+\ts{An alternative to the trimer approach to generate 20/20 libraries is the ProxiMAX system \cite{ashraf:2013}.}
+
+ Another important consideration regarding peptide diversity are cysteines. Pairs of cysteines flanking randomised sequences are often used in phage display as they form controlled disulfide bridges that enhance half-lives and binding characteristics of the library peptides \cite{mcconnell94}. However, random integration of odd numbers of cysteines has repeatedly been shown to inhibit the generation of peptide bearing phages \cite{fukunaga12}. Further, even though the situation is less well understood for other display systems, a strong underrepresentation of cysteine-containing peptides was observed in peptide libraries on different \ts{ adeno-associated virus (AAV)} vectors \cite{waterkamp06, naumer12, perabo:2006, varadi:2012}. This again suggests unfavorable effects of cysteine incorporation on basic functions of the display system. In line with this is the notable lack of capsid surface-exposed cysteine residues on wild type AAV2 \cite{xie:2002}. Also, the surface of human adenovirus type 5 is naturally devoid of cysteines. If they are artificially integrated, the particles were shown to be prone to aggregation due to the formation of interparticle disulfide bridges \cite{kreppel:2005}.
+
+With regard to the aforementioned factors, we will determine peptide diversity by using \ts{the number of bacterial clones}, but consider effects of encoding schemes and stop codons. 
+For the purpose of discussing diversity, we will regard cysteine-containing peptides as non-functional \ts{unless otherwise mentioned}. %However, results for libraries that include cysteines follow immediately from this paper.
+\hh{A complete discussion of} diversity of libraries \hh{treating cysteines as valid or invalid} can be found at our website PeLiCa  [available at \url{http://www.pelica.org}]. 
+Other biological restraints that negatively affect peptide diversity do exist, but are not taken into account here, as they are largely unknown and highly dependent on the individual system and its specific characteristics, such as the differences between distinct incorporation sites \cite{naumer12, girod:1999}. However, depending on the system and its intended use (e.g.\ generation of a functional viral vector with peptide mediated tropism), compatibility with such restrictions might be considered as a first step in the selection process.
+
+%Due to the sheer number of peptides possible in a library, 
+Determining the peptide diversity is a mathematically taxing problem that becomes ever more challenging with increasing peptide length. In particular, Monte Carlo simulation is not practical for this purpose. There are two primary limitations:
+% 
+\begin{enumerate}
+    \item For library sizes above about 10\textsuperscript{8}, the speed of the simulation even on modern hardware is prohibitive without the use of massively parallel hardware. 
+    \item Small probabilities (such as we deal with for rare peptides in a library) cannot be accurately estimated by Monte Carlo methods without oversampling. Oversampling does further increase the complexity of the simulation by increasing the number of runs that need to be made.
+\end{enumerate}
+%
+In this publication, we introduce a mathematical framework capable of facilitating this task. As the quality of a peptide library is not only defined by the peptide diversity, we further use the concepts of {\it \ts{expected} coverage} and {\it \ts{relative} efficiency} to allow a more detailed evaluation of libraries. Further, we discuss effects of insert length, different encoding schemes (NNN, NNB, NNK, NNS, and \hh{20/20}), and answer one of the important questions for researchers working with peptide libraries: ``What are the chances that my library contains (one of) the `best' possible peptides?"
+ 
+Our framework allows %for the first time 
+to determine the peptide diversity of large peptide libraries by combining quantitative information about the number of clones with qualitative information about biological, statistical and encoding effects. This in turn facilitates a deeper understanding and allows for a more informed planning of new, optimized libraries. To make the framework easily accessible, we generated a user-friendly web-interface called PeLiCa, which allows the user to determine all of these factors for libraries of sizes up to 9.9 x 10\textsuperscript{25} bacterial clones, using different encoding schemes (including custom-designed schemes and those that consider cysteine viable) and peptide lengths.
+% 
+\section*{Methods}
+% 
+\subsection*{Measuring Diversity}\label{diversity}
+% 
+While not studied in detail for peptide libraries, studies on diversity at the amino acid level have been performed in the related field of site saturation mutagenesis generated protein libraries. Here, proteins are mutated at a limited number of positions to detect variants with improved properties. The  GLUE-IT software [available at \url{http://guinevere.otago.ac.nz/stats.html}; \citen{firth08}] generates values for diversity and coverage for protein libraries with up to six modified codons per protein. GLUE-IT was designed for another purpose and does not allow evaluation of cysteines as disruptive, but it can also be used to gain some information for peptide libraries with short peptides. However, it is no longer sufficient to describe most libraries currently used, which are generally longer and range from five up to twenty or more amino acids in length [e.g.\ \citen{naumer12, fukunaga12, scholle05}]. 
+
+In our approach to develop a mathematical framework we consider only peptide libraries that are based on synthetic randomized oligonucleiotides. This asserts, from a statistical point of view, that all DNA sequences inserted into the library plasmids are completely randomised and can be observed multiple times.
+
+%In our approach to develop a mathematical framework for the characterization of peptide libraries, we use the assumption that the random DNA sequences that have been inserted into the library plasmids are completely randomised and can be observed multiple times. This is typically the case for general purpose synthetic peptide libraries. \hh{XXX Can I say that?}
+ 
+We %define and 
+discuss three measures of library quality: {\it peptide diversity} defined \hh{-- as stated before --} as the number of distinct peptides in a library, {\it expected coverage}, describing the \eh{expected} fraction of all theoretically possible peptide sequences covered by the library, and {\it relative efficiency} given as the ratio of the expected number of distinct peptides in a library relative to the overall number of encoding oligonucleotides. 
+\ts{The terms {\it diversity} and {\it completeness} used by  Firth and Patrick \cite{firth08} for saturation mutagenesis experiments are equivalent to the concepts peptide diversity and expected coverage we use here for peptide libraries.}
+
+\hh{We investigate these measures for a set of different encoding schemes: NNN-C, NNK/S-C, NNB-C, and 20/20-C. The -C indicates that we will exclude cysteines from consideration. 
+}
+\ts{ Note that the 20/20-C notation refers to libraries that are composed  of only the 19 valid amino acid codons and do not include the codon for cystein or any of the stop codons. }
+%We investigate these measures for NNN, NNK, NNS, NNB and trimer encoding schemes. Trimer libraries can be constructed with any number of selected codons. In this publication, we regard them as composed of peptides assembled from 19 distinct codons (one per amino acid; excluding cysteine).
+We will first discuss library properties for libraries with equal codon representation, such as we see in \hh{20/20} libraries, and then extend the situation to other library schemes.
+% 
+\subsection*{Libraries with equal codon representations}
+An easily tractable case for determining diversity is the setting in which all sequences have the same probability of being included in the library. This can be assumed if diversity is investigated at DNA level or for the special case of \hh{20/20} libraries in which every amino acid \hh{is represented by one codon}.  In that case, calculating expected peptide diversity of a library is relatively simple: the probability that a peptide is present in the library is determined by the maximum number of different peptide sequences and the size of the library \hh{(note that this is also true, when each amino acid is represented by the same number of codons)}.
+Denote the number of all different possible peptides in the library by b, the size, measured as \ts{the number of bacterial colonies}, of the library by N.
+
+\hh{Let us denote the {\it diversity of this library}, as measured by the number of different peptides, as Z = Z\textsubscript{N,b}. }
+The number of different peptides, Z, that can actually be achieved in the library is the primary point of interest. In practice, \hh{the value of Z} will differ from library to library, but we can determine an expected value \hh{of library diversity}, E[Z], and \hh{its corresponding} variance Var[Z] \hh{as outlined below [see also~\citen{kong:2009}].} 
+ 
+\begin{theorem}
+For a library of size N chosen from a scheme with b different peptides, \hh{which are assumed to be all equally likely, }the expected value and the variance of the number of different peptides \hh{Z\textsubscript{N,b}} in the library is given as:
+\begin{align}\label{eqn:diversity-equal}
+E[Z_{N, b}] &= \hh{b\left(1 - (1-b^{-1})^N \right)} \approx b(1 - e^{-N/b}). \\
+%Var[Z] &\approx 2be^{-N/b}(1 - e^{-N/b}).
+\hh{\Var[Z_{N, b}]} &= \hh{b \left[ (1-b^{-1})^{N} -  (1-2b^{-1})^{N}\right] - b^2 \left[ (1-b^{-1})^{2N} -  (1-2b^{-1})^{N}\right]} \nonumber \\
+&\hh{\approx b (e^{-N/b} - e^{-2N/b}) - N e^{-2(N-1)/b}.}
+\end{align}
+The approximation becomes more accurate as values of b and N %$|\log(N/b)|$ 
+increase. \hh{For values of b and N above 50 the approximation is already correct to within 1\% of the exact value. }
+The relative standard deviation, or the square root of the variance \eh{divided by the mean}, is negligibly small for most libraries. The proof and a more detailed discussion of the approximation error can be found in \nameref{appendixProof} and \nameref{appendixApprox}.
+
+\end{theorem}
+%
+%
+In investigating DNA diversity in site saturation mutagenesis libraries, other groups \cite{patrick03, bosley05} obtained the same  result \hh{for expected diversity} as Theorem 1 based on a Poisson approximation. While this approach is usable for an analysis at the DNA level or \hh{20/20} libraries, it cannot be used directly for library schemes in which the number of codons per amino acid varies, because in this case, the probability that a peptide will be included in the library \hh{depends on the} sequence. In a standard 64 codon based library there are one to six codons describing individual amino acids (aa). Therefore, some peptide sequences like {\tt SLRLLRS} are encoded by 6\textsuperscript{7} = 279,936 distinct codon sequences, as each amino acid in the sequence has six independent possibilities to be encoded. At the other end of the scale, there are peptides that are encoded by \hh{only} a single nucleotide sequence. We will therefore partition the overall library into classes of peptides that all have the same number of encodings [similar conceptual approaches have previously been mentioned, e.g.\ \citen{firth08, scott90}] and determine overall diversity based on diversity seen within each of these classes. For that, we need to specify the library under observation in more detail.
+% 
+\subsection*{Partitioning of Peptide Libraries}
+ To be able to determine the peptide diversity, we have to partition the libraries. In the following, we focus on the 32 codon-based encoding schemes NNK and NNS. \hh{O}ther schemes work similarly, \hh{see the} class partitioning \ts{of NNN-C (\nameref{tab:nnn}) and NNB-C (\nameref{tab:nnb})}. According to the  \ts{degree of codon redundancy} and functionality NNK and NNS are equivalent, and we can distinguish four classes of aa based on a \hh{ modified} NNK/S scheme, \hh{in which cysteine is excluded from the set of valid amino acids} (Table~\ref{tbl:nnkdef}). 
+% 
+% % comment
+\begin{table}[h]
+\centering
+\caption{\bf NNK/S\hh{-C} Library Scheme}
+\begin{tabular}{|l|l|r|r|}\hline
+\bf aa class & \bf amino acids & \bf size s & \bf \# codons c \\ \hline
+A & S, L, R & 3 & 3 \\\hline
+B & A, G, P, T, V & 5 & 2 \\\hline
+C & D, E, F, H, I, K, M, N,  & 11 & 1 \\
+& Q, W, Y &&\\\hline
+Z & cysteine C, stop  {\tt TAG} & 2 & 1\\\hline
+\end{tabular}
+\label{tbl:nnkdef}
+\end{table}
+% comment
+Amino acids are given in single letter code. Size s defines the number of different amino acids in an aa class, the number of codons, c, reflects how many codons describe each amino acid in the class. Classes A to C contain all codons for feasible amino acids, while class Z contains corruptive codons. The number of valid aa classes is therefore 3.
+% 
+Stop codons as well as cysteines are treated as non-viable amino acids (aa class `Z'); sequences containing one or more of these codons will therefore be excluded. 
+% 
+<<setup, include=FALSE, cache=FALSE>>=
+library(knitr)
+options(width=32)
+opts_chunk$set(fig.path='images/', cache.path='cache/', fig.align='center',  fig.width=5, fig.height=5, dpi=300)
+
+library(devtools)
+library(plyr)
+library(discreteRV)
+library(peptider)
+library(Hmisc)
+@
+% 
+<<rv, dependson='data', echo=FALSE, results='hide', message=FALSE>>=
+#source("code/src-probability.R") 
+dt <- as.table(t(probs(make.RV(c("A","B","C", "Z"), c(3*3,5*2,11,2) / sum(c(3*3,5*2,11,2))))))
+library(xtable)
+row.names(dt) <- "Probability P(.)"
+dt <- xtable(dt, label="probs", caption="Probability of a randomly sampled codon  to belong to one of the four major classes in an NNK/S library scheme as defined above.")
+print(dt, caption.placement="top")
+
+valid <- make.RV(c(".", "Z"), c(3*3+5*2+11,2) / sum(c(3*3+5*2+11,2)))
+initialloss <- (1-probs(valid)[1]^7)
+@
+% 
+We are now employing a two-step analysis to retrieve all the relevant probabilistic information to calculate peptide diversity in the resulting library:
+In a first step we are only interested in whether the outcome is a {\it valid sequence}, defined to be the case when there is no element of aa class Z in the sequence. Valid sequences are therefore those that are expected to be functional in the biological system.
+In a second step we will investigate the diversity among the remaining peptide sequences.
+% 
+
+Any peptide sequence containing a member of aa class Z is by definition not useful for further analysis. In a randomly generated NNK/S\hh{-C} library of heptapeptides, these make up 36.35\% = $1 - (1 - P(Z))^7$ of the total. We will call this percentage of invalid sequences the {\it initial loss}, L, and restrict our analysis to valid sequences only.
+% 
+<<lossdata, echo=FALSE, results='hide'>>=
+libs.tmp <- read.csv("data/peptider-libs.csv")
+libs.tmp <- subset(libs.tmp, n < 10^15)
+
+n <- unique(libs.tmp$n)
+libs2 <- ldply(6:10, function(k) {
+  lib.stats <- ldply(n, function(x) {  
+    cov = min(x/19^k,1)
+    eff = min(19^k, x)/x
+    c(k=k, n=x, cov=cov, eff=eff)
+  })
+  lib.stats$div <- 1
+  lib.stats$scheme <- "maximum"
+  lib.stats
+})
+
+libs <- rbind(libs2, libs.tmp)
+
+libs$scheme <- factor(libs$scheme, levels=c("maximum", "trimer", "NNK/S", "NNB", "NNN"))
+levels(libs$scheme)[2:5] <- c("20/20-C", "NNK/S-C", "NNB-C", "NNN-C")
+libs$k <- factor(libs$k, levels = 6:10)
+@
+
+<<total, echo=FALSE, warning=FALSE, message=FALSE>>=
+library(extrafont)
+loadfonts(device="postscript")
+suppressMessages(library(ggplot2))
+suppressMessages(library(grid))
+#p1 <- ggplot(aes(x=n, y=cov, colour=factor(k), shape=scheme), data=libs) + 
+p1 <- ggplot(aes(x=n, y=cov, colour=scheme, shape=factor(k)), data=libs) + 
+  scale_x_log10(breaks=c(10^(6:15)),labels=expression(10^6, 10^7, 10^8, 10^9, 10^10, 10^11, 10^12, 10^13, 10^14, 10^15), limits=c(10^6, 10^15)) +
+  geom_line(aes(group=interaction(k, scheme), linetype=factor(k)), size=1) + xlab("Library Size (N)") + ylab("Expected Coverage") + scale_linetype("Sequence Length (k)") +  scale_shape("Sequence Length (k)") +
+  scale_colour_brewer("Library Scheme", palette="Set2") + theme_bw()  + theme(legend.key.width = unit(1.25, "cm"), plot.margin=unit(c(0,0,0,0), "cm"))
+
+if (!file.exists("images")) dir.create("images")
+suppressWarnings(ggsave("images/total.eps", width = 8.5, height = 3.5))
+embed_fonts("images/total.eps", outfile="images/total_embed.eps")
+@
+
+
+Analysing peptide sequences directly is too computationally complex of a problem. In order to reduce this complexity, we only differentiate between peptide sequences at the level of the previously introduced classes. Let V represent the total number of valid aa classes in the given encoding scheme. Then V\textsuperscript{k} is the total number of peptide classes in a library with peptides of length k. If this is performed for an exemplary library of dipeptide sequences, we have a set of nine different peptide classes as shown in Table~\ref{tbl:seqs}. \hh{The peptide class (first line) is defined by the aa class memberships of their codons as defined for NNK/S\hh{-C} libraries in Table~\ref{tbl:nnkdef}. The number of different unique peptide sequences in each class (second line), and the number of codon representations for each peptide sequence in the class (third line) are given. } Within each of the V\textsuperscript{k} = 9 peptide classes, all peptides have an equal number of oligonucleotide sequence representations. This compares to the 19\textsuperscript{2} = 361 possibilities that must be taken into account without the use of peptide classes in the dipeptide case.
+% 
+\begin{table}[h]
+\setlength{\tabcolsep}{3.5pt}
+\caption{\label{tbl:seqs} \bf All \hh{NNK/S-C} peptide sequences of length two partitioned according to peptide classes.}
+\centering
+\begin{tabular}{|r|r|r|r|r|r|r|r|r|r|}\hline
+\bf peptide class & \bf \tt AA & \bf \tt AB & \bf \tt AC & \bf \tt BA & \bf \tt BB & \bf \tt BC & \bf \tt CA & \bf \tt CB & \bf \tt CC \\ \hline
+\it \# peptides & 9 & 15 & 33 & 15 & 25 & 55 & 33 & 55 & 121\\\hline
+\it \# oligonucleotides & 9 & 6 & 3 & 6 & 4 & 2 & 3 & 2 & 1 \\ \hline
+\end{tabular}
+\end{table}
+
+The peptide class completely determines both the number of unique peptides and the number of nucleotide representations for each of the peptide sequences. For a given sequence, let  s\textsubscript{A}, s\textsubscript{B}, and s\textsubscript{C} represent the number of different amino acids in aa classes A, B, and C, and c\textsubscript{A}, c\textsubscript{B}, and c\textsubscript{C} stand for the number of codons per amino acid within the corresponding aa class. Here, n\textsubscript{A}, n\textsubscript{B}, and n\textsubscript{C} \hh{refer to} the number of \hh{elements} from \hh{each of the aa classes}  A, B, and C \hh{that make up the peptide sequence.} The sum of n\textsubscript{A}, n\textsubscript{B}, and n\textsubscript{C} then adds up to the total length of the sequence. 
+
+The number of peptides (\# peptides) and corresponding nucleotide  representations  for each peptide (\# oligonucleotides) is then calculated as
+\begin{eqnarray*}
+\text{\# peptides} &=& {s_A}^{n_A} \cdot {s_B}^{n_B} \cdot {s_C}^{n_C}. \\
+\text{\# oligonucleotides} &=& {c_A}^{n_A} \cdot {c_B}^{n_B} \cdot {c_C}^{n_C}.
+\end{eqnarray*}
+
+The number of oligonucleotide sequences representing a whole peptide class is given as the product of the number of peptides and the number of individual codon representations per peptide. Under the assumption that in a library of peptides with a length of k amino acids all viable codons v (30 codons for NNK/S\hh{-C} usage, excluding any class Z codons) are represented with the same probability, this allows us to calculate the probability p for a peptide class to be present in a library as
+\begin{eqnarray}
+p = \text{\# peptides} \cdot \text{\# oligonucleotides}/ v^k.
+\end{eqnarray}
+
+\subsection*{Diversity in general peptide libraries}
+Combining the information from individual peptide classes we can determine the diversity in the general peptide library.
+
+For a k-peptide library of size N we expect Np\textsubscript{i} sequences to be selected from peptide class i, where p\textsubscript{i} is the probability (effectively, the size) of peptide class i.  
+Within this class, all peptides \ts{are represented by the same number of oligonucleotide sequences}. Assuming b\textsubscript{i} different peptides in peptide class i are theoretically possible, we have, according to theorem 1,  a\hh{n expected} diversity given by the number of different peptides as $b_i(1- e^{-Np_i/b_i})$, resulting in an overall expected number of different peptides in the library and associated variance of
+\begin{eqnarray}\label{eq:diversity}
+D(N,k) &=& \sum_{i=1}^{V^k} b_i(1 -  e^{-Np_i/b_i}). \\ \label{eq:vard}
+%\sigma^2_D &=& \sum_{i=1}^{V^k} 2b_ie^{-Np_i/b_i}(1 -  e^{-Np_i/b_i}).
+\hh{\sigma^2_D} &=& \hh{ N L (1-L) + \sum_{i=1}^{V^k} \sigma^2(Z_{Np_i, b_i}),}
+\end{eqnarray}
+\hh{where L is the initial loss of the library scheme for peptides of length k. 
+A simulation-based discussion of this result and the precision of its approximation can be found in \label{S3_Text}.
+}
+\section*{Results}
+% 
+\subsection*{Expected coverage and relative efficiency}
+
+Based on the overall peptide diversity, we now define two indices measuring different aspects of quality of k-peptide libraries: expected coverage and relative efficiency.
+
+\begin{definition}[Expected coverage]\label{dfn:coverage}
+For a k-peptide library of size N the expected coverage and associated variance is defined as
+\begin{eqnarray*}
+C(N,k) &=& D(N,k)/19^k. \\
+\sigma^2_C &=& \sigma^2_D/19^{2k}.
+\end{eqnarray*}
+
+Expected coverage is an index in [0,1]. 0 indicates that no peptide is in the library (which can only happen for a library of size 0), and 1 indicates that every single possible peptide is included in the library; for this, the size of the library has to be at least N = (\#\;\text{viable amino acids})\textsuperscript{k}. 
+\end{definition}
+
+Fig.\ \ref{loss} shows the expected coverage of k-peptide libraries of sizes between 10\textsuperscript{6} and 10\textsuperscript{15} with different encoding schemes. It is obvious that increasing peptide length k has a dramatic negative influence on \ts{the expected} coverage for a given library size N. Additionally, the used encoding scheme has a profound effect on \eh{expected} coverage, with \hh{20/20-C} libraries being far superior to the other schemes \ts{[see also~\citen{denault:2007, reetz:2008, Nov12, kille:2013}]}. \hh{The line corresponding to `maximum' represents an ideal situation, in which no initial loss or redundancy occurs, such that at a library size of N less than b (the number of total possible peptides), there are N distinct peptides represented, for a coverage of N/b. Once the library size exceeds b, coverage stays at 1.}
+% 
+\ts{Increasing library size always improves coverage until 100\% coverage is reached. However, the added value gained from increasing library size decreases with increasing total size.  }
+
+\begin{figure*}[hbtp]
+\ifthenelse{\equal{\CHARTS}{ON}}{
+%\includegraphics[width=\linewidth]{01-total.eps}
+\centering
+\includegraphics[width=\linewidth]{Fig1.tif}
+}
+\caption{{\bf Overview of expected coverage for k-peptide libraries of different sizes N with the different encoding schemes (\hh{NNN-C, NNB-C, NNK/S-C}, and \hh{20/20-C}).} \hh{The `maximum' line represents the best-case scenario of coverage of a library, in which no peptide appears twice (until the upper limit of all possible peptides is reached at b = 19\textsuperscript{k}, at which point duplication is unavoidable).}} 
+\label{loss}
+\end{figure*}
+%XXX Volles?
+
+\hh{We therefore introduce relative efficiency of a library to measure the value returned for a library of a particular size and a specified scheme: }
+
+\begin{definition}[Relative efficiency] \label{dfn:efficiency} Relative efficiency is defined as the ratio of expected peptide diversity of a library relative to its overall number of oligonucleotides: 
+\begin{eqnarray*}
+R(N,k) &=& D(N,k)/N. \\
+\sigma^2_R &=& \sigma^2_D/N^2.
+\end{eqnarray*}
+This makes relative efficiency a number between 0 and 1. \ts{A relative efficiency of 1 indicates that all peptide sequences in the library are unique and no sequence is found more than once. If the relative efficiency is close to 0 the level of redundant peptide sequences is high.} \hh{A relative efficiency of 0.5 means that we expect half of all peptide sequences in a library to be valid and unique. }
+\end{definition}
+
+<<loss2, echo=FALSE>>=
+#source("code/src-probability.R") 
+suppressMessages(library(grid) )
+#p1 <- ggplot(aes(x=n, y=eff, colour=factor(k),  shape=scheme, 
+#       group=interaction(k, scheme), linetype=scheme
+p1 <- ggplot(aes(x=n, y=eff, colour=scheme,  shape=factor(k), 
+       group=interaction(k, scheme), linetype=factor(k)
+           ), data=libs) +
+  geom_line(size=1.2) + 
+  scale_x_log10(breaks=c(10^(6:15)),labels=expression(10^6, 10^7, 10^8, 10^9, 10^10, 10^11, 10^12, 10^13, 10^14, 10^15)) + 
+  xlab("Library Size (N)") + ylab("Relative Efficiency") + ylim(c(0,1)) + scale_linetype("Sequence Length (k)")  + theme_bw() + 
+  scale_colour_brewer("Library Scheme", palette="Set2")  + 
+  theme(#legend.position="bottom", 
+    legend.key.width = unit(1.5, "cm")) +
+  geom_segment(aes(x=n, xend=n, yend=1, y=eff), data=subset(libs, (n %in% 10^(8:9)) & (k==7) & (scheme=="20/20-C")), colour="grey30", size=0.7, linetype=1, show_guide=FALSE) + 
+  geom_text(aes(x=n+0.6*c(10^8, 10^9), y=1-(1-eff)/2, label=c("(a)", "(b)")), data=unique(subset(libs, (n %in% 10^(8:9)) & (k==7) & (scheme=="20/20-C"))), colour="grey30", inherit.aes=FALSE) + theme(plot.margin=unit(c(0,0,0,0), "cm"))  
+
+suppressWarnings(ggsave("images/loss.eps",width = 8.5, height = 3.5))
+@
+
+
+
+<<coverages, echo=FALSE>>=
+coverages <- subset(libs, scheme %in% c("NNK/S", "NNN", "NNB") & n %in% c(10^8, 10^9) & k == 7)[,c("scheme", "n", "cov")]
+@
+
+Fig.\ \ref{fig:efficiency} gives an overview of relative efficiency of k-peptide libraries of various sizes.  In contrast to \hh{an ideal situation or in a 20/20-C} library, libraries encoded by NNK/S\hh{-C}, NNB\hh{-C} and NNN\hh{-C} schemes  suffer from an initial loss due to sequences containing aa class Z codons. This limits their maximal relative efficiency depending on encoding scheme and peptide length k. With increasing library size, relative efficiency decreases due to increasing effects of \hh{redundancy}. In an ideal case, this drop only occurs when the library size reaches the maximal possible diversity for the given peptide length k. In practice, however, this loss becomes notable when a library reaches a size of about 1\% of the maximal number of possible peptides. 
+
+\begin{figure}
+\ifthenelse{\equal{\CHARTS}{ON}}{
+%\includegraphics[width=\linewidth]{images/loss.eps}
+\centering
+\includegraphics[width=\linewidth]{Fig2.tif}
+
+}
+\caption{{\bf Overview of relative efficiency for k-peptide libraries (6 to 10) of sizes N from 10\textsuperscript{6} to 10\textsuperscript{15}.} Relative efficiency decreases with an increased number of oligonucleotides \hh{in the library and longer peptide sequencesdue to the larger initial loss}.}
+
+
+\label{fig:efficiency}
+\end{figure}
+
+Current AAV library sizes are in the order of 10\textsuperscript{8}. Here, the loss due to \hh{redundancy} makes up for less than 10\% in heptapeptide \hh{20/20} libraries (see (a) in Fig.\ \ref{fig:efficiency}). As peptide libraries increase, the problem  grows exponentially. In heptapeptide libraries of size 10\textsuperscript{9}, the loss due to \hh{redundancy} (see (b) in Fig.\ \ref{fig:efficiency}) is 39.9\%. % nearly as large as the initial loss (27.9\% compared to 36.3\%).
+
+\subsection*{Inclusion Probabilities}\label{inclusion}
+
+Full coverage -- especially with longer peptide sequences -- might be very difficult to achieve in practice. However, as Yuval Nov describes for saturation mutagenesis in protein evolution \cite{Nov12}, it might not always be reasonable to aim for full coverage to ensure that the one `best'  sequence is included in a library (what is `best' is always defined by the goals of a specific library selection, e.g.\ to identify the peptide that shows the strongest interaction with a protein). The reasoning behind this is simple: one would expect that there are in fact several highly similar peptides which perform similarly well. This assumption is supported by the fact that even in selections using libraries with incomplete coverage, we often observe an enrichment of several sequences that share common sequence motifs [e.g.\ \citen{naumer12, michelfelder07, michelfelder09b}]. With this in mind, it might be more reasonable, instead, to raise the question: ``What diversity is necessary to find {\it at least one of} the best possible peptides?" To answer this,  we first estimate the probability that the single best sequence is part of the library. In a next step we assess the probability that any related sequence from an appropriately specified sequence neighborhood around it is included.
+ 
+The probability that a specific peptide sequence is present in a library depends on the overall size of the library and its scheme. Let p\textsubscript{i} be the probability that peptide i is in the library, and $\sum_{i=1}^t p_i$ be the cumulative probability for the occurrence of any one of a  group of t peptide sequences in the library. Define X to be the number of the specified t peptides that occur in a library of size N. The probability that at least one of the t peptides is in the library is then:
+%
+\begin{eqnarray*}
+P(X \ge 1) = 
+1 - P(X = 0) = \\
+=1 - (1- \sum_i^t p_i)^{N} \approx 1 - e^{-N \sum_i^t p_i}.
+\end{eqnarray*}
+The approximation is based on the same argument as Theorem \ref{eqn:diversity-equal} and holds for any reasonably large values of N. 
+
+The probability p\textsubscript{i} of a peptide sequence to occur in a library depends on the number of codons of each of its amino acids. This number varies between  library schemes, making an exact {\it a priori} assessment of the inclusion probability of the `best' peptide sequence impossible except in the case of \hh{20/20} libraries, in which each peptide sequence occurs with equal probability. In all other library schemes, the probability of sequences to be included in the library is highly variable [see also~\citen{hughes:2003}]. Fig.\ \ref{fig:detect-prob} gives an overview of just how much the probability of including the `best' peptide sequence varies in each encoding scheme with different library sizes. \hh{Side-by side boxplots show the inclusion probabilities of all peptide sequences for each peptide length k from 6 to 10 and library sizes N between 10\textsuperscript{8} and 10\textsuperscript{12}. The colored boxes } %The thin dashed lines show minimum and maximum inclusion probabilities for all peptide sequences under different library schemes. The hatched area 
+contain the middle 50\% of all possible peptide sequences. \hh{20/20-C} libraries (shown in pink) do not have any variability associated with the inclusion probability, indicating that all peptide sequences have an equal chance to be part of the library. NNN\hh{-C} libraries have the largest variability associated with them, while NNK/S\hh{-C} libraries have the smallest (after \hh{20/20-C} libraries).
+
+
+The high variability introduced by schemes with varying codons per amino acid ratios causes libraries to be biased towards peptides with a high number of possible encodings at the cost of rare ones. This makes the chance of success in selections strongly dependent on the question, if the {\it a priori} unknown ``best" peptide has many possible encodings or not. Therefore, the inclusion probability for some peptides is maximal in biased schemes like NNN\hh{-C} and \hh{for peptides with high number of encodings inclusion probabilities} exceed those achievable with \hh{20/20-C} encoding (see \hh{\nameref{S4_Text} and \nameref{tab:nearest}}). However, for about 75\% of all possible peptides the highest inclusion probability is reached when an unbiased coding scheme like \hh{20/20-C} is used (see Fig.\ \ref{fig:detect-prob}). 
+
+% 
+<<detect, echo=FALSE, warning=FALSE, message=FALSE>>=
+probs <- read.csv("data/peptider-probs.csv")
+lib.detect.tmp <- subset(probs, scheme %in% c("NNN", "NNB", "NNK/S", "trimer"))
+
+# Nrange <- 10^(seq(8, 12.1, by=0.1))
+#             
+# theProbsRep <- lib.detect.tmp[rep(seq_len(nrow(lib.detect.tmp)), times = length(Nrange)), ]
+# 
+# theProbsRep$N <- rep(Nrange, each = nrow(lib.detect.tmp)) * 10^(0.1*(as.numeric(theProbsRep$scheme)/4-1))
+# theProbsRep$N <- pmax(theProbsRep$N, 10^8)
+# theProbsRep$N <- pmin(theProbsRep$N, 10^12)
+# theProbsRep$n <- factor(theProbsRep$N)
+# 
+# theProbsRep$detectProbs <- with(theProbsRep, 1 - exp(-N*probs/di))
+# 
+# suppressMessages(require(grid))
+# theProbsRep$k2 <- paste("k:", lib.detect.tmp$k)
+# 
+# suppressMessages(require(plyr))
+# suppressMessages(require(Hmisc))
+# 
+# quants <- ddply(theProbsRep, .(N, scheme, k), 
+#                 summarise, 
+#                 wqu = wtd.quantile(detectProbs, probs=seq(0,1, by=0.25), weights=di*choices), 
+#                 qu=names(wtd.quantile(detectProbs, probs=seq(0,1, by=0.25), weights=di*choices)))
+# quants$qu <- as.numeric(gsub("%", "", as.character(quants$qu)))
+# quants$ltype <- 50-abs(quants$qu-50)
+# quants$scheme <- reorder(quants$scheme, quants$wqu)
+# quants$k <- factor(quants$k)
+# library(reshape2)
+# dquants <- dcast(subset(quants, qu %in% c(25, 75)), N+scheme+k~qu, value.var="wqu")
+# pquants <- subset(quants, qu %in% c(0,100))
+# pquants <- ddply(pquants, .(scheme, k, qu), transform,  order=rank(N))
+# ss <- subset(pquants, scheme=="NNK/S" & k==9)
+# pquants <- ddply(pquants, .(scheme, k, qu), transform,  order=ifelse(qu==0, rank(N), length(N)+rank(-N)))
+# pquants <- pquants[order(pquants$order),]
+# 
+
+# qplot(N, wqu,  facets=scheme~k, group=interaction(scheme, k), colour=k, data=quants, size=I(0.1)) + geom_polygon(aes(fill=k, color=k), alpha=0.2, order=order, data=pquants, size=0) + scale_x_log10(breaks=c(10^(6:12)),labels=expression(10^6, 10^7, 10^8, 10^9, 10^10, 10^11, 10^12)) + geom_line(aes( alpha=ltype,  group=qu), size=1.25) + scale_color_brewer(palette="Set2") + theme_bw() + geom_segment(aes(x=N, xend=N, y=`25`, yend=`75`, group=scheme), data=dquants)  + scale_fill_brewer(palette="Set2") +  scale_alpha(guide=FALSE) + xlab("Library size N") + ylab("Detection probabilities") + theme(legend.position="bottom", plot.margin=unit(c(0,0,-0.5,0), "cm"))
+
+
+Nrange <- 10^(seq(8, 12, by=.5))
+
+theProbsRep <- lib.detect.tmp[rep(seq_len(nrow(lib.detect.tmp)), times = length(Nrange)), ]
+
+theProbsRep$N <- rep(Nrange, each = nrow(lib.detect.tmp))
+theProbsRep$N <- pmax(theProbsRep$N, 10^8)
+theProbsRep$N <- pmin(theProbsRep$N, 10^12)
+theProbsRep$n <- factor(theProbsRep$N)
+
+theProbsRep$detectProbs <- with(theProbsRep, 1 - exp(-N*probs/di))
+
+suppressMessages(require(grid))
+theProbsRep$k2 <- paste("k:", lib.detect.tmp$k)
+
+suppressMessages(require(plyr))
+suppressMessages(require(Hmisc))
+
+theProbsRep$k2 <- reorder(theProbsRep$k2, theProbsRep$k)
+theProbsRep$scheme <- factor(theProbsRep$scheme, levels=c("NNN", "NNB", "NNK/S", "trimer"))
+levels(theProbsRep$scheme)[1:4] <- c("NNN-C", "NNB-C", "NNK/S-C", "20/20-C")
+
+levels(theProbsRep$n) <- expression(N:10^8, N:10^8.5, N:10^9, N:10^9.5, N:10^10, N:10^10.5, N:10^11, N:10^11.5, N:10^12)     
+
+stats <- ddply(theProbsRep, .(n, scheme, k2), 
+                summarise, 
+                min=min(detectProbs),
+                max=max(detectProbs),
+                lower=wtd.quantile(detectProbs, probs=0.25, weights=di*choices),
+                upper=wtd.quantile(detectProbs, probs=0.75, weights=di*choices)
+                )
+# quants <- ddply(theProbsRep, .(N, scheme, k), 
+#                 summarise, 
+#                 wqu = wtd.quantile(detectProbs, probs=seq(0,1, by=0.25), weights=di*choices), 
+#                 qu=names(wtd.quantile(detectProbs, probs=seq(0,1, by=0.25), weights=di*choices)))
+# quants$qu <- as.numeric(gsub("%", "", as.character(quants$qu)))
+# quants$ltype <- 50-abs(quants$qu-50)
+# quants$scheme <- reorder(quants$scheme, quants$wqu)
+# quants$k <- factor(quants$k)
+library(reshape2)
+# dquants <- dcast(subset(quants, qu %in% c(25, 75)), N+scheme+k~qu, value.var="wqu")
+# pquants <- subset(quants, qu %in% c(0,100))
+# pquants <- ddply(pquants, .(scheme, k, qu), transform,  order=rank(N))
+# ss <- subset(pquants, scheme=="NNK/S" & k==9)
+# pquants <- ddply(pquants, .(scheme, k, qu), transform,  order=ifelse(qu==0, rank(N), length(N)+rank(-N)))
+# pquants <- pquants[order(pquants$order),]
+trimer <- subset(theProbsRep, scheme=="20/20")
+
+p1 <- ggplot() + 
+    geom_boxplot(aes(x=scheme, y=detectProbs,  fill=scheme, weight=di*choices), data=theProbsRep, outlier.size=0) + 
+ #   geom_point(aes(x=scheme, y=mean), size=5, data=subset(means, scheme != "trimer")) + 
+    scale_fill_brewer(palette="Set2") + theme_bw() + facet_grid(k2~n, labeller= label_parsed) +
+    theme(legend.position="none", plot.margin=unit(c(0,0,-0.5,0), "cm"),
+          axis.text.x=element_text(angle=90, hjust=1, vjust=0.5)) + 
+    xlab("library size (N)") + ylab("inclusion probability") + 
+    geom_boxplot(aes(x=scheme, y=detectProbs,  weight=di*choices), data=trimer, fill=1, colour="#e78ac3") +
+    geom_segment(aes(x=scheme, xend=scheme, y=min, yend=lower, colour=scheme), size=1, data=stats) + 
+    geom_segment(aes(x=scheme, xend=scheme, y=max, yend=upper, colour=scheme), size=1, data=stats) + 
+    scale_colour_brewer(palette="Set2")
+
+# p1 <- qplot(N, wqu,  group=interaction(scheme, k), colour=scheme, data=quants, size=I(0.1)) + facet_grid(k~., labeller="label_both") + 
+#     scale_x_log10(breaks=c(10^(6:12)),labels=expression(10^6, 10^7, 10^8, 10^9, 10^10, 10^11, 10^12)) + 
+#     scale_color_brewer(palette="Set2") + 
+#     theme_bw() + 
+#     scale_fill_brewer(palette="Set2") +  
+#     xlab("library size (N)") + ylab("inclusion probability") + 
+#     theme(#legend.position="bottom", 
+#           plot.margin=unit(c(0,0,-0.5,0), "cm")) +
+#     geom_segment(aes(x=N, xend=N, y=`25`, yend=`75`, group=scheme), data=dquants)  + 
+#     geom_line(aes(  group=interaction(qu, scheme), linetype=factor(ltype), size=factor(ltype)), data=quants) + scale_size_manual("percentile", labels=c("0/100%", "25/75%", "50%"), values=c(0.5, 0.75, 1.5)) + scale_linetype_manual("percentile", labels=c("0/100%", "25/75%", "50%"), values=c(2, 1, 1))
+
+# qplot(N, detectProbs, geom="boxplot", weight=di*choices/19^7, data=subset(theProbsRep, N != 10^12),  
+#       fill=n, alpha=I(0.5), group=n)  + coord_flip() + 
+#   facet_grid(facets=scheme+k~.) +  theme_bw() +
+#   theme(legend.position="none") + ylab("probability of inclusion of the best peptide sequence") +
+#   scale_x_log10(breaks=c(10^(8:11)),labels=expression(10^8, 10^9, 10^10, 10^11)) + xlab("") + scale_fill_grey() + theme(plot.margin=unit(c(0,0,0,-0.5), "cm"))
+
+# qplot(N, detectProbs, geom="boxplot", weight=di*choices/19^7, data=subset(theProbsRep, N != 10^12),  
+#       fill=n, alpha=I(0.5), group=n)  + coord_flip() + 
+#   facet_grid(facets=scheme~.) +  theme_bw() +
+#   theme(legend.position="none") + ylab("probability of inclusion of the best peptide sequence") +
+#   scale_x_log10(breaks=c(10^(8:11)),labels=expression(10^8, 10^9, 10^10, 10^11)) + xlab("") + scale_fill_grey() + theme(plot.margin=unit(c(0,0,0,-0.5), "cm"))
+
+suppressWarnings(ggsave("images/detect.eps", width = 10, height = 10))
+@
+
+\begin{figure}
+\centering
+\ifthenelse{\equal{\CHARTS}{ON}}{
+%\includegraphics[width=\linewidth]{images/detect.eps}
+\includegraphics[width=\linewidth]{Fig3.tif}
+}
+\caption{{\bf Overview of the inclusion probabilities for  peptide sequences of lengths 6 to 10 \hh{(in rows)} in libraries of sizes between 10\textsuperscript{8} to 10\textsuperscript{12} \hh{(in columns)} for different encoding schemes \hh{(as side-by-side boxplots)}.} %The hatched area contains the middle 50 percent of inclusion probabilities for peptide sequences of length k. The dashed lines indicate minimal and maximal inclusion probabilities.
+The \hh{boxes} contain the middle 50 percent of inclusion probabilities for all peptide sequences of length k \hh{in each of the schemes}. \hh{The vertical lines extend to minimum and maximum of the inclusion probabilities.} \hh{20/20-C libraries do not have any variability in the inclusion probabilities, because all sequences are equally likely. NNN-C libraries generally show the largest variability (as seen in the extent of the boxes) in probabilities, followed by NNB-C and NNK/S-C. Simultaneously, median inclusion probabilities increase from NNN-C to 20/20-C libraries for all combinations of peptide lengths and library sizes.}}
+\label{fig:detect-prob}
+\end{figure}
+
+
+
+\subsection*{Neighborhoods}\label{neighbors}
+To determine if at least one of the best possible peptides (or a ``top" peptide) is included in a given library, we have to define first what a {\it top} peptide is. For that we use a rather restrictive definition: 
+a top peptide is any peptide that differs from the best possible peptide s in up to one (first degree neighborhood) or up to two (second degree neighborhood) amino acid positions which are conservatively exchanged. To objectively define conservative exchanges  we employ the BLOSUM80 matrix \cite{henikoff92}, which provides log-odds scores for the chance to observe a substitution of one amino acid for another. Only exchanges with a positive BLOSUM80 score were considered in determining neighborhoods of top peptides. Further, exchanges to stop codons and cysteines were defined here to lead to invalid sequences. In general, a neighborhood of degree d includes all sequences that differ in at most d amino acids from peptide s. It is obvious, that a degree d-neighborhood of s includes s itself as well as all sequences of neighborhoods \hh{of a lower degree than s}.
+
+Neighborhoods and their sizes depend on the individual peptide sequence. Therefore, we cannot give a single inclusion probability, but we rather have to cite a range of probabilities for including top peptides. To set the boundaries of this range, we consider a best and a worst case scenario under all encoding schemes. In the worst case scenario, the top sequence consists of amino acids with only a single codon each (minimizing the probability to be part of the library) along with the smallest possible number of viable exchanges (minimizing the size of the top peptide neighborhood). Analogously, the top sequence in the best case scenario is one that consists of amino acids with a maximum number of codons in the encoding scheme (maximizing the probability to be found in the library) combined with the largest possible number of viable exchanges (maximizing the size of the top peptide neighborhood).
+
+Fig.\ \ref{fig:nhood} gives an overview of the probabilities of including one of the sequences in the first degree neighborhood of the best peptide sequence of length k = 7. For an NNK/S\hh{-C} library of size one billion (N=10\textsuperscript{9}), we have a minimum chance of about 30\% (worst case scenario) that one of the sequences of the first degree neighborhood around the best heptapeptide sequence is included. This chance increases to close to 100\% for more than 75\% of all peptide sequences. Taking a one degree neighborhood of peptide sequences into account has roughly the same effect on inclusion probabilities  as considering sequences of a shorter length (k-1) or using a library of more than ten times the size. Note that a switch from best sequence to first degree neighborhoods of the best sequence does not change the effect that library schemes have on inclusion probabilities except for  libraries, which show a higher variability in inclusion probabilities.
+
+%Fig.\ \ref{fig:nhood} gives an overview of the minimum and maximum possible probabilities of including one of the sequences in the first and second degree neighborhoods of the best heptapeptide sequence. For an NNK/S library of size one billion, we have a minimum chance of about 30\% (worst case scenario) that one of the sequences of the first degree neighborhood around the best sequence is included. This chance increases to about 86\%  to contain at least one sequence for the second degree neighborhood of the sequence.
+% 
+% 
+<<probs-data, echo=FALSE, message=FALSE, warning=FALSE, cache=TRUE>>=
+load("data/nb.RData")
+
+require(Hmisc)
+require(dplyr)
+
+nb.stats <- nb %>% filter(k>=6) %>% group_by(lib, k) %>% 
+    summarise(
+        median=wtd.quantile(N1, weight=s*o, probs=0.5),
+        min=wtd.quantile(N1, weight=s*o, probs=0),
+        max=wtd.quantile(N1, weight=s*o, probs=1),
+        lower=wtd.quantile(N1, weight=s*o, probs=0.25),
+        upper=wtd.quantile(N1, weight=s*o, probs=0.75)
+        )
+
+libs <- data.frame()
+for (lib in c("TrimerC", "NNKC", "NNBC", "NNNC")) {
+    valid <- libBuild(1, scheme(lib))$info$valid
+    libs <- rbind(libs, cbind(lib, valid))
+}        
+nb.stats <- merge(nb.stats, libs, by="lib")
+
+#libsize=10^(seq(8, 12.1, by=0.1))
+libsize=10^(seq(8, 12, by=0.5))
+dRange <- expand.grid(N=libsize, lib=c("TrimerC", "NNKC", "NNBC", "NNNC"))
+nb.stats <- merge(nb.stats, dRange, by="lib")
+nb.stats$valid <- as.numeric(as.character(nb.stats$valid))
+nb.stats$lib <- factor(nb.stats$lib, levels=c("NNNC", "NNBC", "NNKC", "TrimerC"))
+
+require(reshape2)
+nbm <- melt(nb.stats, id.var=c("lib", "k", "valid", "N"))
+nbm$valid <- as.numeric(as.character(nbm$valid))
+nbm$prob <- with(nbm, 1-exp(-N*value/valid^k))
+nbm$qu <- c(0.5, 0,1,0.25, 0.75)[as.numeric(nbm$variable)]
+nbm$ltype <- 50-abs(nbm$qu*100-50)
+
+#nb.stats$N <- nb.stats$N * 10^(0.1*(as.numeric(nb.stats$lib)/4-1))
+#nb.stats$N <- pmax(nb.stats$N, 10^8)
+#nb.stats$N <- pmin(nb.stats$N, 10^12)
+nbs <- subset(nb.stats, k %in% c(7,8,9,10) & N %in% libsize)
+nbsub <- subset(nbm, k %in% c(7,8,9,10) & N %in% libsize)
+@
+
+<<probs, dependson='probs-data', echo=FALSE, message=FALSE, warning=FALSE>>=
+require(ggplot2)
+nbsub$n <- factor(nbsub$N)
+levels(nbsub$n) <- expression(N:10^8, N:10^8.5, N:10^9, N:10^9.5, N:10^10, N:10^10.5, N:10^11, N:10^11.5, N:10^12) 
+
+nbsub$k2 <- paste("k:", nbsub$k)
+nbsub$k2 <- reorder(nbsub$k2, nbsub$k)
+
+nbs$n <- factor(nbs$N)
+levels(nbs$n) <- expression(N:10^8, N:10^8.5, N:10^9, N:10^9.5, N:10^10, N:10^10.5, N:10^11, N:10^11.5, N:10^12) 
+
+nbs$k2 <- paste("k:", nbs$k)
+nbs$k2 <- reorder(nbs$k2, nbs$k)
+
+
+
+q1 <- ggplot(aes(x=as.numeric(lib), y=prob), data=nbsub) + 
+    facet_grid(k2~n, labeller="label_parsed") + 
+    scale_fill_brewer("library scheme", palette="Set2", labels=c("NNN-C", "NNB-C", "NNK/S-C", "20/20-C")) + 
+    theme_bw() + 
+    xlab("library size (N)") + ylab("inclusion probability for degree 1 neighborhood") + 
+    theme(plot.margin=unit(c(0,0,-0.5,0), "cm"), 
+          axis.text.x=element_text(angle=90, hjust=1, vjust=0.5),
+          legend.position="none") + 
+    geom_rect(aes(xmin=as.numeric(lib)-.4, xmax=as.numeric(lib)+.4, 
+                  ymin=1-exp(-N*lower/valid^k), ymax=1-exp(-N*upper/valid^k), 
+                  fill=lib, y=NULL), colour="black", data=nbs, size=0.5) + 
+    scale_x_continuous(breaks=1:4, labels=c("NNN-C", "NNB-C",    "NNK/S-C", "20/20-C")) + 
+    geom_segment(aes(x=as.numeric(lib), xend=as.numeric(lib), y=1-exp(-N*lower/valid^k), 
+                     yend=1-exp(-N*min/valid^k), colour=lib), size=1, data=nbs) + 
+    geom_segment(aes(x=as.numeric(lib), xend=as.numeric(lib), y=1-exp(-N*upper/valid^k), 
+                     yend=1-exp(-N*max/valid^k), colour=lib), size=1, data=nbs) + 
+    geom_segment(aes(x=as.numeric(lib)-.4, xend=as.numeric(lib)+.4, y=1-exp(-N*median/valid^k), 
+                     yend=1-exp(-N*median/valid^k) ), data=nbs, size=1) + 
+    scale_colour_brewer("library scheme", palette="Set2", labels=c("NNN-C", "NNB-C", "NNK/S-C", "20/20-C"))
+ 
+ 
+# q1 <- ggplot(aes(x=N, y=prob, colour=lib), data=subset(nbm, k %in% c(7,8,9,10) & N <= 10^12)) + 
+#     facet_grid(k~., labeller="label_both") + 
+#     scale_x_log10(breaks=c(10^(6:12)),labels=expression(10^6, 10^7, 10^8, 10^9, 10^10, 10^11, 10^12)) + 
+#     scale_color_brewer("library scheme", palette="Set2", labels=c("NNN", "NNB", "NNK/S", "trimer")) + 
+#     theme_bw() + 
+#     xlab("library size (N)") + ylab("inclusion probability for degree 1 neighborhood") + 
+#     theme(#legend.position="bottom", 
+#       plot.margin=unit(c(0,0,-0.5,0), "cm")) +
+#     geom_segment(aes(x=N, xend=N, y=1-exp(-lower/valid^k*N), yend=1-exp(-upper/valid^k*N), group=lib), data=subset(nb.stats, k %in% c(7,8,9,10))) + 
+#     geom_line(aes(  group=interaction(qu, lib), linetype=factor(ltype), size=factor(ltype))) + scale_size_manual("percentile", labels=c("0/100%", "25/75%", "50%"), values=c(0.5, 0.75, 1.5)) + scale_linetype_manual("percentile", labels=c("0/100%", "25/75%", "50%"), values=c(2, 1, 1))
+
+
+suppressWarnings(ggsave(plot=q1, "images/neighbor.eps", width = 10, height = 8.5))
+@
+\begin{figure}
+
+%\includegraphics[width=\linewidth]{images/neighborhood.eps}
+
+
+\ifthenelse{\equal{\CHARTS}{ON}}{
+%\includegraphics[width=\linewidth]{images/neighbor.eps}
+\includegraphics[width=\linewidth]{Fig4.tif}
+
+}
+\caption{{\bf \hh{Side-by-side boxplots of the }probabilities that at least one of the sequences belonging to the first degree neighborhood of the best sequence \hh{is included in libraries of different sizes (columns) and different lengths of peptides (rows)}.} Best and worst case probabilities depend on the number of encodings for a sequence and the exchangeability of the amino acids \hh{it consists of}.}
+
+\label{fig:nhood}
+\end{figure}
+
+For individual sequences we can calculate the probability of including any of its d-degree neighbors (for d = 1, 2) based on the BLOSUM80 matrix\hh{,  see \nameref{tab:nearest} for an example.}
+
+\hh{In particular for longer peptide sequences, higher degree neighbors might play a significant role in the analysis of results. While theoretically feasible, practically neighborhoods of higher order can only be derived -due to computational limitations- for a limited set of peptide sequences rather than the whole library.}
+
+\section*{Discussion}
+Peptide library selection is a powerful technology used in a wide variety of biological systems. For an optimum exploitation of this technique, it is necessary to understand the properties of the peptide libraries. Currently however, the possibilities to functionally describe a \ts{peptide} library are rather limited.
+\ts{Several publications exist that focus on mathematical descriptions of saturation mutagenesis libraries used in protein evolution [\citen{volles:2005, denault:2007, kong:2009, nov:2014}, among others]. While saturation mutagenesis and peptide library display are similar in many aspects, they differ in the fact that in the first generally only low numbers of isolated positions are randomized while in the second often long randomized peptides are used. This causes differences in the techniques available for randomization and, especially,  in the number of possible sequences and thereby in the mathematical complexity. }
+Therefore, researchers designing new \ts{peptide} libraries have to choose key parameters like peptide length, encoding scheme, and target diversity without a possibility to adequately quantify the effects of their decisions. Available qualifiers like functional diversity and \ts{number of bacterial colonies} offer some degree of information, but are unsuited to compare the properties of different libraries in detail. We present a mathematical framework to determine the number of distinct peptides and to calculate the estimated coverage and relative efficiency. These properties are implemented in the web-based tool PeLiCa (\url{http://www.pelica.org}) and enable researchers to quantify and compare their libraries in far greater detail, which in particular allows for a more informed  planning of new libraries and projects. \ts{Researchers can use the preset library schemes in PeLiCa as well as define new ones.}
+The core of our approach is to classify peptides according to the \hh{redundancy} of their encodings first, and then use these peptide classes to regard individual peptide sequences in a second step. This two-step procedure reduces the complexity of the problem sufficiently, making a mathematical assessment of complete libraries analytically feasible. The sheer size of \ts{most} peptide libraries causes alternative approaches to fail. Direct simulation, for instance, is impossible to implement on standard machines due to the limitations of main memory and disk space. Even if these hurdles were taken by more sophisticated simulation strategies, the process would be too slow to be of practical use. \hh{For very small library sizes a simulation study is discussed in \nameref{S3_Text}, which shows the accuracy of the theoretical framework in practice (\nameref{tab:simulation}, \nameref{tab:variance}). For somewhat larger library sizes,} the validity of our approach was successfully confirmed by direct comparison with GLUE-IT \cite{firth08}. GLUE-IT determines protein diversity and coverage for small libraries of individual proteins with mutations in up to 6, in general non-consecutive, amino acid positions (``saturation mutagenesis generated protein libraries"). Though the biological setting is different from the peptide libraries discussed here, GLUE-IT can be used to analyse a limited set of peptide libraries with very short randomised inserts (k = 1 to 6; Cysteines defined as valid; comparison in \nameref{tbl:div} and \nameref{tbl:cov}). \ts{In reverse, our approach and website can also be used to investigate saturation mutagenesis libraries.}
+
+In this publication, we limit our examples to peptides of 6 to 10 amino acids in length, as shorter peptides are rarely used and the use of longer peptides - even for very large current libraries (N up to 2 x 10\textsuperscript{10}) - results in a\ts{n expected} coverage close to zero. The relative efficiency in these cases stays close to its possible maximum defined by peptide length and encoding scheme (Figs.\ \ref{loss} and \ref{fig:efficiency}). The losses in efficiency are strongly dominated by the initial loss and a relative efficiency R (defined in \hh{definition}~\ref{dfn:efficiency}) captures the ratio of the number of viable codons and all codons in the scheme.
+
+% \[
+% R(N, k) = {\left(\frac{\text{\# of viable codons in the encoding scheme}}{\text{\# of all codons in the encoding scheme}}\right)}^k.
+% \]
+
+The most fundamental information about a peptide library is the number of encoded peptides. However, determining this value is difficult, as it is not only influenced by the number of clones generated in library production, but also by other factors. Our framework is able to determine a value for the peptide diversity from the \ts{number of bacterial colonies} by figuring in statistical and encoding effects as well as prominent biological factors (stop codons and cysteines). The negative influence of these factors has already been discussed in the past [e.g.\ \citen{patrick05, fukunaga12, hughes:2003, ashraf:2013, kille:2013, tang:2012, hoebenreich:2014, reetz:2008, neuner:1998, gaytan:2013}], however, our system now allows a quantification of their effects. Based on peptide diversity we calculate the relative efficiency and the expected library coverage. The standard deviations for all three measures are negligibly small for reasonably sized libraries. For example an NNK\hh{-C} heptapeptide library of size 100 Million has a peptide diversity of 5.6 x 10\textsuperscript{7} \textpm 9.6 x 10\textsuperscript{3}, an expected coverage of 6.3\% \textpm 1.1 x 10\textsuperscript{-5}\% and a relative efficiency of 56.3\% \textpm 9.6 x 10\textsuperscript{-5}\%.
+ 
+\ts{Information on} coverage is important to put libraries and selection results in perspective [see also~\citen{firth08}]. In the above example (NNK\hh{-C} library; k = 7; N = 10\textsuperscript{8}) only about 6\% of all possible sequences are covered. Therefore, it is not likely that the most prominent sequence selected from this library is in fact the best possible heptapeptide. Besides that, two identical selections using independent libraries might result in identification of two completely different sets of selected peptides. This situation can be improved by either increasing the library size, which is often restricted by technical limitations, or by changing to a more favourable library design [see also \citen{denault:2007, reetz:2008, Nov12, kille:2013}]. Of the encoding schemes investigated here, \hh{20/20-C} is the most beneficial regarding \ts{expected} coverage and relative efficiency, as it avoids the initial loss and suffers less from redundancy effects. It also prevents the bias for amino acids with a high number of codons shown by other schemes. As generating \ts{20/20 libraries with the trimer technique} is still rather expensive, the majority of current applications uses libraries with other encoding schemes. 
+\ts{However, there are alternative techniques to trimer to reach a ratio of one codon per amino acid, like the MAX randomization \cite{hughes:2003},  the ``small-intelligent libraries" \cite{tang:2012} and the ProxiMAX randomization \cite{ashraf:2013}. Of these only ProxiMAX is suited to produce the longer randomized sequences needed for most peptide library applications \cite{ashraf:2013}.}
+
+<<nnb, echo=FALSE, results='hide'>>=
+library(peptider)
+# use libs2 
+libscheme <- c("NNB", "NNK")
+libsize=seq(7,14, by=0.05)
+N <- 10^libsize
+k <- 6:10
+dframe <- data.frame(expand.grid(N=N, libscheme=libscheme, k=k))
+dframe$cov <- NULL
+dframe <- ddply(dframe, .(k, libscheme), function(x) {
+    lib <- with(x[1,], libBuild(k, scheme(libscheme)))
+    libsize <- x$N
+    cov <- rep(NA, length=length(libsize))
+    for (i in 1:length(libsize)) {
+        cov[i] <- with(x[i,], coverage(k, lib=lib, N=libsize[i], libscheme=libscheme))
+    }
+    data.frame(x, cov)
+})
+library(reshape2)
+require(grid)
+ltm <- dcast(dframe, N+k~libscheme, value.var="cov")
+
+v1 <- ggplot() + geom_hline(yintercept=0, colour="grey50") + 
+    geom_line(aes(x=N, y=NNB-NNK, colour=factor(k),  group=k), size=1.5,  data=ltm) + 
+    scale_x_log10(breaks=c(10^(7:14)),labels=expression(10^7, 10^8, 10^9, 10^10, 10^11, 10^12, 10^13, 10^14), limits=c(10^7, 10^14)) + theme_bw() + 
+    scale_colour_brewer("Sequence Length (k)", palette="Set2") + 
+    ylab("Difference in expected coverage between NNB and NNK/S") + xlab("Library Size (N)") + 
+    theme(legend.key.width = unit(1.25, "cm"), plot.margin=unit(c(0,0,0,0), "cm"))
+ggsave(plot=v1, file="images/nnb-nnk.eps", width=9, height=6)
+@
+When comparing \ts{different library schemes} regarding \ts{expected} coverage and relative efficiency, NNK/S\hh{-C} and NNB\hh{-C} are very similar and preferable to NNN\hh{-C} (see Figs.\ \ref{loss} and \ref{fig:efficiency}). NNK/S\hh{-C} has a slight advantage over NNB\hh{-C} in peptide diversity, expected coverage, and relative efficiency. If cysteines are considered as viable, however, NNB encoding has a minor advantage over NNK/S for libraries with a low \ts{expected} coverage  \hh{(Fig.\ \ref{fig:nnb}). The initial advantage in expected coverage of NNB over NNK/S is due to the smaller initial loss of NNB: out of 48 codons, 47 are valid (corresponding to a 97.8\% of valid codons), leading to a loss of 1 - (47/48)\textsuperscript{k}, whereas NNK/S has 31 valid codons out of 32 (corresponding to a 96.9\% of valid codons), leading to a (slightly) higher loss of 1 - (31/32)\textsuperscript{k}. When peptide sequences including cysteine are also considered as invalid (in NNK/S-C and NNB-C schemes), the advantage of the initial loss disappears, because then an equal percentage of 93.75\% of all codons are valid under either scheme. } 
+%
+
+
+\begin{figure}
+
+\ifthenelse{\equal{\CHARTS}{ON}}{
+%\includegraphics[width=.75\textwidth]{images/nnb-nnk.eps}
+\includegraphics[width=\linewidth]{Fig5.tif}
+}
+\caption{\hh{{\bf Difference in expected coverage between NNB and NNK/S libraries (with cysteines).} Initially, NNB libraries have a slight advantage in expected coverage over NNK/S libraries. Once a coverage of about 50\% is reached, this pattern reverses and NNK/S libraries have a highere expected coverage. For very large libraries the difference in coverage is again, approaching zero (when libraries under both schemes have a coverage of almost 100\%).}}
+
+\label{fig:nnb}
+\end{figure}
+
+%
+
+NNK and NNS are mathematically identical but differ biologically due to different codon preferences of the host organisms. In \emph{E. coli} and especially in \emph{S. cerevisiae}, codon usage suggests that NNK may generally be the better option \cite{patrick05}, while in human cells NNS codons are preferred. Another important design factor is the peptide length, as an elongation by one amino acid increases the number of possible peptides by a factor of 19 (\hh{20/20-C}) to 23 (NNN with cysteines). When planning a new library, one should therefore consider the biological demands on peptide length on the one hand and the achievable coverage on the other. For all discussed encodings except \hh{20/20 or 20/20-C}, peptide length does not only influence the coverage but also the absolute number of viable peptides, as the chance that disruptive codons (stop codons and cysteines if relevant in the system) are included, increases with length. In fact, there is an optimal length that maximizes peptide diversity and relative efficiency for any given library size N (Fig.\ \ref{fig:efficiency}). For example, \hh{for a non-20/20-C library of size N = 100 Million a peptide length of k = 8 is optimal in the sense, that its relative efficiency is larger than for libraries of peptide lengths 7 or 9. Therefore peptide diversity of a library of 8-peptides is also maximal.}
+
+
+ Even extremely large libraries rarely exceed N = 10\textsuperscript{10},  using peptides longer than 9 to 10 amino acids therefore leads to a reduced peptide diversity in non-\hh{20/20-C} libraries. In the case of an NNK\hh{-C} library of 10 billion sequences about 40\% less viable peptides are contained if a length of 18 amino acids is used instead of the optimal 9. 
+
+A high coverage is not always feasible due to limited library size and biological restraints on peptide length. Therefore, the chances that the ``best" peptide is included in the library are often slim. However, peptides whose sequences are close to ideal may exist and perform similarly well \cite{Nov12}. By calculating the chance that at least one such peptide is contained, it is possible to better evaluate if a specific library is likely to produce high performing peptides. This chance depends on the used encoding scheme and the sequence of the ``best" peptide. As this sequence is unknown beforehand, we define a best and worst case and determine a probability range for different library designs (see Fig.\ \ref{fig:nhood}). The degree of variability is by far smallest for \hh{20/20-C} libraries indicating that such libraries should show the most reliable performance over different selections. With the worst case scenario as the most relevant qualifier, \hh{20/20-C} is again the best scheme followed by NNK/S\hh{-C}, NNB\hh{-C} and NNN\hh{-C}, with differences spanning several orders of magnitude. About 5 x 10\textsuperscript{9} sequences are needed in a heptapeptide \hh{20/20-C} library for a 99.5\% chance that even in the worst case at least one top peptide from the first degree neighborhood is part of the library. With NNN\hh{-C} about 2000-fold more (10\textsuperscript{12}) sequences are necessary.
+
+
+In summary, our mathematical framework and its implementation at the web-interface PeLiCa offer evaluation parameters that allow an in-depth analysis of peptide libraries. This promotes a better understanding of library dynamics and enables a more informed design process. With the help of this mathematical framework libraries can be optimised directly for the requirements of the experiment and for the technical feasibility in a given setting. Therefore, our work  contributes to improved peptide libraries which, in turn, will impact the success of viral and phage display systems in a multitude of scientific applications.
+% 
+% 
+%
+

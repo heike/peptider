@@ -1,0 +1,255 @@
+\section*{Supplementary Material}
+% reset table and figure counter, refer to them by Sx
+\setcounter{table}{0}
+\renewcommand{\thetable}{S\arabic{table}}
+\setcounter{figure}{0}
+\renewcommand{\thefigure}{S\arabic{figure}}
+
+
+\begin{appendices}
+\section*{Considerations to Theorem 1}
+\subsection*{Proof of Theorem 1}\label{appendixProof}
+Theorem 1 gives the expected value and the variance of the number of different peptides from a clone library of size $N$ as:
+\begin{eqnarray*}
+E[Z] &\approx& b (1 - e^{-N/b}). \\
+Var[Z] &\approx& 2be^{-N/b}(1 - e^{-N/b}).
+\end{eqnarray*}
+
+\begin{proof}
+We will discuss the proof in a stepwise approach:
+
+Let $Z_i$ be the number of selected peptides after $i$ subsequent draws, $1 \le i \le N$. After the first draw, i.e.  $i = 1$, we know that there is a single peptide sequence $i$ the `library', therefore $Z_1 = 1$. 
+
+Drawing one more peptide sequence opens up two possibilities: we either increase the number of different peptides in the library by one, or we draw a peptide sequence that we have already seen before. The probability to observe a new sequence depends on how many peptide sequences we have already observed ($Z_i$), and how many are still left ($b - Z_i$). 
+
+For draw $i+1$ we then get the following probabilities to either observe a new peptide, i.e. $Z_{i+1} = Z_i + 1$, or a previously drawn peptide, in which case the number of different peptides does not change, i.e. $Z_{i+1} = Z_i$:
+\begin{eqnarray*}
+P(Z_{i+1} = Z_i) &=& Z_i/b\\
+P(Z_{i+1} = Z_i+1) &=& (b-Z_i)/b = (1 - Z_i/b) 
+\end{eqnarray*}
+For the expected number of selected peptides the above equations lead us to:
+\begin{eqnarray*}
+E[Z_{i+1}] &=& E[Z_i]^2/b  + (1-E[Z_i]/b) \cdot (E[Z_i] + 1)  = \\
+&=& 1-E[Z_i]/b + E[Z_i] = 1 + (1-1/b)E[Z_i].
+\end{eqnarray*}
+Since $Z_1 = 1$, we get 
+for the $i$th draw an expected value of 
+\[
+E[Z_i] = \sum_{k=0}^{i-1} (1 - 1/b)^k = b (1 - (1-1/b)^i) \approx b \left(1 - e^{-i/b}\right).
+\]
+The approximation holds for large values of $b$, and the expected diversity of a library of size $N$, $E[Z]$, is given as $E[Z] = E[Z_N]$. A similar argument holds for $Var[Z]$ by using the second moment:
+
+\begin{align*}
+E[Z_{i+1}^2] &= E[Z_i]^3/b + (E[Z_i] + 1)^2(1 - E[Z_i]/b) \\
+             &= E[Z_i]^3/b + (E[Z_i]^2 + 2E[Z_i] + 1)(1 - E[Z_i]/b) \\
+             &= E[Z_i]^2 + 2E[Z_i] - (2/b)E[Z_i]^2 - E[Z_i]/b + 1 \\
+             &= \frac{b-2}{b}E[Z_i]^2 + \frac{2b-1}{b}E[Z_i] + 1
+\end{align*}
+Using the equality $E[Z_i] = b(1-(1-1/b)^i)$, we calculate the variance of $Z_i$ as:
+\begin{align*}
+Var[Z_{i+1}] &= E[Z_{i+1}^2] - E[Z_i]^2 \\
+             &= \frac{-2}{b}E[Z_i]^2 + \frac{2b-1}{b}E[Z_i] + 1 \\
+             &= 2b (1-1/b)^i (1 - (1-1/b)^i)\\
+             &\approx 2be^{-i/b}(1 - e^{-i/b})
+\end{align*}
+
+\end{proof}
+
+Note that the relative standard deviation, or the ratio of the square root of the variance to the expected value of the number of different peptides, is small for most libraries. Table \ref{tbl:var} displays the standard deviation and relative standard deviation for an NNK library of sizes ranging from $10^8$ to $10^{10}$.
+
+<<variance, echo=FALSE, results='asis'>>=
+xtable(data.frame(N = 10^(8:10), SD = sqrt(sapply(10^(8:10), function(y) {peptider:::diversity(k=7,libscheme="NNKC",N=y,variance=TRUE)})), RelativeSD = sqrt(sapply(10^(8:10), function(y) {peptider:::diversity(k=7,libscheme="NNKC",N=y,variance=TRUE)})) / sapply(10^(8:10), function(y) {peptider:::diversity(k=7,libscheme="NNKC",N=y,variance=FALSE)})), label = "tbl:var", caption = "Relative standard deviation in the number of different peptides for three NNK libraries.", display = c("d", "e", "f", "e"), digits = c(0, 0, 2, 2))
+@
+
+<<varplot, echo=FALSE, eval=FALSE>>=
+N <- 10^8
+b <- 10^seq(5,10, by=0.1)
+expb <- b*(1-exp(-N/b))
+varb <- -2*b*(1 - exp(-N/b))^2 + (2*b-1)*(1 - exp(-N/b)) + 1
+varb2 <- 2*b*exp(-N/b)*(1-exp(-N/b))
+
+
+qplot(b, expb)+scale_x_log10() + geom_point(aes(b, expb+1.96*sqrt(varb2)), colour="red", size=0.5) + geom_point(aes(b, expb-1.96*sqrt(varb2)), colour="red", size=0.5) + scale_y_log10()
+
+#qplot(b, expb)+scale_x_log10()+scale_y_log10() 
+#qplot(b, varb2)+scale_x_log10()+scale_y_log10() 
+
+#summary(sqrt(varb2)/expb)
+#summary(sqrt(varb))
+#summary(expb)
+@
+
+\subsection*{Approximation Error in Theorem 1}\label{appendixA}
+The question is how close the approximation of the expected value in theorem 1 is:
+\begin{equation}\label{eqn:approx}
+(1- 1/b)^N = e^{-N/b} + {\mathcal O}\left( \min\left(\frac{1}{b} e^{-N/b-\epsilon}, \frac{N}{b^2}\right)\right).
+\end{equation}
+
+\begin{proof}
+In D\"orrie's elementary proof of problem 12  \cite{doerrie} (limits for sequences $\lim_{x \rightarrow \infty} (1+1/x)^x$ and $\lim_{x \rightarrow \infty} (1+1/x)^{x+1}$) we find the following inequality:
+ for $x > 0$ and $m$ such that $1 \pm x/m > 0$ it holds, that
+\[
+(1-x^2/m) e^x \le (1 + x/m)^m \le e^x.
+\]
+
+We can directly apply this to our situation with
+ $x := -N/b$ and $m = N$. Then $1 \pm x/m = 1 \pm 1/b > 0$, which is true for $b > 1$ -- this we can safely assume.
+ 
+The above inequality gives us
+\[
+(1-N/b^2) e^{-N/b} \le (1 -1/b)^N \le e^{-N/b}.
+\]
+This means that the error in equation (\ref{eqn:approx}) has an upper bound given by $Nb^{-2} e^{-N/b} = 1/b \cdot N/b \cdot e^{-N/b}$.
+
+It is easy to see that the expression $N/b \ e^{-N/b}$ is positive with a maximum of $e^{-1}$ at $N = b$. Both for large and small values of $N/b$ this function goes rapidly to zero: 
+For small values of $N/b$ the expression  $N/b \ e^{-N/b} = {\mathcal O}(N/b)$, while for large values of $N/b$ the expression  $N/b \ e^{-N/b} = {\mathcal O}(e^{-N/b-\epsilon})$ for some small $\epsilon > 0$.
+
+Upper and lower bound combined  give equation (\ref{eqn:approx}).
+\end{proof}
+
+% \section{Variance Derivations}
+% Continuing to let Z represent a random variable for the number of different peptides in the library, we can define two new random variables. $Z_C$ is a random variable quantifying the library coverage, while $Z_E$ is a random variable quantifying the library relative efficiency. Noting that $Z_C$ and $Z_E$ are simply constant multiples of $Z$, we have:
+% \begin{align*}
+% Var[Z_C] &= Var[Z / 19^k] \\
+%          &= Var[Z]/19^{2k} \\
+% Var[Z_E] &= Var[Z / N] \\
+%          &= Var[Z]/N^2
+% \end{align*}
+
+\section*{Peptide Library Schemes}\label{definitions}
+
+According to their multiplicity and functionality we  distinguish six classes of amino acids based on an NNN scheme (see table \ref{tab:nnn}) and five classes of amino acids based on an NNB scheme (see table \ref{tab:nnb}).
+
+
+\begin{table}[h]
+\caption{\label{tab:nnn} NNN Library Scheme}
+\centering
+\scalebox{0.9}{\hspace{-.25cm}{
+\begin{tabular}{llrr}\hline
+class & amino acids & size $s$ & \# nucleotides c \\ \hline
+A & S, L, R & 3 & 6 \\
+B & A, G, P, T, V & 5 & 4 \\
+C & I  & 1 & 3 \\
+D & D, E, F, H, K, N, Q, Y & 8 & 2 \\
+E & M, W & 2 & 1\\[3pt]
+Z & cysteine C,  & 2 & 2.5\\
+& \multicolumn{2}{l}{stop tags {\tt TAG, TGA, TAA}}\\\hline
+\\[-6pt]
+\end{tabular}}}
+\end{table}
+
+\begin{table}[h]
+\caption{\label{tab:nnb} NNB Library Scheme}
+\centering
+\scalebox{0.9}{\hspace{-0.35cm}{
+\begin{tabular}{llrr}\hline
+class & amino acids & size $s$ & \# nucleotides c \\ \hline
+A & S & 1 & 5\\
+B & L, R & 2 & 4\\
+C & A, G, P, T, V & 5 & 3 \\
+D & D, F, H, I, N, Y & 6 & 2 \\
+E & E, K, M, Q, W  & 5 & 1 \\[3pt]
+Z & cysteine C, stop tag {\tt TAG} & 2 & 1.5\\\hline
+\\[-6pt]
+\end{tabular}}}
+
+%
+\end{table}
+
+% 
+% <<rv1, dependson='data', echo=FALSE, results='asis'>>=
+% #source("code/src-probability.R") 
+% library(peptider)
+% #seq1 <- make.RV(c("A","B","C"), c(3*3,5*2,11))
+% #dt <- as.table(t(probs(seq1)))
+% library(xtable)
+% library(reshape2)
+% #row.names(dt) <- "Probability P(.| not Z)"
+% #dt <- xtable(dt, label="probs2", caption="Probability of a randomly sampled codon contributing to a valid sequence  to belong to one of the three major classes as defined above.")
+% #print(dt, caption.placement="top")
+% 
+% scheme <- c("NNN", "NNB", "NNK", "Trimer")
+% dframe <- ldply(scheme, function(x) cbind(x, libscheme(x)$data))
+% dt <- acast(dframe, x~class, value.var="probs")*100
+% row.names(dt)[3] <- "NNK/S"
+% print(xtable(dt, label="probs2", caption="Conditional probability of a randomly sampled codon contributing to a valid sequence belonging in one of the major aa classes in each library scheme."), digits=2, NA.string ="--", caption.placement="top")
+% 
+% @
+% 
+% 
+
+\section*{Examples}
+Table~\ref{tab:nearest} gives the inclusion probabilities for some example sequences from a heptapeptide library of size 100 Million under all common library schemes. For comparison, both the inclusion probabilities of the sequence itself are given (denoted by degree 0) as well as the  probabilities to detect at least one sequence from the degree-1  and degree-2 neighborhoods, respectively. While the probabilities to detect  individual sequences are highly dependent on the specific sequence and the library scheme, inclusion probabilities quickly grow as first and second degree neighborhoods (based on positive BLOSUM80 scores) are regarded. 
+<<nearest, echo=FALSE, results='asis'>>=
+library(peptider) 
+scheme <- c("NNNC", "NNBC", "NNKC", "trimerC") 
+detect <- c(unlist(llply(scheme, function(z) ppeptide(x="NEAREST", libscheme=z, N=10^8))),
+            unlist(llply(scheme, function(z) ppeptide(x=getNeighbors("NEAREST"), libscheme=z, N=10^8))),
+            unlist(llply(scheme, function(z) ppeptide(x=unique(unlist(getNeighbors(getNeighbors("NEAREST")))), libscheme=z, N=10^8))))
+detect2 <- c(unlist(llply(scheme, function(z) ppeptide(x="SLRSLRS", libscheme=z, N=10^8))),
+             unlist(llply(scheme, function(z) ppeptide(x=getNeighbors("SLRSLRS"), libscheme=z, N=10^8))),
+            unlist(llply(scheme, function(z) ppeptide(x=unique(unlist(getNeighbors(getNeighbors("SLRSLRS")))), libscheme=z, N=10^8))))
+detect3 <- c(unlist(llply(scheme, function(z) ppeptide(x="HENNING", libscheme=z, N=10^8))),
+             unlist(llply(scheme, function(z) ppeptide(x=getNeighbors("HENNING"), libscheme=z, N=10^8))),
+            unlist(llply(scheme, function(z) ppeptide(x=unique(unlist(getNeighbors(getNeighbors("HENNING")))), libscheme=z, N=10^8))))
+detect4 <- c(unlist(llply(scheme, function(z) ppeptide(x="MMMMMMM", libscheme=z, N=10^8))),
+             unlist(llply(scheme, function(z) ppeptide(x=getNeighbors("MMMMMMM"), libscheme=z, N=10^8))),
+            unlist(llply(scheme, function(z) ppeptide(x=unique(unlist(getNeighbors(getNeighbors("MMMMMMM")))), libscheme=z, N=10^8))))
+
+dframe <- data.frame("scheme"=c("NNN", "NNB", "NNK/S", "trimer"), "SLRSLRS"=detect2,  "NEAREST"=detect, "HENNING"=detect3, "MMMMMMM"=detect4)
+dframe$degree <- rep(0:2, each=4)
+
+library(reshape2)
+dfm <- melt(dframe, id.var=c(1,6))
+dfm$scheme <- factor(dfm$scheme, levels=c("NNN", "NNB", "NNK/S", "trimer"))
+names(dfm)[3] <- "peptide"
+tab <- dcast(dfm, peptide+degree~scheme)
+
+require(xtable)
+tab$peptide <- as.character(tab$peptide)
+tab$peptide <- paste("\\tt",tab$peptide)
+tab$peptide[c(c(3,6,9,12),c(3,6,9,12)-1)] <- ""
+xtab <- xtable(tab, digits=4, caption="Overview of inclusion probabilities by library schemes for specific heptapeptide sequences (degree 0) as well as  first and second degree neighborhoods (degree 1 and degree 2). All probabilities are based on a library of size 100 Million.", label="tab:nearest", align="llcrrrr")
+print(xtab, add.to.row=list(list(3,6,9), rep("[3pt]",3)), include.rownames=FALSE, sanitize.text.function = function(x){x})
+@
+
+\section*{Validation}
+The intersecting properties of GLUE-IT and PeLiCa offer the possibility to directly compare values for peptide diversity and coverage for the following libraries: Peptide length: 6; Encoding schemes: NNN, NNB, NNK and NNS with variable library sizes; cysteines regarded as viable. Both PeLiCa and GLUE-IT offer identical values for libraries of sizes 10 million, 100 million and 1 billion as indicated in Tables \ref{tbl:gluediv}, \ref{tbl:pelidiv}, \ref{tbl:gluecov}, and \ref{tbl:pelicov}.
+
+<<validcode, results='asis', echo=FALSE>>=
+df <- data.frame("Scheme" = c("NNN", "NNB", "NNK/S"), 
+                 "Ten Million" = c("6.206e+06", "7.296e+06", "6.918e+06"),
+                 "Hundred Million" = c("2.97e+07", "3.345e+07", "3.347e+07"),
+                 "One Billion" = c("5.77e+07", "5.961e+07", "6.116e+07"))
+
+print(xtable(df, label = "tbl:gluediv", caption = "GLUE-IT - Peptide diversity/expected number of distinct amino acid variants"), include.rownames = FALSE)
+@
+
+<<validcode2, results='asis', echo=FALSE>>=
+df <- data.frame("Scheme" = c("NNN", "NNB", "NNK/S"), 
+                 "Ten Million" = c("6.2058e+06", "7.2925e+06", "6.9179e+06"),
+                 "Hundred Million" = c("2.9696e+07", "3.3447e+07", "3.3468e+07"),
+                 "One Billion" = c("5.7705e+07", "5.9612e+07", "6.1165e+07"))
+
+print(xtable(df, label = "tbl:pelidiv", caption = "PeLiCa - Peptide diversity/expected number of distinct amino acid variants"), include.rownames = FALSE)
+@
+
+<<validcode3, results='asis', echo=FALSE>>=
+df <- data.frame("Scheme" = c("NNN", "NNB", "NNK/S"), 
+                 "Ten Million" = c("0.09697", "0.464", "0.9016"),
+                 "Hundred Million" = c("0.114", "0.5226", "0.9314"),
+                 "One Billion" = c("0.1081", "0.5229", "0.9557"))
+
+print(xtable(df, label = "tbl:gluecov", caption = "GLUE-IT - Coverage/Completeness"), include.rownames = FALSE)
+@
+
+<<validcode4, results='asis', echo=FALSE>>=
+df <- data.frame("Scheme" = c("NNN", "NNB", "NNK/S"), 
+                 "Ten Million" = c("0.09697", "0.46401", "0.90163"),
+                 "Hundred Million" = c("0.114", "0.52261", "0.93144"),
+                 "One Billion" = c("0.10809", "0.52294", "0.9557"))
+
+print(xtable(df, label = "tbl:pelicov", caption = "PeLiCa - Coverage/Completeness"), include.rownames = FALSE)
+@
+
+\end{appendices}
